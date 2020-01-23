@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{title.cookies}">Política de cookies</title>
+		</head>
+		
+		<body>
+			<div class="content">
+				<h1 th:text="#{cookies.ppal.header}"> Politica de cookies </h1>
+				<p th:text="#{cookies.description}">Descripción</p>
+				
+				<h2 th:text="#{cookies.meaning.header}">Definición y uso</h2>
+				<p th:text="#{cookies.meaning.text}">Texto</p>
+				
+				<h2 th:text="#{cookies.target.header}">¿Cuáles usamos y para qué?</h2>
+				<p th:text="#{cookies.target.text}">Texto</p>
+				
+				<h2 th:text="#{cookies.config.header}">Configuracion</h2>
+				<p th:text="#{cookies.config.text}">Texto</p>
+			</div>
+		</body>
+	</html>

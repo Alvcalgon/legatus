@@ -1,22 +1,16 @@
 <!DOCTYPE html>
-	<html xmlns:th="http://www.thymeleaf.org">
-		<head>
-			<meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
-			
-			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/menu.css}">
-			<title>Motorsport F1 Home</title>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>			
+			<title th:text="#{title.index}">Motorsport F1 Home</title>
 		</head>
 		
 		<body>
-			<div class="master-page-header" th:replace="master-page/header :: frag-header"></div>
-			<p>
-				<strong th:utext=#{master.currentMoment}> </strong>
-				<span th:text="${moment}"> </span>
-			</p>
-			<p>
-				Established language: <span th:text=${#locale.language}> </span>
-			</p>
-			
-			<div class="master-page-footer" th:replace="master-page/footer :: frag-footer"></div>
+			<div class="content">
+				<h1 th:text="#{master.welcome}"></h1>
+				<p>
+					<strong th:utext=#{master.currentMoment}> </strong>
+					<span th:text="${moment}"> </span>
+				</p>
+			</div>
 		</body>
 	</html>

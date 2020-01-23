@@ -76,13 +76,13 @@ public class HomeController implements ApplicationContextAware {
 		
 		return result;
 	}
-
-	@GetMapping("/home/dataProcesses")
-	public ModelAndView dataProcesses() {
+	
+	@GetMapping("/home/cookies")
+	public ModelAndView cookiesPolicy() {
 		ModelAndView result;
 
-		result = new ModelAndView("master-page/dataprocesses");
-		log.info("HomeController::dataProcesses");
+		result = new ModelAndView("master-page/cookiesPolicy");
+		log.info("HomeController::cookiesPolicy");
 		
 		return result;
 	}

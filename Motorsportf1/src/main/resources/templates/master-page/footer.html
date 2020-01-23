@@ -4,7 +4,7 @@
 			<div class="footer" th:fragment="frag-footer" style="text-align:center;">
 				<hr />
 				
-				<strong th:utext="#{master.footer.terms.data(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
+				<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
 				<br />
 			
 				<p>
@@ -12,7 +12,7 @@
 				</p>
 				
 				<p>
-					<a th:href="@{dataProcesses}" th:text="#{master.footer.dataProcesses}"></a>
+					<a th:href="@{cookies}" th:text="#{master.footer.cookies}"></a>
 				</p>
 			</div>
 		</body>

@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-	<html xmlns:th="http://www.thymeleaf.org">
+	<html th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			
-			
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/menu.css}" />
 			<script type="text/javascript" th:src="@{/libraries/jquery/3.3.1/js/jquery.js}"></script>
 			
-			<title th:replace="frag-meta-title">Motorsport F1 Home</title>
+			<title th:replace="${title}">Layout Title</title>
 		</head>
 		
 		<body>
-			<div class="master-page-header" th:replace="master-page/header :: frag-header"></div>
+			<section class="master-page header">
+				<div th:replace="master-page/header :: frag-header"></div>
+			</section>
 			
-			<div th:replace="content" class="master-page-content">
+			<section class="master-page content">
+				<div th:replace="${content}">Layout content</div>
+			</section>
 			
-			</div>
-			
+			<section class="master-page footer">
 			<div class="master-page-footer" th:replace="master-page/footer :: frag-footer"></div>
+			</section>
 		</body>
 	</html>

@@ -1,14 +1,30 @@
 <!DOCTYPE html>
-	<html xmlns:th="http://www.thymeleaf.org">
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
 		<head>
-			<title th:fragment="frag-meta-title" th:text="#{master.footer.terms}"> </title>
+			<title th:text="#{title.terms}">Terms and conditions</title>
 		</head>
 		
 		<body>
-			<div class="master-page-header" th:replace="master-page/header :: frag-header"></div>
-			
-			<p> Terminos y condiciones </p>
-			
-			<div class="master-page-footer" th:replace="master-page/footer :: frag-footer"></div>
+			<div class="content">
+				<h1 th:text="#{terms.ppal.header}"> Terminos y condiciones </h1>
+				<p th:text="#{terms.description}">Descripción</p>
+				
+				<h2 th:text="#{terms.responsible.header}">Responsable de los datos</h2>
+				<div class="datos-company">
+					<p th:utext="#{terms.identity}">Identidad</p>
+					<p th:utext="#{terms.direction}">Dirección</p>
+					<p th:utext="#{terms.phone}">Phone</p>
+					<p th:utext="#{terms.email}">Email</p>
+				</div>
+				
+				<h2 th:text="#{terms.info.header}">¿Qué información se recopila?</h2>
+				<p th:text="#{terms.info.text}">Texto</p>
+				
+				<h2 th:text="#{terms.dest.header}">¿Quién tiene acceso a esa información?</h2>
+				<p th:text="#{terms.dest.text}">Texto</p>
+				
+				<h2 th:text="#{terms.links.header}">Enlaces a terceros</h2>
+				<p th:text="#{terms.links.text}">Texto</p>
+			</div>
 		</body>
 	</html>
