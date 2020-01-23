@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+		<body>
+			<div class="footer" th:fragment="frag-footer" style="text-align:center;">
+				<hr />
+				
+				<strong th:utext="#{master.footer.terms.data(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
+				<br />
+			
+				<p>
+					<a th:href="@{terms}" th:text="#{master.footer.terms}"></a>	
+				</p>
+				
+				<p>
+					<a th:href="@{dataProcesses}" th:text="#{master.footer.dataProcesses}"></a>
+				</p>
+			</div>
+		</body>
+	</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+		<head>
+			<title th:fragment="frag-meta-title" th:text="#{master.footer.terms}"> </title>
+		</head>
+		
+		<body>
+			<div class="master-page-header" th:replace="master-page/header :: frag-header"></div>
+			
+			<p> Terminos y condiciones </p>
+			
+			<div class="master-page-footer" th:replace="master-page/footer :: frag-footer"></div>
+		</body>
+	</html>
