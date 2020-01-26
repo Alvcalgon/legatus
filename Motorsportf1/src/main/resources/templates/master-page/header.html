@@ -2,16 +2,9 @@
 	<html xmlns:th="http://www.thymeleaf.org">
 		<body>
 			<div class="header" th:fragment="frag-header">
-				<div>
-					<a href="../">
-						<img th:src="@{/images/motor.jpg}"
-							 alt="Motorsport F1 Co., Inc."
-							 height="200px"
-							 width="400px" /> 
-					</a>
-				</div>
+				<div th:replace="master-page/banner :: frag-banner"></div>
 				
-				<div th:replace="master-page/menu"></div>
+				<div th:replace="master-page/menu :: frag-menu"></div>
 				
 				<div>
 					<a href="?language=en">en</a> | <a href="?language=es">es</a>

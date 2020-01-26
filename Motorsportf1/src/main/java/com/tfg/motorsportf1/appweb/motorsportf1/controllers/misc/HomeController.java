@@ -1,11 +1,9 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers.misc;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,17 +11,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
+
 @Controller
 public class HomeController implements ApplicationContextAware {
 
 	private static final Log log = LogFactory.getLog(HomeController.class);
 	
-//	@Autowired
-//	private MessageSource messageSource;
+	@Autowired
+	private UtilityService utilityService;
 	
 	// Internal state --------------------------------
 	private ConfigurableApplicationContext context;
-	
 	
 	
 	// ApplicationContextAware interface -------------
@@ -34,7 +33,7 @@ public class HomeController implements ApplicationContextAware {
 		this.context = (ConfigurableApplicationContext) context;
 	}
 
-	// Welcome ---------------------------------------
+	// Welcome ----------------------------------------------
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView result;
@@ -48,30 +47,29 @@ public class HomeController implements ApplicationContextAware {
 	@GetMapping("/home/welcome")
 	public ModelAndView welcome() {
 		ModelAndView result;
-		SimpleDateFormat formatter;
 		String moment;
 		
-		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		moment = formatter.format(new Date());
+		try {
+			moment = this.utilityService.getCurrentMomentString();
+			
+			result = new ModelAndView("home/index");
+			result.addObject("moment", moment);
 		
-		result = new ModelAndView("home/index");
-		result.addObject("moment", moment);
-	
-		log.info("HomeController::welcome");
+			log.info("HomeController::welcome");
+		} catch (Throwable oops) {
+			result = new ModelAndView("redirect:/error");
+			log.info("Redireccion HomeController::error");
+		}
 		
 		return result;
 	}
 	
-	// Footer -----------------------------
+	// Footer ----------------------------------------------
 	@GetMapping("/home/terms")
 	public ModelAndView terms() {
 		ModelAndView result;
-		//String metaTitle;
-
-		//metaTitle = this.messageSource.getMessage("master.footer.terms", null, LocaleContextHolder.getLocale());
 		
 		result = new ModelAndView("master-page/terms");
-		//result.addObject("metaTitle", metaTitle);
 		log.info("HomeController::terms");
 		
 		return result;
@@ -84,6 +82,22 @@ public class HomeController implements ApplicationContextAware {
 		result = new ModelAndView("master-page/cookiesPolicy");
 		log.info("HomeController::cookiesPolicy");
 		
+		return result;
+	}
+	
+	
+	// Panic ----------------------------------------------	
+	@GetMapping("/home/oops")
+	public ModelAndView oops() {
+		throw new RuntimeException("Test exception");
+	}
+	
+	@GetMapping("/error")
+	public ModelAndView error() {
+		ModelAndView result;
+
+		result = new ModelAndView("home/error");
+
 		return result;
 	}
 	

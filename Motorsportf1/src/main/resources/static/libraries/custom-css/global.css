@@ -1,0 +1,15 @@
+@charset "ISO-8859-1";
+
+* {
+	box-sizing: border-box;
+	font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/*
+.content {
+	background-color: #C0C0C0;
+}
+*/
+.footer {
+	background-color: #9ACD32;
+}

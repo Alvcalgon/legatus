@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>			
+			<title th:text="#{title.index}">Motorsport F1 Home</title>
+		</head>
+		
+		<body>
+			<div class="content">
+				<p th:text="#{error.text}">Texto</p>
+				<p> <a th:href="@{/}" th:text="#{error.return}"> </a> </p>
+			</div>
+		</body>
+	</html>

@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+	<html>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			
+			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/global.css}" />
+						
+			<title th:text="#{title.error}">Pagina de error</title>
+		</head>
+		
+		<body>
+			<div style="text-align:center;" th:replace="master-page/banner :: frag-banner"> </div>
+				
+			<div class="content">
+				<h1 th:text="'Error ' + ${#response.status}"> </h1>
+				
+				<div th:switch="${#response.status}">
+					<p 	th:case="404"
+						th:text="#{panic.cuatrocerocuatro}"> </p>
+					<p th:case="*"
+					   th:text="#{panic.text}">
+				</div>
+				
+				<p> <a th:href="@{/}" th:text="#{panic.return}"> </a> </p>
+				
+				<p>
+					 <strong th:text="#{master.currentMoment}"> </strong>
+					 <span th:text="${moment}"> </span>
+				</p>
+				<p>
+					 <strong th:text="#{panic.label.request}"> </strong>
+					 &nbsp;
+					 <span th:text="${#request.method}"> </span>
+					 &nbsp;
+					 <span th:text="${#request.protocol}"> </span>
+					 &nbsp;
+					 <span th:text="${#request.requestURL}"> </span>
+				</p>
+			</div>
+		</body>
+	</html>
