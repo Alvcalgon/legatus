@@ -11,6 +11,21 @@
 					<strong th:utext=#{master.currentMoment}> </strong>
 					<span th:text="${moment}"> </span>
 				</p>
+				
+				<div id="descripcionAppWeb">
+					<h2 th:text="#{master.appweb.name}">Aplicación web</h2>
+					
+					<p th:text="#{master.appweb.description}">Descripción de la aplicación web</p>
+				</div>
+				
+				<div id="descripcionAPI">
+					<h2 th:text="#{master.api.name}">API REST</h2>
+					
+					<p th:text="#{master.api.description}">Descripción de la API REST</p>
+				
+					<p> <a th:text="#{master.api.link}" href=""> </a> </p>
+				</div>
+				
 			</div>
 		</body>
 	</html>

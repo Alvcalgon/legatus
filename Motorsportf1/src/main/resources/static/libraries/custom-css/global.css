@@ -13,3 +13,16 @@
 .footer {
 	background-color: #9ACD32;
 }
+
+span.error {
+	color:red;
+}
+
+#descripcionAppWeb {
+	border-bottom: 5px;
+	background-color: #DCDCDC;
+}
+
+#descripcionAPI {
+	background-color: #D3D3D3;
+}

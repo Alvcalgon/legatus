@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{driver.list}">Lista de pilotos</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
+				
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th th:text="#{driver.fullname}">Nombre completo</th>
+								<th th:text="#{driver.placebirth}">Place of birth</th>
+								<th th:text="#{driver.country}">Country</th>
+								<th th:text="#{driver.datebirth}">Date of birth</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="driver : ${drivers}">
+								<td th:text="${driver.fullname}"></td>
+								<td th:text="${driver.placeOfBirth}"></td>
+								<td th:text="${driver.country}"></td>
+								<td th:text="${driver.dateOfBirth}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div>
+					<h3> Parametros de busqueda </h3>
+					<p> <strong> NombreCompleto: </strong> <span th:text="${nombreCompleto} ? ${nombreCompleto} : 'No se ha buscado por este parametro'"></span> </p>
+					<p> <strong> Pais: </strong> <span th:text="${pais} ? ${pais} : 'No se ha buscado por este parametro'"></span> </p>
+				</div>
+				
+				<div th:replace="driver/search :: frag-driver-search"></div>
+				
+				<p> <a th:href="@{/}"
+					   th:text="#{link.return}">Volver atrás</a> </p>
+			</div>
+		</body>
+	</html>

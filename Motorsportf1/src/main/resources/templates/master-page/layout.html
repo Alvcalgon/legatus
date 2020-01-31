@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-	<html th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
+	<html th:attr="lang=${#locale}" th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/menu.css}" />
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/global.css}" />
+			<!--<link rel="stylesheet" type="text/css" th:href="@{/libraries/bootstrap/4.1.3/css/bootstrap.min.css}"/>-->
+			
 			<script type="text/javascript" th:src="@{/libraries/jquery/3.3.1/js/jquery.js}"></script>
+			<script type="text/javascript" th:src="@{/libraries/custom-js/driverFormValidation.js}"></script>
+			
+			<!--<script type="text/javascript" th:src="@{/libraries/popper.js/1.14.4/js/popper.min.js}"></script>
+			<script type="text/javascript" th:src="@{/libraries/bootstrap/4.1.3/js/bootstrap.min.js}"></script>-->
 			
 			<title th:replace="${title}">Layout Title</title>
 		</head>
