@@ -23,7 +23,7 @@ function validateFullname() {
 		input.style.border = "1px solid green";
 	}
 	
-	
+	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("fullnameError").innerHTML = error;
 	return error;
 }
@@ -45,8 +45,21 @@ function validateCountry() {
 		input.style.border = "1px solid green";
 	}
 	
-	
+	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("countryError").innerHTML = error;
 	return error;
+}
+
+function htmlScape(input) {
+	var tagsToReplace = {'&': '&amp;', '<': '&lt;', '>': 'gt;'};
+	var inputValue = input.value;
+	
+	var validValue = inputValue.replace(/[&<>]/g, function(tag) {
+		return tagsToReplace[tag] || tag;
+	});
+	
+	input.value = validValue;
+	
+	return true;
 }
 

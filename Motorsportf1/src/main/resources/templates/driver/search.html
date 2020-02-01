@@ -3,16 +3,16 @@
 		<body>
 			<div class="form driver search container" th:fragment="frag-driver-search">
 			
-				<form th:action="@{/home/driver/search}" th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
+				<form th:action="@{/driver/list}" th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
 					
 					<label th:text="#{driver.fullname} + ':'" for="fullname"></label>
-					<input type="text" th:field="*{fullname}" onchange="validateFullname()" />
+					<input id="fullname" type="text" th:field="*{fullname}" onchange="validateFullname()" />
 					<span class="error" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}">Error nombre completo</span>
 					<span id="fullnameError" class="error"></span>
 					<br />
 					
 					<label th:text="#{driver.country} + ':'" for="country"></label>
-					<input type="text" th:field="*{country}" onchange="validateCountry()" />
+					<input id="country" type="text" th:field="*{country}" onchange="validateCountry()" />
 					<span class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Error pais</span>
 					<span id="countryError" class="error"></span>
 					<br />

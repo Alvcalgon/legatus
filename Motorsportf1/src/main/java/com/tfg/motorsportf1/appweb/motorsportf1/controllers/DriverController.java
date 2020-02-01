@@ -22,7 +22,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.forms.DriverForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverService;
 
 @Controller
-@RequestMapping("/home/driver")
+@RequestMapping("/driver")
 public class DriverController {
 
 	private static final Log log = LogFactory.getLog(DriverController.class);
@@ -49,7 +49,7 @@ public class DriverController {
 		return result;
 	}
 	
-	@PostMapping(value = "/search", params = "search")
+	@PostMapping(value = "/list", params = "search")
 	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
 		ModelAndView result;
 		
@@ -73,7 +73,7 @@ public class DriverController {
 		
 	}
 	
-	@PostMapping(value = "/search", params = "reset")
+	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute DriverForm driverForm) {
 		ModelAndView result;
 		

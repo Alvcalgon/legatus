@@ -22,7 +22,7 @@
 								<td th:text="${driver.fullname}"></td>
 								<td th:text="${driver.placeOfBirth}"></td>
 								<td th:text="${driver.country}"></td>
-								<td th:text="${driver.dateOfBirth}"></td>
+								<td th:text="${#dates.format(driver.dateOfBirth, 'dd/MM/yyyy')}"></td>
 							</tr>
 						</tbody>
 					</table>
