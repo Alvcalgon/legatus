@@ -1,8 +1,11 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
@@ -15,9 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.DriverForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverService;
 
@@ -35,15 +38,39 @@ public class DriverController {
 	}
 	
 	@GetMapping("/list")
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam("offset") Optional<Integer> requestedPage,
+							 @RequestParam("limit") Optional<Integer> limit) {
+		int targetPage, sizePage, totalPages, currentPage;
 		ModelAndView result;
 		DriverForm driverForm;
+		List<Integer> pages;
+		Map<String, List<Object>> mapa;
+	
+		result = new ModelAndView("driver/list");
+		result.addObject("requestedPage", requestedPage);
 		
+		targetPage = (requestedPage.isPresent()) ? requestedPage.get()-1 : 0;
+		sizePage = limit.orElse(10);
 		
 		driverForm = new DriverForm();
 		
-		result = new ModelAndView("driver/list");
-		result.addObject("drivers", this.findAll());
+		mapa = this.driverService.findAll(targetPage, sizePage);
+		
+		totalPages = (int) mapa.get("dataPage").get(0);
+		currentPage = (int) mapa.get("dataPage").get(1);
+		
+		if (totalPages > 0) {
+			pages = IntStream.rangeClosed(1, totalPages)
+					.boxed()
+					.collect(Collectors.toList());
+		} else {
+			pages = new ArrayList<Integer>();
+		}
+		
+		result.addObject("drivers", mapa.get("drivers"));
+		result.addObject("limit", sizePage);
+		result.addObject("currentPage", currentPage);
+		result.addObject("pages", pages);
 		result.addObject("driverForm", driverForm);
 		
 		return result;
@@ -58,12 +85,12 @@ public class DriverController {
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			result.addObject("drivers", this.findAll());
+			result.addObject("drivers", this.driverService.findAll());
 			
 		} else {
 			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas
-			result.addObject("drivers", this.findAll());
+			result.addObject("drivers", this.driverService.findAll());
 			
 			result.addObject("nombreCompleto", driverForm.getFullname());
 			result.addObject("pais", driverForm.getCountry());
@@ -78,44 +105,11 @@ public class DriverController {
 		ModelAndView result;
 		
 		result = new ModelAndView("driver/list");
-		result.addObject("drivers", this.findAll());
+		result.addObject("drivers", this.driverService.findAll());
 		result.addObject("driverForm", new DriverForm());
-		
+		//PagedListHolder<Driver> pagedDriver;
 		return result;
 		
 	}
-	
-	private List<Driver> findAll() {
-		List<Driver> drivers;
-		Driver d;
 		
-		drivers = new ArrayList<Driver>();
-		
-		d = new Driver();
-		d.setFullname("Fernando Alonso");
-		d.setCountry("Spain");
-		d.setPlaceOfBirth("Turia, Asturias");
-		d.setDateOfBirth(new Date());
-		
-		drivers.add(d);
-		
-		d = new Driver();
-		d.setFullname("Lewis Hamilton");
-		d.setCountry("Great Britain");
-		d.setPlaceOfBirth("London, England");
-		d.setDateOfBirth(new Date());
-		
-		drivers.add(d);
-		
-		d = new Driver();
-		d.setFullname("Sebastian Vettel");
-		d.setCountry("Germany");
-		d.setPlaceOfBirth("Berlin");
-		d.setDateOfBirth(new Date());
-		
-		drivers.add(d);
-		
-		return drivers;
-	}
-	
 }

@@ -7,6 +7,17 @@
 			<div class="content">
 				<div class="container">
 					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
+					
+					<div class="paginationContainer">
+						<ul th:if="${drivers.size() > 0}" class="pagination">
+							<li th:each="page: ${pages}" class="page-item">
+								<a th:href="@{/list(offset=${page}, limit=10)}"
+								   th:text="${page}"
+								   th:class="${page==currentPage+1} ? 'page-link active' : 'page-link'">
+								</a>
+							</li>
+						</ul>
+					</div>
 				
 					<table class="table">
 						<thead class="thead-dark">

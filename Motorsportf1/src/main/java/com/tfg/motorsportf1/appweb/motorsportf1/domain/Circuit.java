@@ -1,5 +1,8 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Circuit {
 
 	

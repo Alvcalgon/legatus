@@ -1,9 +1,13 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Race {
 
 	// Atributos -----------------------	

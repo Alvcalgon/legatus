@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{title.api}">Informacion de la API</title>
+		</head>
+	<body>
+		<div class="content">
+			<h1 th:text="#{title.api}"></h1>
+			
+			<div class="overview">
+				<h2 th:text="#{api.overview}">Cabecera</h2>
+				<p th:text="#{api.overview.text}">Texto</p>
+			</div>
+			
+			<div class="resources">
+				<h2 th:text="#{api.resources}">Cabecera</h2>
+				<p th:text="#{api.resources.request}">Peticiones</p>
+				<ul>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/driver/list"
+						   th:text="#{api.resources.driver.href}">
+						</a>
+						<span th:text="#{api.resources.driver}"> </span>	   
+					</li>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/constructor/list"
+						   th:text="#{api.resources.constructor.href}">
+						</a>
+						<span th:text="#{api.resources.constructor}"> </span>	   
+					</li>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/circuit/list"
+						   th:text="#{api.resources.circuit.href}">
+						</a>
+						<span th:text="#{api.resources.circuit}"> </span>	   
+					</li>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/races/list/season/2018"
+						   th:text="#{api.resources.races.href}">
+						</a>
+						<span th:text="#{api.resources.races}"> </span>	   
+					</li>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/driver-standing/list/season/2018"
+						   th:text="#{api.resources.driversstanding.href}">
+						</a>
+						<span th:text="#{api.resources.driversstanding}"> </span>	   
+					</li>
+					<li>
+						<a target="_blank" href="https://fone-api.herokuapp.com/fone/constructor-standing/list/season/2018"
+						   th:text="#{api.resources.constructorstanding.href}">
+						</a>
+						<span th:text="#{api.resources.constructorstanding}"> </span>	   
+					</li>
+				</ul>
+				<p th:text="#{api.resources.response}">Respuestas</p>
+			</div>
+			
+			<div class="development">
+				<h2 th:text="#{api.development}">Cabecera</h2>
+				<p th:text="#{api.development.text}">Texto</p>
+			</div>
+		</div>
+	</body>
+	</html>

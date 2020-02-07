@@ -2,10 +2,7 @@ package com.tfg.motorsportf1.appweb.motorsportf1.controllers.misc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 
 @Controller
-public class HomeController implements ApplicationContextAware {
+public class HomeController {
 
 	private static final Log log = LogFactory.getLog(HomeController.class);
 	
@@ -26,12 +23,12 @@ public class HomeController implements ApplicationContextAware {
 	
 	
 	// ApplicationContextAware interface -------------
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		assert context != null;
-		
-		this.context = (ConfigurableApplicationContext) context;
-	}
+//	@Override
+//	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+//		assert context != null;
+//		
+//		this.context = (ConfigurableApplicationContext) context;
+//	}
 
 	// Welcome ----------------------------------------------
 	@GetMapping("/")
@@ -60,6 +57,17 @@ public class HomeController implements ApplicationContextAware {
 			result = new ModelAndView("redirect:/error");
 			log.info("Redireccion HomeController::error");
 		}
+		
+		return result;
+	}
+
+	// API REST
+	@GetMapping("/api")
+	public ModelAndView infoAPI() {
+		ModelAndView result;
+		
+		result = new ModelAndView("home/api");
+		log.info("HomeController::infoAPI");
 		
 		return result;
 	}

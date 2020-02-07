@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<html xmlns:th="http://www.thymeleaf.org">
 		<body>
-			<div class="footer" th:fragment="frag-footer" style="text-align:center;">
+			<footer class="footer" th:fragment="frag-footer" style="text-align:center;">
 				<hr />
 				
 				<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
@@ -14,6 +14,6 @@
 				<p>
 					<a th:href="@{cookies}" th:text="#{master.footer.cookies}"></a>
 				</p>
-			</div>
+			</footer>
 		</body>
 	</html>

@@ -2,9 +2,9 @@ package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Driver {
 	
 	// Atributos --------------------------
@@ -21,8 +21,17 @@ public class Driver {
 	public Driver() {
 		super();
 	}
+		
+	public Driver(String fullname, String placeOfBirth, String country, Date dateOfBirth) {
+		super();
+		
+		this.fullname = fullname;
+		this.placeOfBirth = placeOfBirth;
+		this.country = country;
+		this.dateOfBirth = dateOfBirth;
+	}
 	
-	
+
 	// Getters y setters ----------------------	
 	public String getFullname() {
 		return fullname;
