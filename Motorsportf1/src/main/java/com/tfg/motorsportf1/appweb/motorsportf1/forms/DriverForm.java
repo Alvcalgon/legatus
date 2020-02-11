@@ -1,6 +1,5 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.forms;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -8,8 +7,8 @@ import org.hibernate.validator.constraints.SafeHtml;
 
 public class DriverForm {
 	
-	@NotBlank
-	@Pattern(regexp = "^[^0-9]+$")
+	@NotNull
+	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String fullname;
 	

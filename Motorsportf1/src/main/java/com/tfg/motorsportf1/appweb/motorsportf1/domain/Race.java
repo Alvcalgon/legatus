@@ -75,6 +75,48 @@ public class Race {
 	public String toString() {
 		return "[Race [season=" + this.season + ", event=" + this.event + "]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((circuit == null) ? 0 : circuit.hashCode());
+		result = prime * result + ((event == null) ? 0 : event.hashCode());
+		result = prime * result + ((raceDate == null) ? 0 : raceDate.hashCode());
+		result = prime * result + ((season == null) ? 0 : season.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Race other = (Race) obj;
+		if (circuit == null) {
+			if (other.circuit != null)
+				return false;
+		} else if (!circuit.equals(other.circuit))
+			return false;
+		if (event == null) {
+			if (other.event != null)
+				return false;
+		} else if (!event.equals(other.event))
+			return false;
+		if (raceDate == null) {
+			if (other.raceDate != null)
+				return false;
+		} else if (!raceDate.equals(other.raceDate))
+			return false;
+		if (season == null) {
+			if (other.season != null)
+				return false;
+		} else if (!season.equals(other.season))
+			return false;
+		return true;
+	}
 	
 }

@@ -8,18 +8,45 @@
 				<div class="container">
 					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
 					
-					<div class="paginationContainer">
-						<ul th:if="${drivers.size() > 0}" class="pagination">
-							<li th:each="page: ${pages}" class="page-item">
-								<a th:href="@{/list(offset=${page}, limit=10)}"
-								   th:text="${page}"
-								   th:class="${page==currentPage+1} ? 'page-link active' : 'page-link'">
-								</a>
-							</li>
-						</ul>
-					</div>
+					<nav th:if="${pages.size() > 0}">
+						<div class="enlaces">
+							<ul class="pagination">
+								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
+									<a th:href="@{/driver/list(offset=${selectedPage}-1, limit=${limit})}"
+									   th:text="#{paginacion.previous}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+									<a th:href="@{/driver/list(offset=${page}, limit=${limit})}"
+									   th:text="${page}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
+									<a th:href="@{/driver/list(offset=${selectedPage}+1, limit=${limit})}"
+									   th:text="#{paginacion.next}"
+									   class="page-link">
+									</a>
+								</li>
+							</ul>
+						</div>
+						
+						<form th:action="@{/driver/list}" th:object="${paginationForm}"
+							  method="post">
+							<input id="offset" name="offset" type="hidden"
+							       th:field="*{offset}">
+							
+							<label th:text="#{paginacion.length} + ':'" for="limit"></label>
+							<input id="limit" name="limit" type="number"
+							       th:field="*{limit}" min="1" th:max="${totalElements}" />
+					
+							<input type="submit" name="update" th:value="#{paginacion.update}" />
+						</form>
+						<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
+					</nav>
 				
-					<table class="table">
+					<table th:if="${drivers.size() > 0}" class="table table-striped">
 						<thead class="thead-dark">
 							<tr>
 								<th th:text="#{driver.fullname}">Nombre completo</th>
@@ -37,6 +64,7 @@
 							</tr>
 						</tbody>
 					</table>
+					<span th:if="${drivers.size() == 0}" th:text="#{paginacion.empty}"></span>
 				</div>
 				
 				<div>

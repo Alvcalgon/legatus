@@ -59,5 +59,51 @@ public class ConstructorStanding {
 	public String toString() {
 		return "ConstructorStanding [season=" + this.season + ", constructor=" + this.getConstructor() + ", position=" + this.position + ", points" + this.points + "]"; 
 	}
-	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((constructor == null) ? 0 : constructor.hashCode());
+		result = prime * result + ((points == null) ? 0 : points.hashCode());
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + ((season == null) ? 0 : season.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ConstructorStanding other = (ConstructorStanding) obj;
+		if (constructor == null) {
+			if (other.constructor != null)
+				return false;
+		} else if (!constructor.equals(other.constructor))
+			return false;
+		if (points == null) {
+			if (other.points != null)
+				return false;
+		} else if (!points.equals(other.points))
+			return false;
+		if (position == null) {
+			if (other.position != null)
+				return false;
+		} else if (!position.equals(other.position))
+			return false;
+		if (season == null) {
+			if (other.season != null)
+				return false;
+		} else if (!season.equals(other.season))
+			return false;
+		return true;
+	}
+
 }
+

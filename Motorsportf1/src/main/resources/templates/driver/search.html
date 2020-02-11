@@ -4,6 +4,7 @@
 			<div class="form driver search container" th:fragment="frag-driver-search">
 			
 				<form th:action="@{/driver/list}" th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
+					<input id="paginationForm" type="hidden" th:value="${paginationForm}" />
 					
 					<label th:text="#{driver.fullname} + ':'" for="fullname"></label>
 					<input id="fullname" type="text" th:field="*{fullname}" onchange="validateFullname()" />
