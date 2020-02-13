@@ -9,7 +9,7 @@ function validateFullname() {
 	var input = document.getElementById("fullname");
 	var fullname = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]*$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
 	var valid = regExp.test(fullname);
@@ -32,7 +32,7 @@ function validateCountry() {
 	var input = document.getElementById("country");
 	var country = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]*$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
 	var valid = regExp.test(country);

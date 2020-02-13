@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.DriverForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.PaginationForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverService;
@@ -41,33 +42,25 @@ public class DriverController {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 							 @RequestParam("limit") Optional<Integer> limit) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit;
 		ModelAndView result;
-		List<Integer> pages;
-		List<Object> dataPage;
 		Map<String, List<Object>> mapa;
 	
-		result = new ModelAndView("driver/list");
-		
 		mapa = this.driverService.findAll(selectedPage, limit);
 		
-		dataPage = mapa.get("dataPage");
+		result = this.getModelAndView(mapa);
 		
-		totalPages = (int) dataPage.get(0);
-		pages = this.utilityService.getPages(totalPages);
+		return result;
+	}
 	
-		totalElements = (int) dataPage.get(2);
-		valid_limit = (int) dataPage.get(3);
-		valid_selectedPage = (int) dataPage.get(4);
+	@GetMapping("/display")
+	public ModelAndView display(@RequestParam("fullname") String fullname) {
+		ModelAndView result;
+		Driver driver;
 		
-		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
-		result.addObject("selectedPage", valid_selectedPage);
-		result.addObject("totalPages", totalPages);
-		result.addObject("pages", pages);
-		result.addObject("drivers", mapa.get("drivers"));
-		result.addObject("driverForm", new DriverForm());
-		result.addObject("paginationForm", new PaginationForm(valid_selectedPage, valid_limit));
+		driver = (Driver)this.driverService.findOne(fullname.trim());
+		
+		result = new ModelAndView("driver/display");
+		result.addObject("driver", driver);
 		
 		return result;
 	}
@@ -89,37 +82,33 @@ public class DriverController {
 	}
 	
 	@PostMapping(value = "/list", params = "search")
-	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, @Valid @ModelAttribute PaginationForm paginationForm, BindingResult binding) {
+	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
 		ModelAndView result;
+		Map<String, List<Object>> mapa;
 		String country;
-		
-		result = new ModelAndView("driver/list");
-		result.addObject("driverForm", driverForm);
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			result.addObject("drivers", this.driverService.findAll());
+			mapa = this.driverService.findAll();
+			result = this.getModelAndView(mapa);
 			
 		} else {
 			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas
-			
 			country = driverForm.getCountry();
 			
 			if (!StringUtil.isBlank(country)) {
-				result.addObject("drivers", this.driverService.findByCountry(country,
-																			Optional.ofNullable(paginationForm.getOffset()),
-																			Optional.ofNullable(paginationForm.getLimit())));
+				mapa = this.driverService.findByCountry(country,
+														Optional.ofNullable(0),
+														Optional.ofNullable(10)); 
 			} else {
-				result.addObject("drivers", this.driverService.findAll());
+				mapa = this.driverService.findAll();
 			}
 			
-			result.addObject("nombreCompleto", driverForm.getFullname());
-			result.addObject("pais", driverForm.getCountry());
+			result = this.getModelAndView(mapa);
 		}
 		
 		return result;
-		
 	}
 	
 	@PostMapping(value = "/list", params = "reset")
@@ -132,6 +121,39 @@ public class DriverController {
 		//PagedListHolder<Driver> pagedDriver;
 		return result;
 		
+	}
+	
+	
+	public ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
+		int totalPages, totalElements, valid_selectedPage, valid_limit;
+		ModelAndView result;
+		List<Integer> pages;
+		List<Object> dataPage;
+		PaginationForm paginationForm;
+		
+		dataPage = mapa.get("dataPage");
+		
+		totalPages = (int) dataPage.get(0);
+		pages = this.utilityService.getPages(totalPages);
+	
+		totalElements = (int) dataPage.get(2);
+		valid_limit = (int) dataPage.get(3);
+		valid_selectedPage = (int) dataPage.get(4);
+	
+		paginationForm = new PaginationForm(valid_selectedPage, valid_limit);
+		
+		result = new ModelAndView("driver/list");
+		
+		result.addObject("totalElements", totalElements);
+		result.addObject("limit", valid_limit);
+		result.addObject("selectedPage", valid_selectedPage);
+		result.addObject("totalPages", totalPages);
+		result.addObject("pages", pages);
+		result.addObject("drivers", mapa.get("drivers"));
+		result.addObject("driverForm", new DriverForm());
+		result.addObject("paginationForm", paginationForm);
+		
+		return result;
 	}
 		
 }

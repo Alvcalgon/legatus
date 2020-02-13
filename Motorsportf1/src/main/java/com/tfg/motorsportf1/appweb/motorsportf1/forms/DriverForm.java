@@ -17,9 +17,19 @@ public class DriverForm {
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String country;
 	
+//	@Valid
+//	@NotNull
+//	private PaginationForm paginationForm;
+	
 	public DriverForm() {
 		super();
 	}
+	
+//	public DriverForm(PaginationForm paginationForm) {
+//		super();
+//		
+//		this.paginationForm = paginationForm;
+//	}
 
 	public String getFullname() {
 		return fullname;
@@ -36,8 +46,15 @@ public class DriverForm {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
 	
+//	public PaginationForm getPaginationForm() {
+//		return paginationForm;
+//	}
+//
+//	public void setPaginationForm(PaginationForm paginationForm) {
+//		this.paginationForm = paginationForm;
+//	}
+
 	@Override
 	public String toString() {
 		return "DriverSearch [fullname=" + this.fullname + ", country=" + this.country + "]";

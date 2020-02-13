@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{driver.list}">Lista de pilotos</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{driver.display}">Detalles de un piloto</h1>
+					
+					<div class="detalles" style="background-color:'grey';">
+						<p>
+							<strong th:text="#{driver.fullname}">Nombre completo</strong>
+							<span th:text="${driver.fullname}"></span>
+						</p>
+						
+						<p>
+							<strong th:text="#{driver.country}">Pais de nacimiento</strong>
+							<span th:text="${driver.country}"></span>
+						</p>
+						
+						<p>
+							<strong th:text="#{driver.placebirth}">Nombre completo</strong>
+							<span th:text="${driver.placeOfBirth}"></span>
+						</p>
+						
+						<p>
+							<strong th:text="#{driver.datebirth}">Nombre completo</strong>
+							<span th:text="${driver.dateOfBirth}"></span>
+						</p>
+						
+					</div>
+				
+					<p> <a th:href="@{/}"
+					  	   th:text="#{link.return}">Volver atrás</a> </p>
+				
+				</div>
+			</div>
+		</body>
+	</html>

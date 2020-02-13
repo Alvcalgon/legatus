@@ -49,6 +49,8 @@
 					<table th:if="${drivers.size() > 0}" class="table table-striped">
 						<thead class="thead-dark">
 							<tr>
+								<th>
+								</th>
 								<th th:text="#{driver.fullname}">Nombre completo</th>
 								<th th:text="#{driver.placebirth}">Place of birth</th>
 								<th th:text="#{driver.country}">Country</th>
@@ -57,6 +59,9 @@
 						</thead>
 						<tbody>
 							<tr th:each="driver : ${drivers}">
+								<td>
+									<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
+								</td>
 								<td th:text="${driver.fullname}"></td>
 								<td th:text="${driver.placeOfBirth}"></td>
 								<td th:text="${driver.country}"></td>
