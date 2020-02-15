@@ -8,23 +8,32 @@
 				<div class="container">
 					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
 					
-					<nav th:if="${pages.size() > 0}">
+					<nav th:if="${pages.size() > 0}" style="margin-bottom:20px;">
 						<div class="enlaces">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
-									<a th:href="@{/driver/list(offset=${selectedPage}-1, limit=${limit})}"
+									<a href="#" th:href="@{/driver/list(offset=${selectedPage}-1,
+															   limit=${limit},
+															   fullname=${driverForm.fullname},
+															   country=${driverForm.country})}"
 									   th:text="#{paginacion.previous}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
-									<a th:href="@{/driver/list(offset=${page}, limit=${limit})}"
+									<a href="#" th:href="@{/driver/list(offset=${page},
+															   limit=${limit},
+															   fullname=${driverForm.fullname},
+															   country=${driverForm.country})}"
 									   th:text="${page}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
-									<a th:href="@{/driver/list(offset=${selectedPage}+1, limit=${limit})}"
+									<a href="#" th:href="@{/driver/list(offset=${selectedPage}+1,
+															   limit=${limit},
+															   fullname=${driverForm.fullname},
+															   country=${driverForm.country})}"
 									   th:text="#{paginacion.next}"
 									   class="page-link">
 									</a>
@@ -32,10 +41,14 @@
 							</ul>
 						</div>
 						
-						<form th:action="@{/driver/list}" th:object="${paginationForm}"
+						<form th:action="@{/driver/list}" th:object="${driverForm}"
 							  method="post">
 							<input id="offset" name="offset" type="hidden"
-							       th:field="*{offset}">
+							       th:field="*{offset}" />
+							<input id="fullname" name="fullname" type="hidden"
+							       th:field="*{fullname}" />
+							<input id="country" name="country" type="hidden"
+							       th:field="*{country}" />
 							
 							<label th:text="#{paginacion.length} + ':'" for="limit"></label>
 							<input id="limit" name="limit" type="number"
@@ -65,17 +78,11 @@
 								<td th:text="${driver.fullname}"></td>
 								<td th:text="${driver.placeOfBirth}"></td>
 								<td th:text="${driver.country}"></td>
-								<td th:text="${#dates.format(driver.dateOfBirth, 'dd/MM/yyyy')}"></td>
+								<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
 							</tr>
 						</tbody>
 					</table>
 					<span th:if="${drivers.size() == 0}" th:text="#{paginacion.empty}"></span>
-				</div>
-				
-				<div>
-					<h3> Parametros de busqueda </h3>
-					<p> <strong> NombreCompleto: </strong> <span th:text="${nombreCompleto} ? ${nombreCompleto} : 'No se ha buscado por este parametro'"></span> </p>
-					<p> <strong> Pais: </strong> <span th:text="${pais} ? ${pais} : 'No se ha buscado por este parametro'"></span> </p>
 				</div>
 				
 				<div th:replace="driver/search :: frag-driver-search"></div>

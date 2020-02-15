@@ -21,8 +21,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
-
 @Service
 public class UtilityService {
 	
@@ -113,7 +111,11 @@ public class UtilityService {
 		} catch (URISyntaxException use) {
 			log.info("Error en la url de la API: " + use.getMessage());
 			
-			result = new Driver();
+			result = null;
+		} catch (Throwable oops) {
+			log.info("Algo falló: " + oops.getMessage());
+			
+			result = null;
 		}
 		
 		return result;

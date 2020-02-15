@@ -25,6 +25,55 @@ public class DriverServiceTest extends AbstractTest {
 	
 	
 	// Suite test -------------------------
+//	@Test
+//	public void positiveTest_fromObjectToDriver() {
+//		Map<String,List<Object>> mapJSON;
+//		List<Object> objects;
+//		List<Driver> drivers;
+//		
+//		mapJSON = this.driverService.findAll(Optional.of(1), Optional.of(10));
+//		objects = mapJSON.get("drivers");
+//		
+//		drivers = this.driverService.getDriversFromObject(objects);
+//		
+//		assertNotNull(drivers);
+//		assertTrue(drivers.size() > 0);
+//	}
+	
+	@Test
+	public void positiveTest_display_uno() {
+		Object driver;
+		String fullname;
+		
+		fullname = "Fernando Alonso";
+		driver = this.driverService.findOne(fullname);
+		
+		assertNotNull(driver);
+	}
+	
+	@Test
+	public void positiveTest_display_dos() {
+		Object driver;
+		String fullname;
+		
+		fullname = "Philippe Étancelin";
+		driver = this.driverService.findOne(fullname);
+		
+		assertNotNull(driver);
+	}
+	
+	@Test
+	public void negativeTest_display() {
+		Object driver;
+		String fullname;
+		
+		fullname = "Desconocido";
+		driver = this.driverService.findOne(fullname);
+		
+		assertTrue(driver == null);
+	}
+	
+	
 	@Test
 	public void positiveTest_findAll_uno() {
 		Map<String,List<Object>> mapJSON;

@@ -5,7 +5,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.SafeHtml;
 
-public class DriverForm {
+public class DriverForm extends PaginationForm {
 	
 	@NotNull
 	@Pattern(regexp = "^[^0-9]*$")
@@ -17,20 +17,23 @@ public class DriverForm {
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String country;
 	
-//	@Valid
-//	@NotNull
-//	private PaginationForm paginationForm;
 	
 	public DriverForm() {
 		super();
 	}
 	
-//	public DriverForm(PaginationForm paginationForm) {
-//		super();
-//		
-//		this.paginationForm = paginationForm;
-//	}
-
+	public DriverForm(int offset, int limit) {
+		super(offset, limit);
+	}
+	
+	public DriverForm(int offset, int limit, String fullname, String country) {
+		super(offset, limit);
+		
+		this.fullname = fullname;
+		this.country = country;
+	}
+	
+	
 	public String getFullname() {
 		return fullname;
 	}
@@ -47,14 +50,6 @@ public class DriverForm {
 		this.country = country;
 	}
 	
-//	public PaginationForm getPaginationForm() {
-//		return paginationForm;
-//	}
-//
-//	public void setPaginationForm(PaginationForm paginationForm) {
-//		this.paginationForm = paginationForm;
-//	}
-
 	@Override
 	public String toString() {
 		return "DriverSearch [fullname=" + this.fullname + ", country=" + this.country + "]";
