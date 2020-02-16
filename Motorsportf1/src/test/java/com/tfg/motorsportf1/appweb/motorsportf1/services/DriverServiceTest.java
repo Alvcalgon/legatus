@@ -25,20 +25,6 @@ public class DriverServiceTest extends AbstractTest {
 	
 	
 	// Suite test -------------------------
-//	@Test
-//	public void positiveTest_fromObjectToDriver() {
-//		Map<String,List<Object>> mapJSON;
-//		List<Object> objects;
-//		List<Driver> drivers;
-//		
-//		mapJSON = this.driverService.findAll(Optional.of(1), Optional.of(10));
-//		objects = mapJSON.get("drivers");
-//		
-//		drivers = this.driverService.getDriversFromObject(objects);
-//		
-//		assertNotNull(drivers);
-//		assertTrue(drivers.size() > 0);
-//	}
 	
 	@Test
 	public void positiveTest_display_uno() {
@@ -101,7 +87,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -136,7 +122,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -171,7 +157,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -206,7 +192,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -241,7 +227,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -276,7 +262,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -311,7 +297,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -346,7 +332,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -381,7 +367,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -416,7 +402,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -451,7 +437,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -486,7 +472,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -556,7 +542,7 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
@@ -591,12 +577,332 @@ public class DriverServiceTest extends AbstractTest {
 		limit = (int) dataPage.get(3);
 		offset = (int) dataPage.get(4);
 		
-		assertTrue(drivers.size() == limit);
+		assertTrue(drivers.size() <= limit);
 		assertTrue(totalPages >= 0);
 		assertTrue(currentPage >= 0 && currentPage <= totalPages);
 		assertTrue(totalElements >= 0);
 		assertTrue(limit >= 1 && limit <= totalElements);
 		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void positiveTest_findByCountry_uno() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		String country;
+		Optional<Integer> page, size;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		country = "Spain";
+		
+		mapJSON = this.driverService.findByCountry(country, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit <= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void positiveTest_findByCountry_dos() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		String country;
+		Optional<Integer> page, size;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		country = "United States";
+		
+		mapJSON = this.driverService.findByCountry(country, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit <= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void positiveTest_findByCountry_tres() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		String country;
+		Optional<Integer> page, size;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		country = "France";
+		
+		mapJSON = this.driverService.findByCountry(country, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit <= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void negativeTest_findByCountry_uno() {
+		int offset, limit;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		String country;
+		Optional<Integer> page, size;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		country = "España";
+		
+		mapJSON = this.driverService.findByCountry(country, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		assertTrue(drivers.size() == 0);
+	}
+	
+	@Test
+	public void negativeTest_findByCountry_dos() {
+		int offset, limit;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		Optional<Integer> page, size;
+		String country;
+		
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		country = "Desconocido";
+		
+		mapJSON = this.driverService.findByCountry(country, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+			
+		assertTrue(drivers.size() == 0);
+	}
+	
+	@Test
+	public void positiveTest_findByFullname_uno() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		Optional<Integer> page, size;
+		String fullname;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		fullname = "Lauda";
+		
+		mapJSON = this.driverService.findByFullname(fullname, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit >= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	
+	@Test
+	public void positiveTest_findByFullname_dos() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		Optional<Integer> page, size;
+		String fullname;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		fullname = "Fernando Alonso";
+		
+		mapJSON = this.driverService.findByFullname(fullname, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit >= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void positiveTest_findByFullname_tres() {
+		int offset, limit, totalPages, currentPage, totalElements;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		Optional<Integer> page, size;
+		String fullname;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		fullname = "londoño";
+		
+		mapJSON = this.driverService.findByFullname(fullname, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+		totalPages = (int) dataPage.get(0);
+		currentPage = (int) dataPage.get(1);
+		totalElements = (int) dataPage.get(2);
+		limit = (int) dataPage.get(3);
+		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() <= limit);
+		assertTrue(totalPages >= 0);
+		assertTrue(currentPage >= 0 && currentPage <= totalPages);
+		assertTrue(totalElements >= 0);
+		assertTrue(limit >= 1 && limit >= totalElements);
+		assertTrue(offset >= 1 && offset <= totalPages);
+	}
+	
+	@Test
+	public void negativeTest_findByFullname_uno() {
+		int offset, limit;
+		Map<String,List<Object>> mapJSON;
+		List<Object> drivers, dataPage;
+		Optional<Integer> page, size;
+		String fullname;
+		
+		offset = 1;
+		limit = 5;
+		
+		page = Optional.ofNullable(offset);
+		size = Optional.ofNullable(limit);
+		
+		fullname = "Desconocido";
+		
+		mapJSON = this.driverService.findByFullname(fullname, page, size);
+		
+		drivers = mapJSON.get("drivers");
+		dataPage  = mapJSON.get("dataPage");
+		
+		assertNotNull(drivers);
+		assertNotNull(dataPage);
+		
+//		totalPages = (int) dataPage.get(0);
+//		currentPage = (int) dataPage.get(1);
+//		totalElements = (int) dataPage.get(2);
+//		limit = (int) dataPage.get(3);
+//		offset = (int) dataPage.get(4);
+		
+		assertTrue(drivers.size() == 0);
+		//assertTrue(totalPages >= 0);
+		//assertTrue(currentPage == 0);
+		//assertTrue(totalElements == 0);
 	}
 	
 }

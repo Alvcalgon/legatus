@@ -43,15 +43,15 @@
 						
 						<form th:action="@{/driver/list}" th:object="${driverForm}"
 							  method="post">
-							<input id="offset" name="offset" type="hidden"
+							<input name="offset" type="hidden"
 							       th:field="*{offset}" />
-							<input id="fullname" name="fullname" type="hidden"
+							<input name="fullname" type="hidden"
 							       th:field="*{fullname}" />
-							<input id="country" name="country" type="hidden"
+							<input name="country" type="hidden"
 							       th:field="*{country}" />
 							
 							<label th:text="#{paginacion.length} + ':'" for="limit"></label>
-							<input id="limit" name="limit" type="number"
+							<input name="limit2" type="number"
 							       th:field="*{limit}" min="1" th:max="${totalElements}" />
 					
 							<input type="submit" name="update" th:value="#{paginacion.update}" />

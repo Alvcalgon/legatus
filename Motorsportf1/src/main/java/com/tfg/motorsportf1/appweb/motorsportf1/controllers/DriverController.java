@@ -35,6 +35,7 @@ public class DriverController {
 	@Autowired
 	private UtilityService utilityService;
 	
+	
 	public DriverController() {
 		super();
 	}
@@ -125,7 +126,6 @@ public class DriverController {
 			// Si hay errores de validacion, se envian todos los pilotos
 			mapa = this.driverService.findAll();
 			
-			driverForm = new DriverForm();
 		} else {
 			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas
@@ -156,11 +156,12 @@ public class DriverController {
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute DriverForm driverForm) {
+		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		
-		result = new ModelAndView("driver/list");
-		result.addObject("drivers", this.driverService.findAll());
-		result.addObject("driverForm", new DriverForm());
+		mapa = this.driverService.findAll();
+		
+		result = this.getModelAndView(mapa);
 		
 		return result;
 	}
@@ -183,7 +184,7 @@ public class DriverController {
 		valid_selectedPage = (int) dataPage.get(4);
 	
 		result = new ModelAndView("driver/list");
-		
+	
 		result.addObject("totalElements", totalElements);
 		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);

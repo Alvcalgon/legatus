@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriUtils;
 
 @Service
 public class UtilityService {
@@ -72,29 +72,9 @@ public class UtilityService {
 		
 			results = new HashMap<String, Object>();
 		} catch (Throwable oops) {
-			log.info("Error al parsear los objetos del json");
+			log.info("Error al parsear los objetos del json: " + oops.getMessage());
 			
 			results = new HashMap<String, Object>();
-		}
-		
-		return results;
-	}
-	
-	public List<LinkedHashMap<String, String>> mapJSON(String url) {
-		List<LinkedHashMap<String, String>> results;
-		URI uri;
-		
-		try {
-			uri = new URI(url);
-			
-			results = this.restTemplate.getForObject(uri, List.class);
-		} catch (URISyntaxException use) {
-			log.info("Error en la url de la API: " + use.getMessage());
-			
-			results = new ArrayList<LinkedHashMap<String,String>>();
-		} catch (Throwable oops) {
-			log.info("Error al parsear los objetos del json");
-			results = new ArrayList<LinkedHashMap<String,String>>();
 		}
 		
 		return results;
@@ -153,7 +133,7 @@ public class UtilityService {
 		int result;
 		int totalPages;
 		
-		if (selectedPage != null) {
+		if (selectedPage != null && totalElements > 0) {
 			totalPages = (totalElements%limit == 0) ? totalElements/limit : (totalElements/limit)+1; 
 			
 			result = (selectedPage.isPresent()) ? selectedPage.get() : 1;
@@ -162,6 +142,14 @@ public class UtilityService {
 		} else {
 			result = 1;
 		}
+		
+		return result;
+	}
+	
+	protected String getEncodedText(String text) {
+		String result;
+		
+		result = UriUtils.encode(text, "UTF-8");
 		
 		return result;
 	}

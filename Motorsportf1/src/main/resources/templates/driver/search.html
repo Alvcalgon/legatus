@@ -3,7 +3,7 @@
 		<body>
 			<div class="form driver search container" th:fragment="frag-driver-search">
 				<h2 th:text="#{search.finder}">Buscador</h2>
-				<form th:action="@{/driver/list}" th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
+				<form class="search" th:action="@{/driver/list}" th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
 					<input id="limit" type="hidden" th:field="*{limit}" />
 					<input id="offset" type="hidden" th:field="*{offset}" />
 					

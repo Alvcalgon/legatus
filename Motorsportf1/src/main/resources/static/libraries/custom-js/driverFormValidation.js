@@ -6,7 +6,8 @@ function validateDriverForm() {
 }
 
 function validateFullname() {
-	var input = document.getElementById("fullname");
+	//var input = document.getElementById("fullname");
+	var input = document.querySelectorAll("form.search input#fullname")[0];
 	var fullname = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[^0-9]{0,}$/;
@@ -25,11 +26,13 @@ function validateFullname() {
 	
 	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("fullnameError").innerHTML = error;
+	
 	return error;
 }
 
 function validateCountry() {
-	var input = document.getElementById("country");
+	//var input = document.getElementById("country");
+	var input = document.querySelectorAll("form.search input#country")[0];
 	var country = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[^0-9]{0,}$/;
@@ -47,6 +50,7 @@ function validateCountry() {
 	
 	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("countryError").innerHTML = error;
+	
 	return error;
 }
 
