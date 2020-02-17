@@ -6,8 +6,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +25,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/driver")
 public class DriverController {
 
-	private static final Log log = LogFactory.getLog(DriverController.class);
+	//private static final Log log = LogFactory.getLog(DriverController.class);
 	
 	@Autowired
 	private DriverService driverService;
@@ -153,6 +151,55 @@ public class DriverController {
 		
 		return result;
 	}
+	
+//	@PostMapping(value = "/list", params = "search")
+//	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
+//		ModelAndView result;
+//		Map<String, List<Object>> mapa, mapa_fullname, mapa_country;
+//		List<Object> objects, objects_fullname, objects_country;
+//		String country, fullname;
+//		
+//		if (binding.hasErrors()) {
+//			// Si hay errores de validacion, se envian todos los pilotos
+//			mapa = this.driverService.findAll();
+//			
+//		} else {
+//			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
+//			// parametros de busquedas
+//			country = driverForm.getCountry().trim();
+//			fullname = driverForm.getFullname().trim();
+//			
+//			mapa = this.driverService.findAll(
+//					Optional.ofNullable(driverForm.getOffset()),
+//					Optional.ofNullable(driverForm.getLimit()));
+//			
+//			objects = mapa.get("drivers");
+//			
+//			if (!StringUtil.isBlank(country)) {
+//				mapa_country = this.driverService.findByCountry(country,
+//								Optional.ofNullable(driverForm.getOffset()),
+//							    Optional.ofNullable(driverForm.getLimit()));
+//				
+//				objects_country = mapa_country.get("drivers");
+//				
+//				objects.retainAll(objects_country);
+//			} else if (!StringUtil.isBlank(fullname)) {
+//				mapa_fullname = this.driverService.findByFullname(fullname,
+//								Optional.ofNullable(driverForm.getOffset()),
+//								Optional.ofNullable(driverForm.getLimit()));
+//				
+//				objects_fullname = mapa_fullname.get("drivers");
+//				
+//				objects.retainAll(objects_fullname);
+//			}
+//			
+//			mapa.put("drivers", objects);
+//		}
+//		
+//		result = this.getModelAndView(mapa, driverForm);
+//		
+//		return result;
+//	}
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute DriverForm driverForm) {

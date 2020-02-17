@@ -41,7 +41,8 @@
 							</ul>
 						</div>
 						
-						<form th:action="@{/driver/list}" th:object="${driverForm}"
+						<form class="form-inline was-validated" th:action="@{/driver/list}"
+						 	  th:object="${driverForm}"
 							  method="post">
 							<input name="offset" type="hidden"
 							       th:field="*{offset}" />
@@ -50,11 +51,14 @@
 							<input name="country" type="hidden"
 							       th:field="*{country}" />
 							
-							<label th:text="#{paginacion.length} + ':'" for="limit"></label>
-							<input name="limit2" type="number"
-							       th:field="*{limit}" min="1" th:max="${totalElements}" />
+							<div class="form-group" style="padding-right:20px;">
+								<label th:text="#{paginacion.length} + ':'" for="limit" style="padding-right:20px;"></label>
+								<input class="form-control" name="limit2" type="number"
+							      	   th:field="*{limit}" min="1" th:max="${totalElements}" />
+							</div>
 					
-							<input type="submit" name="update" th:value="#{paginacion.update}" />
+							<input class="btn btn-primary" type="submit" 
+								   name="update" th:value="#{paginacion.update}" />
 						</form>
 						<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
 					</nav>
@@ -87,7 +91,7 @@
 				
 				<div th:replace="driver/search :: frag-driver-search"></div>
 				
-				<p> <a th:href="@{/}"
+				<p> <a class="btn btn-secondary" th:href="@{/}"
 					   th:text="#{link.return}">Volver atrás</a> </p>
 			</div>
 		</body>
