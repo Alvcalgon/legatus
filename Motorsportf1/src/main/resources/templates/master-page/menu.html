@@ -4,37 +4,47 @@
 	<body>
 		<div class="menu-principal" th:fragment="frag-menu">
 			<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-				<ul class="navbar-nav">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#"
-						   id="navbardrop" data-toggle="dropdown"
-						   th:text="#{master.menu.driver}"> Lista de pilotos </a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-							   th:text="#{driver.list}">Lista de pilotos </a>
-							<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-							   th:text="#{driver.list}">Formulario de pilotos</a>
-							<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-							   th:text="#{driver.list}">Mostrar piloto</a>
-						</div>
-					</li>
-					
-					<li class="nav-item">
-						<a class="nav-link" href="#" th:href="@{/constructor/list}"
-						   th:text="#{constructor.list}">Lista de escuderias</a>
-					</li>
-					
-					<li class="nav-item">
-						<a class="nav-link" href="#" th:href="@{/circuit/list}"
-						   th:text="#{circuit.list}">Lista de circuits</a>
-					</li>
-					
-					<li class="nav-item dropright">
-						<a class="nav-link" href="#" th:href="@{/api}">
-							API Rest - FOne
-						</a>
-					</li>
-				</ul>
+				<a class="nav-item navbar-brand" href="#" th:href="@{/}">
+					Motorsport F1
+				</a>
+				
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+					<span class="navbar-toggler-icon"> </span>
+				</button>
+				
+				<div class="collapse navbar-collapse" id="collapsibleNavbar">
+					<ul class="navbar-nav">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#"
+							   id="navbardrop" data-toggle="dropdown"
+							   th:text="#{master.menu.driver}"> Lista de pilotos </a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
+								   th:text="#{driver.list}">Lista de pilotos </a>
+								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
+								   th:text="#{driver.list}">Formulario de pilotos</a>
+								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
+								   th:text="#{driver.list}">Mostrar piloto</a>
+							</div>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" href="#" th:href="@{/constructor/list}"
+							   th:text="#{constructor.list}">Lista de escuderias</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" href="#" th:href="@{/circuit/list}"
+							   th:text="#{circuit.list}">Lista de circuits</a>
+						</li>
+						
+						<li class="nav-item dropright">
+							<a class="nav-link" href="#" th:href="@{/api}">
+								API Rest - FOne
+							</a>
+						</li>
+					</ul>
+				</div>
 			</nav>
 		</div>
 	</body>
