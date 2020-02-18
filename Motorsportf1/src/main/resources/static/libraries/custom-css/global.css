@@ -18,11 +18,7 @@ span.error {
 	color:red;
 }
 
-#descripcionAppWeb {
-	border-bottom: 5px;
-	background-color: #DCDCDC;
+footer.footer div div {
+	text-align:center;
 }
 
-#descripcionAPI {
-	background-color: #D3D3D3;
-}
