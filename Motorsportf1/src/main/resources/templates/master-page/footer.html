@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 	<html xmlns:th="http://www.thymeleaf.org">
 		<body>
-			<footer class="footer" th:fragment="frag-footer" style="text-align:center;">
-				<hr />
-				
-				<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
-				<br />
+		
+			<footer class="footer jumbotron jumbotron-fluid bg-dark text-white" th:fragment="frag-footer" style="text-align:center;">		
+				<div class="container">
+					<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
 			
-				<p>
-					<a th:href="@{terms}" th:text="#{master.footer.terms}"></a>	
-				</p>
-				
-				<p>
-					<a th:href="@{cookies}" th:text="#{master.footer.cookies}"></a>
-				</p>
+					<p>
+						<a th:href="@{terms}" th:text="#{master.footer.terms}"></a>	
+					</p>
+					
+					<p>
+						<a th:href="@{cookies}" th:text="#{master.footer.cookies}"></a>
+					</p>
+				</div>
 			</footer>
 		</body>
 	</html>
