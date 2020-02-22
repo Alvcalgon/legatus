@@ -29,6 +29,15 @@ public class UtilityService {
 	public static final String API_URI_DEPLOY = "https://fone-api.herokuapp.com/fone";
 	public static final String API_URI_PRE = "http://localhost:8080/fone";
 	
+	public static final int DEFAULT_LIMIT = 10;
+	public static final int DEFAULT_OFFSET_TO_USER = 1;
+	public static final int DEFAULT_OFFSET_TO_API = 0;
+	
+	public static final int POS_TOTAL_PAGES = 0;
+	public static final int POS_TOTAL_ELEMENTS = 1;
+	public static final int POS_LIMIT = 2;
+	public static final int POS_OFFSET = 3;
+	
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -152,6 +161,19 @@ public class UtilityService {
 		result = UriUtils.encode(text, "UTF-8");
 		
 		return result;
+	}
+	
+	protected List<Object> fillDataPage(int totalPages, int totalElements, int limit, int offset) {
+		List<Object> results;
+		
+		results = new ArrayList<Object>();
+		
+		results.add(UtilityService.POS_TOTAL_PAGES, totalPages);
+		results.add(UtilityService.POS_TOTAL_ELEMENTS, totalElements);
+		results.add(UtilityService.POS_LIMIT, limit);
+		results.add(UtilityService.POS_OFFSET, offset);
+		
+		return results;
 	}
 	
 }

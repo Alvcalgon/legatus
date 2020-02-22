@@ -10,17 +10,27 @@
 					
 					<div class="form-group">
 						<label th:text="#{driver.fullname} + ':'" for="fullname"></label>
-						<input class="form-control is-invalid" id="fullname" type="text" th:field="*{fullname}" onchange="validateFullname()" />
+						<input class="form-control is-invalid"
+						       id="fullname"
+						       type="text"
+						       th:field="*{fullname}"
+						       onchange="validateFullname()" />
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
-							<span class="error" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}">Error nombre completo</span>
+							<span class="error" 
+							      th:if="${#fields.hasErrors('fullname')}"
+							      th:errors="*{fullname}">Error nombre completo</span>
 							<span id="fullnameError"></span>
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<label th:text="#{driver.country} + ':'" for="country"></label>
-						<input class="form-control is-invalid" id="country" type="text" th:field="*{country}" onchange="validateCountry()" />
+						<input class="form-control is-invalid"
+							   id="country"
+							   type="text"
+							   th:field="*{country}"
+							   onchange="validateCountry()" />
 						<span class="form-text text-muted" th:text="#{driver.country.info}">Información</span>
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">

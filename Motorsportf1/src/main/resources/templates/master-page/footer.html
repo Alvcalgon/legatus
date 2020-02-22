@@ -4,8 +4,10 @@
 			<footer class="footer" th:fragment="frag-footer">
 				<div class="jumbotron jumbotron-fluid bg-dark text-white">	
 					<div class="container">		
-						<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
-					
+						<p>
+							<strong th:utext="#{master.footer.copyright(${#calendars.format(#calendars.createNow(), 'yyyy')})}"></strong>
+						</p>
+						
 						<p>
 							<a th:href="@{terms}" th:text="#{master.footer.terms}"></a>	
 						</p>

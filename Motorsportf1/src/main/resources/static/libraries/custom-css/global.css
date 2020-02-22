@@ -5,11 +5,10 @@
 	font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/*
-.content {
-	background-color: #C0C0C0;
+table.table {
+	margin-top: 75px;
 }
-*/
+
 .footer {
 	background-color: #9ACD32;
 }
@@ -18,8 +17,30 @@ span.error {
 	color:red;
 }
 
+div.info-size  {
+	display:block;
+	float: left;
+}
+
+div.enlaces-paginacion ul li {
+	display: inline;
+}
+
+div.enlaces-paginacion ul li a {
+	float:left;
+}
+
+ul.navbar-nav li.nav-item.right-link {
+	float:right !important;
+}
+
 footer.footer div div {
 	text-align:center;
+}
+
+div.no-elements {
+	padding: 25px;
+	width: 50%;
 }
 
 p.volver-atras {

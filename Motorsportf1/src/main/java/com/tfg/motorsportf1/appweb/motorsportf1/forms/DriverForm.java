@@ -52,7 +52,7 @@ public class DriverForm extends PaginationForm {
 	
 	@Override
 	public String toString() {
-		return "DriverSearch [fullname=" + this.fullname + ", country=" + this.country + "]";
+		return "DriverForm [fullname=" + this.fullname + ", country=" + this.country + "]";
 	}
 	
 }

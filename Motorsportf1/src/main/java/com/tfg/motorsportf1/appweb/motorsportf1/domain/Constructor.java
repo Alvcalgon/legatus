@@ -17,6 +17,21 @@ public class Constructor {
 		super();
 	}
 	
+	public Constructor(String name, String country) {
+		super();
+		
+		this.name = name;
+		this.country = country;
+	}
+	
+	public Constructor(String name, String country, String principal) {
+		super();
+		
+		this.name = name;
+		this.country = country;
+		this.principal = principal;
+	}
+	
 	// Getters y setters ---------------------------
 	public String getName() {
 		return name;

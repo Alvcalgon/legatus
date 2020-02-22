@@ -63,8 +63,8 @@ public class DriverController {
 		
 		dataPage = mapa.get("dataPage");
 		
-		valid_limit = (int) dataPage.get(3);
-		valid_offset = (int) dataPage.get(4);
+		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
+		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
 		driverForm = new DriverForm(valid_offset, valid_limit, val_fullname, val_country);
 		
@@ -214,7 +214,7 @@ public class DriverController {
 	}
 	
 	
-	public ModelAndView getModelAndView(Map<String, List<Object>> mapa, 
+	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, 
 										DriverForm driverForm) {
 		int totalPages, totalElements, valid_selectedPage, valid_limit;
 		ModelAndView result;
@@ -223,12 +223,12 @@ public class DriverController {
 		
 		dataPage = mapa.get("dataPage");
 		
-		totalPages = (int) dataPage.get(0);
+		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
 		pages = this.utilityService.getPages(totalPages);
 	
-		totalElements = (int) dataPage.get(2);
-		valid_limit = (int) dataPage.get(3);
-		valid_selectedPage = (int) dataPage.get(4);
+		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
+		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 	
 		result = new ModelAndView("driver/list");
 	
@@ -243,7 +243,7 @@ public class DriverController {
 		return result;
 	}
 	
-	public ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
+	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
 		ModelAndView result;
 		DriverForm driverForm;
 		

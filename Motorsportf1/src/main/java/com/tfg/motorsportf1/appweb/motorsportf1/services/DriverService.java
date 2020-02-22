@@ -100,7 +100,7 @@ public class DriverService {
 				Optional<Integer> limit) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_drivers;
-		int currentPage, totalPages, totalElements, valid_limit, valid_selectedPage, targetPage;
+		int totalPages, totalElements, valid_limit, valid_selectedPage, targetPage;
 		Map<String, Object> map_json, temp;
 		List<Object> drivers;
 		List<Object> dataPage;
@@ -112,7 +112,6 @@ public class DriverService {
 
 			// Validamos campos de la paginacion
 			valid_limit = this.utilityService.getValidLimit(limit, totalElements);
-
 			valid_selectedPage = this.utilityService.getValidOffset(selectedPage, valid_limit, totalElements);
 
 			targetPage = valid_selectedPage - 1;
@@ -128,23 +127,22 @@ public class DriverService {
 
 				if (!ls_map_drivers.isEmpty()) {
 					for (LinkedHashMap<String, String> mapDriver : ls_map_drivers) {
-						driver = new Driver(mapDriver.get("fullname"), mapDriver.get("placeOfBirth"),
-								mapDriver.get("country"),
-								this.utilityService.getDateFromString(mapDriver.get("dateOfBirth")));
+						driver = new Driver(mapDriver.get("fullname"),
+											mapDriver.get("placeOfBirth"),
+											mapDriver.get("country"),
+											this.utilityService.getDateFromString(mapDriver.get("dateOfBirth")));
 
 						drivers.add(driver);
 					}
 				}
 				
 				totalPages = (int) map_json.get("totalPages");
-				currentPage = (int) map_json.get("number");
 				totalElements = (int) map_json.get("totalElements");
 				
-				dataPage.add(totalPages);
-				dataPage.add(currentPage);
-				dataPage.add(totalElements);
-				dataPage.add(valid_limit);
-				dataPage.add(valid_selectedPage);
+				dataPage = this.utilityService.fillDataPage(totalPages,
+															totalElements, 
+															valid_limit,
+															valid_selectedPage);
 			}
 			
 			results.put("drivers", drivers);
@@ -157,13 +155,7 @@ public class DriverService {
 			results = new HashMap<String, List<Object>>();
 			
 			drivers = new ArrayList<Object>();
-			dataPage = new ArrayList<Object>();
-			
-			dataPage.add(-1);
-			dataPage.add(-1);
-			dataPage.add(-1);
-			dataPage.add(10);
-			dataPage.add(1);
+			dataPage = this.utilityService.fillDataPage(-1, -1, 10, 1);
 			
 			results.put("drivers", drivers);
 			results.put("dataPage", dataPage);

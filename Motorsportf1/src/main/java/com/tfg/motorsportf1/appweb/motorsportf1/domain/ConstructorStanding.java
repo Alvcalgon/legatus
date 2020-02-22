@@ -11,7 +11,7 @@ public class ConstructorStanding {
 	private String position;
 	
 	private Integer points;
-	
+		
 	private Constructor constructor;
 	
 	
@@ -20,6 +20,17 @@ public class ConstructorStanding {
 		super();
 	}
 	
+	public ConstructorStanding(String season, 
+							   String position, 
+							   Integer points, 
+							   Constructor constructor) {
+		super();
+		
+		this.season = season;
+		this.position = position;
+		this.points = points;
+		this.constructor = constructor;
+	}
 	
 	// Getters y setters	
 	public String getSeason() {

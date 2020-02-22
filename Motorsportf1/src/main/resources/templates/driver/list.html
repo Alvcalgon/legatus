@@ -8,8 +8,9 @@
 				<div class="container">
 					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
 					
-					<nav th:if="${pages.size() > 0}" style="margin-bottom:20px;">
-						<div class="enlaces">
+					<div th:replace="driver/search :: frag-driver-search"></div>
+					<nav th:if="${pages.size() > 0}">
+						<div class="enlaces-paginacion">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/driver/list(offset=${selectedPage}-1,
@@ -40,8 +41,10 @@
 								</li>
 							</ul>
 						</div>
-						
-						<form class="form-inline was-validated" th:action="@{/driver/list}"
+					</nav>
+				
+					<div class="info-size">
+						<form class="size-table form-inline was-validated" th:action="@{/driver/list}"
 						 	  th:object="${driverForm}"
 							  method="post">
 							<input name="offset" type="hidden"
@@ -60,9 +63,13 @@
 							<input class="btn btn-primary" type="submit" 
 								   name="update" th:value="#{paginacion.update}" />
 						</form>
-						<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
-					</nav>
-				
+						
+						<div>
+							<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
+						</div>
+					</div>
+					
+					<h2 th:text="#{result.list}">Resultados encontrados</h2>
 					<table th:if="${drivers.size() > 0}" class="table table-striped">
 						<thead class="thead-dark">
 							<tr>
@@ -86,10 +93,10 @@
 							</tr>
 						</tbody>
 					</table>
-					<span th:if="${drivers.size() == 0}" th:text="#{paginacion.empty}"></span>
-				
-					<div th:replace="driver/search :: frag-driver-search"></div>
-					
+					<div th:if="${drivers.size() == 0}"
+						 class="no-elements bg-info text-white">
+						<span th:text="#{paginacion.empty}"></span>
+					</div>
 				</div>		
 			
 				<p class="volver-atras"> 

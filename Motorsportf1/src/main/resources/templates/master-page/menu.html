@@ -38,7 +38,19 @@
 							   th:text="#{circuit.list}">Lista de circuits</a>
 						</li>
 						
-						<li class="nav-item dropright">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#"
+							   id="navbardrop" data-toggle="dropdown"
+							   th:text="#{master.menu.standing}"> Clasificacion general </a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="#" th:href="@{/constructor-standing/list}"
+							       th:text="#{master.menu.constructorStanding}">Clasificacion general de escuderias</a>
+								<a class="dropdown-item" href="#" th:href="@{/driver-standing/list}"
+							       th:text="#{master.menu.driverStanding}">Clasificacion general de pilotos</a>
+							</div>
+						</li>
+												
+						<li class="nav-item right-link">
 							<a class="nav-link" href="#" th:href="@{/api}">
 								API Rest - FOne
 							</a>

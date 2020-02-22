@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{constructorStanding.list}">Clasificación general de escuderías</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{constructorStanding.list}">Clasificación general de escuderías</h1>
+					
+					<div th:replace="constructorStanding/search :: frag-constructor-standing-search"></div>
+					
+					<nav th:if="${constructorsStanding.size() > 0}" class="nav justify-content-center">
+						<div class="enlaces-paginacion">
+							<ul class="pagination">
+								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/constructor-standing/list(offset=${selectedPage}-1,
+															   limit=${limit},
+															   season=${constructorStandingForm.season},
+															   position=${constructorStandingForm.position},
+															   constructor=${constructorStandingForm.constructor})}"
+									   th:text="#{paginacion.previous}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+									<a href="#" th:href="@{/constructor-standing/list(offset=${page},
+															   limit=${limit},
+															   season=${constructorStandingForm.season},
+															   position=${constructorStandingForm.position},
+															   constructor=${constructorStandingForm.constructor})}"
+									   th:text="${page}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/constructor-standing/list(offset=${selectedPage}+1,
+															   limit=${limit},
+															   season=${constructorStandingForm.season},
+															   position=${constructorStandingForm.position},
+															   constructor=${constructorStandingForm.constructor})}"
+									   th:text="#{paginacion.next}"
+									   class="page-link">
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+					<div th:if="${constructorsStanding.size() > 0}" class="info-size">
+						<form class="size-table form-inline was-validated" 
+						      method="post"
+						      th:action="@{/constructor-standing/list}"
+						 	  th:object="${constructorStandingForm}"
+							  novalidate="novalidate">
+							<input name="offset" type="hidden"
+							       th:field="*{offset}" />
+							<input name="season" type="hidden"
+							       th:field="*{season}" />
+							<input name="position" type="hidden"
+							       th:field="*{position}" />
+							<input name="constructor" type="hidden"
+								   th:field="*{constructor}" />
+							
+							<div class="form-group" style="padding-right:20px;">
+								<label th:text="#{paginacion.length} + ':'" for="limit" style="padding-right:20px;"></label>
+								<input class="form-control" name="limit" type="number"
+							      	   th:field="*{limit}" min="1" th:max="${totalElements}" />
+							</div>
+					
+							<input class="btn btn-primary" type="submit" 
+								   name="update" th:value="#{paginacion.update}" />
+						</form>
+						
+						<div>
+							<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
+						</div>
+					</div>
+						
+					<table th:if="${constructorsStanding.size() > 0}" class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th th:text="#{constructorStanding.season}">Temporada</th>
+								<th th:text="#{constructorStanding.position}">Posición</th>
+								<th th:text="#{constructorStanding.points}">Puntos</th>
+								<th th:text="#{constructorStanding.constructor}">Escudería</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="constructorStd : ${constructorsStanding}">
+								<td th:text="${constructorStd.season}"></td>
+								<td th:text="${constructorStd.position}"></td>
+								<td th:text="${constructorStd.points}"></td>
+								<td th:text="${constructorStd.constructor.name}"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${constructorsStanding.size() == 0}"
+						 class="no-elements bg-info text-white">
+						<span th:text="#{paginacion.empty}"></span>
+					</div>		
+				</div>		
+			
+				<p class="volver-atras"> 
+					<a class="btn btn-secondary" th:href="@{/}"
+					   th:text="#{link.return}">Volver atrás</a>
+				</p>
+			</div>
+		</body>
+	</html>
