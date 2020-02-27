@@ -163,6 +163,22 @@ public class UtilityService {
 		return result;
 	}
 	
+	public Object getFromMap(Map<String, Object> w_map, String key) {
+		Object result;
+		
+		result = (w_map.containsKey(key)) ? w_map.get(key) : null;
+		
+		return result;
+	}
+	
+	public List<Object> getFromMap2(Map<String, List<Object>> w_map, String key) {
+		List<Object> result;
+		
+		result = (w_map.containsKey(key)) ? w_map.get(key) : new ArrayList<Object>();
+		
+		return result;
+	}
+	
 	protected List<Object> fillDataPage(int totalPages, int totalElements, int limit, int offset) {
 		List<Object> results;
 		

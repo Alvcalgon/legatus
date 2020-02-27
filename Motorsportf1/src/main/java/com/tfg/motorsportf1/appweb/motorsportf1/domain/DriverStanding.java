@@ -18,6 +18,17 @@ public class DriverStanding {
 		super();
 	}
 	
+	public DriverStanding(String season, Integer points, String position,
+						  Driver driver, Constructor constructor) {
+		super();
+		
+		this.season = season;
+		this.points = points;
+		this.position = position;
+		this.driver = driver;
+		this.constructor = constructor;
+	}
+	
 	// Getter y setters -------------------	
 	public String getSeason() {
 		return season;

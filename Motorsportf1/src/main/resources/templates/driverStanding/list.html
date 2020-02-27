@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{driverStanding.list}">Clasificación general de pilotos</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{driverStanding.list}">Clasificación general de escuderías</h1>
+					
+					<div th:replace="driverStanding/search :: frag-driver-standing-search"></div>
+					
+					<nav th:if="${driversStanding.size() > 0}" class="nav justify-content-center">
+						<div class="enlaces-paginacion">
+							<ul class="pagination">
+								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/driver-standing/list(offset=${selectedPage}-1,
+															   limit=${limit},
+															   season=${driverStandingForm.season},
+															   position=${driverStandingForm.position},
+															   driver=${driverStandingForm.driver})}"
+									   th:text="#{paginacion.previous}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+									<a href="#" th:href="@{/driver-standing/list(offset=${page},
+															   limit=${limit},
+															   season=${driverStandingForm.season},
+															   position=${driverStandingForm.position},
+															   driver=${driverStandingForm.driver})}"
+									   th:text="${page}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/driver-standing/list(offset=${selectedPage}+1,
+															   limit=${limit},
+															   season=${driverStandingForm.season},
+															   position=${driverStandingForm.position},
+															   driver=${driverStandingForm.driver})}"
+									   th:text="#{paginacion.next}"
+									   class="page-link">
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+					
+					<div th:if="${driversStanding.size() > 0}" class="info-size">
+						<form class="size-table form-inline was-validated" 
+						      method="post"
+						      th:action="@{/driver-standing/list}"
+						 	  th:object="${driverStandingForm}"
+							  novalidate="novalidate">
+							<input name="offset" type="hidden"
+							       th:field="*{offset}" />
+							<input name="season" type="hidden"
+							       th:field="*{season}" />
+							<input name="position" type="hidden"
+							       th:field="*{position}" />
+							<input name="driver" type="hidden"
+								   th:field="*{driver}" />
+							
+							<div class="form-group" style="padding-right:20px;">
+								<label th:text="#{paginacion.length} + ':'" for="limit" style="padding-right:20px;"></label>
+								<input class="form-control" name="limit" type="number"
+							      	   th:field="*{limit}" min="1" th:max="${totalElements}" />
+							</div>
+					
+							<input class="btn btn-primary" type="submit" 
+								   name="update" th:value="#{paginacion.update}" />
+						</form>
+						
+						<div>
+							<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
+						</div>
+					</div>
+						
+					<table class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th th:text="#{driverStanding.season}">Temporada</th>
+								<th th:text="#{driverStanding.position}">Posición</th>
+								<th th:text="#{driverStanding.points}">Puntos</th>
+								<th th:text="#{driverStanding.driver}">Driver</th>
+								<th th:text="#{driverStanding.constructor}">Escudería</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="driverStd : ${driversStanding}">
+								<td th:text="${driverStd.season}"></td>
+								<td th:text="${driverStd.position}"></td>
+								<td th:text="${driverStd.points}"></td>
+								<td th:text="${driverStd.driver.fullname}"></td>
+								<td th:text="${driverStd.constructor.name}"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${driversStanding.size() == 0}" class="no-elements bg-info text-white">
+						<span th:text="#{paginacion.empty}"></span>
+					</div>		
+				</div>		
+			
+				<p class="volver-atras"> 
+					<a class="btn btn-secondary" th:href="@{/}"
+					   th:text="#{link.return}">Volver atrás</a>
+				</p>	
+			</div>
+		</body>
+	</html>
