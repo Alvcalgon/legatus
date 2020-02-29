@@ -1,18 +1,15 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.forms;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.SafeHtml;
 
 public class DriverForm extends PaginationForm {
 	
-	@NotNull
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String fullname;
 	
-	@NotNull
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String country;

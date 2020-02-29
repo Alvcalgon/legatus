@@ -50,23 +50,36 @@ public class DriverController {
 		List<Object> dataPage;
 		DriverForm driverForm;
 		
-		val_fullname = fullname.orElse(null);
-		val_country = country.orElse(null);
+		val_fullname = fullname.orElse("");
+		val_country = country.orElse("");
 		
-		if (!StringUtil.isBlank(val_fullname)) {
-			mapa = this.driverService.findByFullname(val_fullname, selectedPage, limit);
+		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_country)) {
+			mapa = this.driverService.findByParameters(val_fullname,
+													   val_country,
+													   selectedPage,
+													   limit);
+		} else if (!StringUtil.isBlank(val_fullname)) {
+			mapa = this.driverService.findByFullname(val_fullname,
+													selectedPage,
+													limit);
 		} else if (!StringUtil.isBlank(val_country)) {			
-			mapa = this.driverService.findByCountry(val_country, selectedPage, limit);
+			mapa = this.driverService.findByCountry(val_country,
+													selectedPage,
+													limit);
 		} else {
 			mapa = this.driverService.findAll(selectedPage, limit);
 		}
 		
-		dataPage = mapa.get("dataPage");
+		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
+		
 		
 		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
-		driverForm = new DriverForm(valid_offset, valid_limit, val_fullname, val_country);
+		driverForm = new DriverForm(valid_offset,
+									valid_limit,
+									val_fullname.trim(),
+									val_country.trim());
 		
 		result = this.getModelAndView(mapa, driverForm);
 		
@@ -92,114 +105,36 @@ public class DriverController {
 		
 		return result;
 	}
-	
-	@PostMapping(value = "/list", params = "update")
-	public ModelAndView update(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
-		ModelAndView result;
-		
-		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se muestra la primera pagina
-			result = this.list(Optional.of(0),
-							   Optional.of(10),
-							   Optional.empty(),
-							   Optional.empty());
 			
-		} else {
-			result = this.list(Optional.ofNullable(driverForm.getOffset()), 
-					  		   Optional.ofNullable(driverForm.getLimit()),
-					  		   Optional.ofNullable(driverForm.getFullname()),
-					  		   Optional.ofNullable(driverForm.getCountry()));
-		}
-		
-		return result;
-	}
-	
 	@PostMapping(value = "/list", params = "search")
 	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
 		ModelAndView result;
-		Map<String, List<Object>> mapa;
 		String country, fullname;
+		Integer offset, limit;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			mapa = this.driverService.findAll();
-			
+			result = this.list(Optional.of(0),
+					   		   Optional.of(10),
+					   		   Optional.empty(),
+					   		   Optional.empty());
 		} else {
-			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
+			// Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas
 			country = driverForm.getCountry().trim();
 			fullname = driverForm.getFullname().trim();
+			limit = driverForm.getLimit();
+			offset = driverForm.getOffset();
 			
-			if (!StringUtil.isBlank(country)) {
-				mapa = this.driverService.findByCountry(country,
-								Optional.ofNullable(driverForm.getOffset()),
-							    Optional.ofNullable(driverForm.getLimit()));
-			
-			} else if (!StringUtil.isBlank(fullname)) {
-				mapa = this.driverService.findByFullname(fullname,
-								Optional.ofNullable(driverForm.getOffset()),
-								Optional.ofNullable(driverForm.getLimit()));
-			} else {
-				mapa = this.driverService.findAll(
-						Optional.ofNullable(driverForm.getOffset()),
-						Optional.ofNullable(driverForm.getLimit()));
-			}
-			
+			result = this.list(Optional.ofNullable(offset),
+							   Optional.ofNullable(limit),
+							   Optional.ofNullable(fullname),
+							   Optional.ofNullable(country));
 		}
-		
-		result = this.getModelAndView(mapa, driverForm);
 		
 		return result;
 	}
 	
-//	@PostMapping(value = "/list", params = "search")
-//	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
-//		ModelAndView result;
-//		Map<String, List<Object>> mapa, mapa_fullname, mapa_country;
-//		List<Object> objects, objects_fullname, objects_country;
-//		String country, fullname;
-//		
-//		if (binding.hasErrors()) {
-//			// Si hay errores de validacion, se envian todos los pilotos
-//			mapa = this.driverService.findAll();
-//			
-//		} else {
-//			//TODO: Si no hay errores de validacion, se filtran los pilotos según los
-//			// parametros de busquedas
-//			country = driverForm.getCountry().trim();
-//			fullname = driverForm.getFullname().trim();
-//			
-//			mapa = this.driverService.findAll(
-//					Optional.ofNullable(driverForm.getOffset()),
-//					Optional.ofNullable(driverForm.getLimit()));
-//			
-//			objects = mapa.get("drivers");
-//			
-//			if (!StringUtil.isBlank(country)) {
-//				mapa_country = this.driverService.findByCountry(country,
-//								Optional.ofNullable(driverForm.getOffset()),
-//							    Optional.ofNullable(driverForm.getLimit()));
-//				
-//				objects_country = mapa_country.get("drivers");
-//				
-//				objects.retainAll(objects_country);
-//			} else if (!StringUtil.isBlank(fullname)) {
-//				mapa_fullname = this.driverService.findByFullname(fullname,
-//								Optional.ofNullable(driverForm.getOffset()),
-//								Optional.ofNullable(driverForm.getLimit()));
-//				
-//				objects_fullname = mapa_fullname.get("drivers");
-//				
-//				objects.retainAll(objects_fullname);
-//			}
-//			
-//			mapa.put("drivers", objects);
-//		}
-//		
-//		result = this.getModelAndView(mapa, driverForm);
-//		
-//		return result;
-//	}
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute DriverForm driverForm) {
@@ -216,20 +151,33 @@ public class DriverController {
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, 
 										DriverForm driverForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit;
+		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		List<Object> drivers;
 		ModelAndView result;
 		List<Integer> pages;
 		List<Object> dataPage;
 		
-		dataPage = mapa.get("dataPage");
+		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 		
 		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
 		pages = this.utilityService.getPages(totalPages);
 	
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
+		
+		if (totalElements > 0) {
+			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
+			valid_limit = (limit > totalElements) ? totalElements : limit;
+		} else {
+			valid_limit = 1;
+		}
+		
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 	
+		driverForm.setLimit(valid_limit);
+		driverForm.setOffset(valid_selectedPage);
+		
+		drivers = this.utilityService.getFromMap2(mapa, "drivers");
+		
 		result = new ModelAndView("driver/list");
 	
 		result.addObject("totalElements", totalElements);
@@ -237,7 +185,7 @@ public class DriverController {
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);
-		result.addObject("drivers", mapa.get("drivers"));
+		result.addObject("drivers", drivers);
 		result.addObject("driverForm", driverForm);
 		
 		return result;

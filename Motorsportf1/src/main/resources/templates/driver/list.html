@@ -43,66 +43,51 @@
 						</div>
 					</nav>
 				
-					<div class="info-size">
-						<form class="size-table form-inline was-validated" th:action="@{/driver/list}"
-						 	  th:object="${driverForm}"
-							  method="post">
-							<input name="offset" type="hidden"
-							       th:field="*{offset}" />
-							<input name="fullname" type="hidden"
-							       th:field="*{fullname}" />
-							<input name="country" type="hidden"
-							       th:field="*{country}" />
-							
-							<div class="form-group" style="padding-right:20px;">
-								<label th:text="#{paginacion.length} + ':'" for="limit" style="padding-right:20px;"></label>
-								<input class="form-control" name="limit2" type="number"
-							      	   th:field="*{limit}" min="1" th:max="${totalElements}" />
-							</div>
-					
-							<input class="btn btn-primary" type="submit" 
-								   name="update" th:value="#{paginacion.update}" />
-						</form>
+					<div class="results-container">
+						<h2 th:text="#{result.list}">Resultados encontrados</h2>
 						
-						<div>
-							<span th:utext="#{paginacion.number(${totalElements})}">Numero de registros</span>
+						<div class="info-size">
+							<span th:utext="#{paginacion.number(${totalElements})}">
+								Numero de registros
+							</span>
 						</div>
+						
+						<table th:if="${drivers.size() > 0}" class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th>
+									</th>
+									<th th:text="#{driver.fullname}">Nombre completo</th>
+									<th th:text="#{driver.placebirth}">Place of birth</th>
+									<th th:text="#{driver.country}">Country</th>
+									<th th:text="#{driver.datebirth}">Date of birth</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="driver : ${drivers}">
+									<td>
+										<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
+									</td>
+									<td th:text="${driver.fullname}"></td>
+									<td th:text="${driver.placeOfBirth}"></td>
+									<td th:text="${driver.country}"></td>
+									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					
-					<h2 th:text="#{result.list}">Resultados encontrados</h2>
-					<table th:if="${drivers.size() > 0}" class="table table-striped">
-						<thead class="thead-dark">
-							<tr>
-								<th>
-								</th>
-								<th th:text="#{driver.fullname}">Nombre completo</th>
-								<th th:text="#{driver.placebirth}">Place of birth</th>
-								<th th:text="#{driver.country}">Country</th>
-								<th th:text="#{driver.datebirth}">Date of birth</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="driver : ${drivers}">
-								<td>
-									<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
-								</td>
-								<td th:text="${driver.fullname}"></td>
-								<td th:text="${driver.placeOfBirth}"></td>
-								<td th:text="${driver.country}"></td>
-								<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
-							</tr>
-						</tbody>
-					</table>
 					<div th:if="${drivers.size() == 0}"
 						 class="no-elements bg-info text-white">
 						<span th:text="#{paginacion.empty}"></span>
 					</div>
+					
+					<p class="volver-atras"> 
+						<a class="btn btn-secondary" th:href="@{/}"
+						   th:text="#{link.return}">Volver atrás</a>
+					</p>
 				</div>		
 			
-				<p class="volver-atras"> 
-					<a class="btn btn-secondary" th:href="@{/}"
-					   th:text="#{link.return}">Volver atrás</a>
-				</p>
 			</div>
 		</body>
 	</html>

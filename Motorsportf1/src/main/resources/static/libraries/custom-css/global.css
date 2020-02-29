@@ -5,8 +5,8 @@
 	font-family: "Segoe UI", Arial, sans-serif;
 }
 
-table.table {
-	margin-top: 75px;
+div.results-container, div.enlaces-paginacion, div.info-size {
+	margin-top:25px;
 }
 
 .footer {
@@ -17,10 +17,6 @@ span.error {
 	color:red;
 }
 
-div.info-size  {
-	display:block;
-	float: left;
-}
 
 div.enlaces-paginacion ul li {
 	display: inline;

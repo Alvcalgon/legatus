@@ -5,8 +5,27 @@
 				<h2 th:text="#{search.finder}">Buscador</h2>
 				<form class="search was-validated needs-validation" th:action="@{/driver/list}"
 				      th:object="${driverForm}" method="post" onsubmit="return validateDriverForm()">
-					<input id="limit" type="hidden" th:field="*{limit}" />
 					<input id="offset" type="hidden" th:field="*{offset}" />
+					
+					<div class="form-group" style="padding-right:20px;">
+						<label th:text="#{paginacion.length} + ':'" for="limit"></label>
+						<input class="form-control"
+						       id="limit"
+						       type="number"
+					      	   th:field="*{limit}"
+					      	   min="1"
+					      	   th:max="${totalElements}"
+					      	   onchange="validateLimit()"
+					      	   th:disabled="${totalElements} == 0 ? 'true' : 'false'" />
+					    <span class="form-text text-muted" th:text="#{driver.limit.info}">Información</span>
+					    <div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" 
+							      th:if="${#fields.hasErrors('limit')}"
+							      th:errors="*{limit}">Error nombre completo</span>
+							<span id="limitError"></span>
+						</div>
+					</div>
 					
 					<div class="form-group">
 						<label th:text="#{driver.fullname} + ':'" for="fullname"></label>

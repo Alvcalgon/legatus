@@ -42,7 +42,7 @@ public class DriverService {
 		} catch (Throwable oops) {
 			result = null;
 			
-			log.info("Error al recuperar el piloto cuyo nombre completo es: " + fullname);
+			log.info("DriverService::findOne - Error al recuperar el piloto cuyo nombre completo es: " + fullname);
 		}
 
 		return result;
@@ -89,6 +89,21 @@ public class DriverService {
 		encodedFullname = this.utilityService.getEncodedText(fullname);
 		
 		url = UtilityService.API_URI_PRE + "/driver/list/fullname/" + encodedFullname;
+
+		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+
+		return results;
+	}
+	
+	public Map<String, List<Object>> findByParameters(String fullname, String country,
+			Optional<Integer> selectedPage, Optional<Integer> limit) {
+		Map<String, List<Object>> results;
+		String url, encodedFullname, encodedCountry;
+
+		encodedFullname = this.utilityService.getEncodedText(fullname);
+		encodedCountry = this.utilityService.getEncodedText(country);
+		
+		url = UtilityService.API_URI_PRE + "/driver/list/country/" + encodedCountry + "/fullname/" + encodedFullname;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
 
@@ -149,7 +164,7 @@ public class DriverService {
 			results.put("dataPage", dataPage);
 			
 		} catch (Throwable oops) {
-			log.info("Algo fue mal al recuperar los objetos y datos de la paginacion: "
+			log.info("DriverService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: "
 						+ oops.getMessage());
 
 			results = new HashMap<String, List<Object>>();
