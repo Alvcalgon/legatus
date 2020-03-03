@@ -9,6 +9,7 @@ public class DriverStandingForm extends PaginationForm {
 
 	@NotNull
 	@Pattern(regexp = "^[0-9]{0,4}$")
+	//TODO:@Range(min = 1950, max = 2018)
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String season;
 	
@@ -63,7 +64,10 @@ public class DriverStandingForm extends PaginationForm {
 		this.driver = driver;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "DriverForm [season=" + this.season + ", position=" + this.position + ", driver=" + this.driver + "]";
+	}
 	
 	
 }

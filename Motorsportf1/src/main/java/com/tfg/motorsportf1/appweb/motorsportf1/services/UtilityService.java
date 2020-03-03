@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -175,6 +176,14 @@ public class UtilityService {
 		List<Object> result;
 		
 		result = (w_map.containsKey(key)) ? w_map.get(key) : new ArrayList<Object>();
+		
+		return result;
+	}
+	
+	public String getStringFromKey(LinkedHashMap<String, String> map, String key) {
+		String result;
+		
+		result = (map.containsKey(key)) ? (String) map.get(key) : "";
 		
 		return result;
 	}

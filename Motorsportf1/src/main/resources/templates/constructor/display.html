@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{constructor.list}">Lista de escuderías</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{constructor.display}">Detalles de una escudería</h1>
+					
+					<div class="detalles" style="background-color:'grey';">
+						<p>
+							<strong th:text="#{constructor.name}">Nombre</strong>
+							<span th:text="${constructor.name}"></span>
+						</p>
+						
+						<p th:if="${constructor.country != null}">
+							<strong th:text="#{constructor.country}">Pais de origen</strong>
+							<span th:text="${constructor.country}"></span>
+						</p>
+						
+						<p th:if="${constructor.principal != null}">
+							<strong th:text="#{constructor.principal}">Director actual</strong>
+							<span th:text="${constructor.principal}"></span>
+						</p>
+					</div>
+									
+					<p> <a th:href="@{/constructor/list}"
+					  	   th:text="#{link.return}">Volver atrás</a> </p>
+				
+				</div>
+			</div>
+		</body>
+	</html>

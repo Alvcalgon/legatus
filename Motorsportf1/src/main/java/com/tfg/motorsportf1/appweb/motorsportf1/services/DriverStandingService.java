@@ -161,14 +161,16 @@ public class DriverStandingService {
 			results.put("dataPage", dataPage);
 
 		} catch (Throwable oops) {
-			log.info("Algo fue mal al recuperar los objetos y datos de la paginacion: " + oops.getMessage());
+			log.info("DriverStandingService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: " + oops.getMessage());
 
 			results = new HashMap<String, List<Object>>();
 
 			driversStanding = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1, 10, 1);
+			dataPage = this.utilityService.fillDataPage(-1, -1,	
+										UtilityService.DEFAULT_OFFSET_TO_USER,
+										UtilityService.DEFAULT_LIMIT);
 
-			results.put("constructorsStanding", driversStanding);
+			results.put("driversStanding", driversStanding);
 			results.put("dataPage", dataPage);
 		}
 

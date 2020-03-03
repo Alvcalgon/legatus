@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+		<body>
+			<div class="form circuit search container" th:fragment="frag-circuit-search">
+				<h2 th:text="#{search.finder}">Buscador</h2>
+				<form class="search was-validated needs-validation" th:action="@{/circuit/list}"
+				      th:object="${circuitForm}" method="post" onsubmit="return validateCircuitForm()">
+					
+					<input id="offset" type="hidden" th:field="*{offset}" />
+					
+					<div class="form-group" style="padding-right:20px;">
+						<label th:text="#{paginacion.length} + ':'" for="limit"></label>
+						<input class="form-control"
+						       id="limit"
+						       type="number"
+					      	   th:field="*{limit}"
+					      	   min="1"
+					      	   th:max="${totalElements}"
+					      	   onchange="validateLimit()"
+					      	   th:disabled="${totalElements} == 0 ? 'true' : 'false'" />
+					    <span class="form-text text-muted" th:text="#{circuit.limit.info}">Información</span>
+					    <div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" 
+							      th:if="${#fields.hasErrors('limit')}"
+							      th:errors="*{limit}">Error limit</span>
+							<span id="limitError"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label th:text="#{circuit.name} + ':'" for="name"></label>
+						<input class="form-control is-invalid"
+						       id="name"
+						       type="text"
+						       th:field="*{name}"
+						       onchange="validateName()" />
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" 
+							      th:if="${#fields.hasErrors('name')}"
+							      th:errors="*{name}">Error nombre</span>
+							<span id="nameError"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label th:text="#{circuit.season} + ':'" for="season"></label>
+						<input class="form-control is-invalid"
+						       id="season"
+						       type="text"
+						       th:field="*{season}"
+						       onchange="validateSeason()" />
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" 
+							      th:if="${#fields.hasErrors('season')}"
+							      th:errors="*{season}">Error temporada</span>
+							<span id="seasonErrorCS"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label th:text="#{circuit.type} + ':'" for="type"></label>
+						<select class="form-control is-invalid" th:field="*{type}">
+							<option value="">----</option>
+							<option value="Street Circuit" th:text="#{circuit.type.street}">Street Circuit</option>
+							<option value="Closed Circuit" th:text="#{circuit.type.closed}">Closed Circuit</option>
+						</select>
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Error tipo</span>
+							<span id="typeError"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label th:text="#{circuit.location} + ':'" for="location"></label>
+						<input class="form-control is-invalid"
+							   id="location"
+							   type="text"
+							   th:field="*{location}"
+							   onchange="validateLocation()" />
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error localización</span>
+							<span id="locationError"></span>
+						</div>
+					</div>
+					
+					<input type="submit" name="search" th:value="#{form.search}" class="btn btn-primary" />
+					<input type="submit" name="reset" th:value="#{form.reset}" class="btn btn-warning" />
+				</form>
+			</div>
+		</body>
+	</html>

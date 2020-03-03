@@ -49,7 +49,8 @@ public class DriverService {
 	}
 
 	public Map<String, List<Object>> findAll() {
-		return this.findAll(Optional.of(0), Optional.of(10));
+		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
+							Optional.of(UtilityService.DEFAULT_LIMIT));
 	}
 	
 	// source:
@@ -170,7 +171,9 @@ public class DriverService {
 			results = new HashMap<String, List<Object>>();
 			
 			drivers = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1, 10, 1);
+			dataPage = this.utilityService.fillDataPage(-1, -1, 
+					UtilityService.DEFAULT_OFFSET_TO_USER,
+					UtilityService.DEFAULT_LIMIT);
 			
 			results.put("drivers", drivers);
 			results.put("dataPage", dataPage);

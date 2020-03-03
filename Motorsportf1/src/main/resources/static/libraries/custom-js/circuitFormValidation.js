@@ -1,15 +1,14 @@
-function validateConstructorStandingForm() {
+function validateCircuitForm() {
+	var errorName = validateName();
+	var errorLocation = validateLocation();
 	var errorSeason = validateSeason();
-	var errorPosition = validatePosition();
-	var errorConstructor = validateConstructor();
 	var errorLimit = validateLimit();
 	
-	return errorFullname.length == 0 && errorPosition.length == 0 && errorConstructor.length == 0 && errorLimit.length == 0;
+	return errorName.length == 0 && errorLocation.length == 0 && errorLimit.length == 0 && errorSeason.length == 0;
 }
 
 function validateLimit() {
 	var input = document.getElementById("limit");
-	//var input = document.querySelectorAll("form.search input#fullname")[0];
 	var limit = input.value;
 	var language = document.documentElement.lang;
 	var error = "";
@@ -21,14 +20,13 @@ function validateLimit() {
 				: "The limit must be a value between 1 and register total numbers";
 	}
 	
-	document.getElementById("limitErrorCS").innerHTML = error;
+	document.getElementById("limitError").innerHTML = error;
 	
 	return error;
 }
 
 function validateSeason() {
 	var input = document.getElementById("season");
-	//var input = document.querySelectorAll("form.search input#season")[0];
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{4}$/;
@@ -51,18 +49,17 @@ function validateSeason() {
 	return error;
 }
 
-function validatePosition() {
-	var input = document.getElementById("position");
-	//var input = document.querySelectorAll("form.search input#position")[0];
-	var position = input.value.trim();
+function validateLocation() {
+	var input = document.getElementById("location");
+	var location = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[0-9]{1,2}$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
-	var valid = regExp.test(position);
+	var valid = regExp.test(location);
 	
-	if (position != '' && !valid) {
-		error = (language == "es") ? "Posición inválido" : "Invalid position"; 
+	if (!valid) {
+		error = (language == "es") ? "Introduzca una localización válido." : "You must enter a valid location.";
 		
 		input.style.border = "1px solid red";
 	} else {
@@ -70,30 +67,30 @@ function validatePosition() {
 	}
 	
 	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("positionErrorCS").innerHTML = error;
+	document.getElementById("locationError").innerHTML = error;
 	
 	return error;
 }
 
-function validateConstructor() {
-	var input = document.getElementById("constructor");
-	var constructor = input.value.trim();
+function validateName() {
+	var input = document.getElementById("name");
+	var name = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]*$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
-	var valid = regExp.test(constructor);
+	var valid = regExp.test(name);
 	
-	if (constructor != '' && !valid) {
-		error = (language == "es") ? "Escudería inválida" : "Invalid constructor"; 
-	
+	if (!valid) {
+		error = (language == "es") ? "Introduzca un nombre válido." : "You must enter a valid name.";
+		
 		input.style.border = "1px solid red";
 	} else {
 		input.style.border = "1px solid green";
 	}
 	
 	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("constructorErrorCS").innerHTML = error;
+	document.getElementById("nameError").innerHTML = error;
 	
 	return error;
 }

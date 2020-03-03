@@ -14,18 +14,9 @@
 				
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
 					<ul class="navbar-nav">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#"
-							   id="navbardrop" data-toggle="dropdown"
-							   th:text="#{master.menu.driver}"> Lista de pilotos </a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-								   th:text="#{driver.list}">Lista de pilotos </a>
-								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-								   th:text="#{driver.list}">Formulario de pilotos</a>
-								<a class="dropdown-item" href="#" th:href="@{/driver/list}"
-								   th:text="#{driver.list}">Mostrar piloto</a>
-							</div>
+						<li class="nav-item">
+							<a class="nav-link" href="#" th:href="@{/driver/list}"
+							   th:text="#{driver.list}">Lista de pilotos</a>
 						</li>
 						
 						<li class="nav-item">

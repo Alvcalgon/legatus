@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
 		<head>
-			<title th:text="#{driver.list}">Lista de pilotos</title>
+			<title th:text="#{constructor.list}">Lista de escuderías</title>
 		</head>
 		<body>
 			<div class="content">
 				<div class="container">
-					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
+					<h1 th:text="#{constructor.list}">Lista de escuderías</h1>
 					
-					<div th:replace="driver/search :: frag-driver-search"></div>
+					<div th:replace="constructor/search :: frag-constructor-search"></div>
 					<nav th:if="${pages.size() > 0}">
 						<div class="enlaces-paginacion">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/driver/list(offset=${selectedPage}-1,
+									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}-1,
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   name=${constructorForm.name},
+															   country=${constructorForm.country})}"
 									   th:text="#{paginacion.previous}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
-									<a href="#" th:href="@{/driver/list(offset=${page},
+									<a href="#" th:href="@{/constructor/list(offset=${page},
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   name=${constructorForm.name},
+															   country=${constructorForm.country})}"
 									   th:text="${page}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/driver/list(offset=${selectedPage}+1,
+									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}+1,
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   name=${constructorForm.name},
+															   country=${constructorForm.country})}"
 									   th:text="#{paginacion.next}"
 									   class="page-link">
 									</a>
@@ -52,32 +52,30 @@
 							</span>
 						</div>
 						
-						<table th:if="${drivers.size() > 0}" class="table table-striped">
+						<table th:if="${constructors.size() > 0}" class="table table-striped">
 							<thead class="thead-dark">
 								<tr>
 									<th>
 									</th>
-									<th th:text="#{driver.fullname}">Nombre completo</th>
-									<th th:text="#{driver.placebirth}">Place of birth</th>
-									<th th:text="#{driver.country}">Country</th>
-									<th th:text="#{driver.datebirth}">Date of birth</th>
+									<th th:text="#{constructor.name}">Nombre</th>
+									<th th:text="#{constructor.country}">Country</th>
+									<th th:text="#{constructor.principal}">Current principal</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="driver : ${drivers}">
+								<tr th:each="constructor : ${constructors}">
 									<td>
-										<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
+										<a th:href="@{/constructor/display(name=${constructor.name})}" th:text="#{link.display}">Display</a>
 									</td>
-									<td th:text="${driver.fullname}"></td>
-									<td th:text="${driver.placeOfBirth}"></td>
-									<td th:text="${driver.country}"></td>
-									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
+									<td th:text="${constructor.name}"></td>
+									<td th:text="${constructor.country}"></td>
+									<td th:text="${constructor.principal}"></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 					
-					<div th:if="${drivers.size() == 0}"
+					<div th:if="${constructors.size() == 0}"
 						 class="no-elements bg-info text-white">
 						<span th:text="#{paginacion.empty}"></span>
 					</div>

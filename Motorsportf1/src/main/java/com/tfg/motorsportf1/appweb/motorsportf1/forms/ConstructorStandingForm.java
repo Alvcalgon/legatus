@@ -9,6 +9,7 @@ public class ConstructorStandingForm extends PaginationForm {
 
 	@NotNull
 	@Pattern(regexp = "^[0-9]{0,4}$")
+	//@Range(min = 1958, max = 2018)
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String season;
 	

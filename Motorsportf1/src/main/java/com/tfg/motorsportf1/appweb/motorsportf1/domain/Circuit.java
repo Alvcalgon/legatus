@@ -20,6 +20,14 @@ public class Circuit {
 	public Circuit() {
 		super();
 	}
+	
+	public Circuit(String name, String location, String type, String lapDistance) {
+		super();
+		this.name = name;
+		this.location = location;
+		this.type = type;
+		this.lapDistance = lapDistance;
+	}
 
 	// Getters y setters ----------------------
 	public String getName() {

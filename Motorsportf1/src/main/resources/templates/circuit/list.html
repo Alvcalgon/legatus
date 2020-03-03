@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
 		<head>
-			<title th:text="#{driver.list}">Lista de pilotos</title>
+			<title th:text="#{circuit.list}">Lista de circuitos</title>
 		</head>
 		<body>
 			<div class="content">
 				<div class="container">
-					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
+					<h1 th:text="#{circuit.list}">Lista de circuitos</h1>
 					
-					<div th:replace="driver/search :: frag-driver-search"></div>
-					<nav th:if="${pages.size() > 0}">
+					<div th:replace="circuit/search :: frag-circuit-search"></div>
+					<nav th:if="${pages.size() > 0}" class="nav justify-content-center">
 						<div class="enlaces-paginacion">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/driver/list(offset=${selectedPage}-1,
+									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}-1,
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   type=${circuitForm.type},
+															   location=${circuitForm.location},
+															   season=${circuitForm.season},
+															   name=${circuitForm.name})}"
 									   th:text="#{paginacion.previous}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
-									<a href="#" th:href="@{/driver/list(offset=${page},
+									<a href="#" th:href="@{/circuit/list(offset=${page},
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   type=${circuitForm.type},
+															   location=${circuitForm.location},
+															   season=${circuitForm.season},
+															   name=${circuitForm.name})}"
 									   th:text="${page}"
 									   class="page-link">
 									</a>
 								</li>
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/driver/list(offset=${selectedPage}+1,
+									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}+1,
 															   limit=${limit},
-															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   type=${circuitForm.type},
+															   location=${circuitForm.location},
+															   season=${circuitForm.season},
+															   name=${circuitForm.name})}"
 									   th:text="#{paginacion.next}"
 									   class="page-link">
 									</a>
@@ -52,32 +58,32 @@
 							</span>
 						</div>
 						
-						<table th:if="${drivers.size() > 0}" class="table table-striped">
+						<table th:if="${circuits.size() > 0}" class="table table-striped">
 							<thead class="thead-dark">
 								<tr>
 									<th>
 									</th>
-									<th th:text="#{driver.fullname}">Nombre completo</th>
-									<th th:text="#{driver.placebirth}">Place of birth</th>
-									<th th:text="#{driver.country}">Country</th>
-									<th th:text="#{driver.datebirth}">Date of birth</th>
+									<th th:text="#{circuit.name}">Nombre</th>
+									<th th:text="#{circuit.type}">Tipo</th>
+									<th th:text="#{circuit.location}">Localización</th>
+									<th th:text="#{circuit.lapDistance}">Distancia</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="driver : ${drivers}">
+								<tr th:each="circuit : ${circuits}">
 									<td>
-										<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
+										<a th:href="@{/circuit/display(name=${circuit.name})}" th:text="#{link.display}">Display</a>
 									</td>
-									<td th:text="${driver.fullname}"></td>
-									<td th:text="${driver.placeOfBirth}"></td>
-									<td th:text="${driver.country}"></td>
-									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
+									<td th:text="${circuit.name}"></td>
+									<td th:text="${circuit.type}"></td>
+									<td th:text="${circuit.location}"></td>
+									<td th:text="${circuit.lapDistance}"></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 					
-					<div th:if="${drivers.size() == 0}"
+					<div th:if="${circuits.size() == 0}"
 						 class="no-elements bg-info text-white">
 						<span th:text="#{paginacion.empty}"></span>
 					</div>

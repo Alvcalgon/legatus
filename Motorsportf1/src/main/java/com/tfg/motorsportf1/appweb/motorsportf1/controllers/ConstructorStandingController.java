@@ -1,15 +1,11 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +25,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/constructor-standing")
 public class ConstructorStandingController {
 
-	private static final Log log = LogFactory.getLog(ConstructorStandingController.class);
+	//private static final Log log = LogFactory.getLog(ConstructorStandingController.class);
 
 	@Autowired
 	private ConstructorStandingService constructorStandingService;
@@ -55,9 +51,9 @@ public class ConstructorStandingController {
 		ModelAndView result;
 		List<Object> dataPage;
 
-		val_season = season.orElse(null);
-		val_position = position.orElse(null);
-		val_constructor = constructor.orElse(null);
+		val_season = season.orElse("");
+		val_position = position.orElse("");
+		val_constructor = constructor.orElse("");
 
 		if (!StringUtil.isBlank(val_season)) {
 			mapa = this.constructorStandingService.findBySeason(val_season,
@@ -77,79 +73,52 @@ public class ConstructorStandingController {
 																limit);
 		}
 
-		dataPage = mapa.get("dataPage");
+		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 
 		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		constructorStandingForm = new ConstructorStandingForm(valid_offset, valid_limit, val_season, val_position,
-				val_constructor);
+		constructorStandingForm = new ConstructorStandingForm(valid_offset,
+															  valid_limit,
+															  val_season,
+															  val_position,
+															  val_constructor);
 
 		result = this.getModelAndView(mapa, constructorStandingForm);
 
 		return result;
 	}
 
-	@PostMapping(value = "/list", params = "update")
-	public ModelAndView update(@Valid @ModelAttribute ConstructorStandingForm constructorStandingForm, BindingResult binding) {
+
+	@PostMapping(value = "/list", params = "search")
+	public ModelAndView search(@Valid @ModelAttribute ConstructorStandingForm constructorStandingForm, BindingResult binding) {
 		ModelAndView result;
+		String season, position, constructor;
+		Integer limit, offset;
 		
 		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se muestra la primera pagina
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_API),
+			// Si hay errores de validacion, se envian todos los pilotos
+			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
 							   Optional.of(UtilityService.DEFAULT_LIMIT),
 							   Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
-		} else {
-			result = this.list(Optional.ofNullable(constructorStandingForm.getOffset()), 
-					  		   Optional.ofNullable(constructorStandingForm.getLimit()),
-					  		   Optional.ofNullable(constructorStandingForm.getSeason()),
-					  		   Optional.ofNullable(constructorStandingForm.getPosition()),
-					  		   Optional.ofNullable(constructorStandingForm.getConstructor()));
-		}
-		
-		return result;
-	}
-	
-	@PostMapping(value = "/list", params = "search")
-	public ModelAndView search(@Valid @ModelAttribute ConstructorStandingForm constructorStandingForm, BindingResult binding) {
-		ModelAndView result;
-		Map<String, List<Object>> mapa;
-		String season, position, constructor;
-		
-		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se envian todos los pilotos
-			mapa = new HashMap<String, List<Object>>();
 			
 		} else {
-			//TODO: Si no hay errores de validacion, se filtran los constructor
+			// Si no hay errores de validacion, se filtran los constructor
 			// standing según los parametros de busquedas
 			season = constructorStandingForm.getSeason().trim();
 			position = constructorStandingForm.getPosition().trim();
 			constructor = constructorStandingForm.getConstructor().trim();
+			limit = constructorStandingForm.getLimit();
+			offset = constructorStandingForm.getOffset();
 			
-			if (!StringUtil.isBlank(season)) {
-				mapa = this.constructorStandingService.findBySeason(season,
-						Optional.ofNullable(constructorStandingForm.getOffset()),
-						Optional.ofNullable(constructorStandingForm.getLimit()));
-			
-			} else if (!StringUtil.isBlank(position)) {
-				mapa = this.constructorStandingService.findByPosition(position,
-								Optional.ofNullable(constructorStandingForm.getOffset()),
-								Optional.ofNullable(constructorStandingForm.getLimit()));
-			} else if (!StringUtil.isBlank(constructor)) {
-				mapa = this.constructorStandingService.findByConstructor(constructor, 
-						Optional.ofNullable(constructorStandingForm.getOffset()),
-						Optional.ofNullable(constructorStandingForm.getLimit()));
-			} else {
-				//TODO: vacio no puede ir
-				mapa = new HashMap<String, List<Object>>();
-			}
-			
+			result = this.list(Optional.ofNullable(offset),
+							   Optional.of(limit),
+							   Optional.ofNullable(season),
+							   Optional.ofNullable(position),
+							   Optional.ofNullable(constructor));	
 		}
-		
-		result = this.getModelAndView(mapa, constructorStandingForm);
 		
 		return result;
 	}
@@ -158,11 +127,15 @@ public class ConstructorStandingController {
 	public ModelAndView reset(@ModelAttribute ConstructorStandingForm constructorStandingForm) {
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
+		int offset, limit;
+		
+		offset = constructorStandingForm.getOffset();
+		limit = constructorStandingForm.getLimit();
 		
 		mapa = this.constructorStandingService.findBySeason("2018",
-									Optional.ofNullable(constructorStandingForm.getOffset()),
-									Optional.ofNullable(constructorStandingForm.getLimit()));
-		
+															Optional.ofNullable(offset),
+															Optional.ofNullable(limit));
+	
 		result = this.getModelAndView(mapa);
 		
 		return result;
@@ -175,36 +148,34 @@ public class ConstructorStandingController {
 		List<Object> dataPage;
 		List<Object> constructorsStanding;
 
-		result = new ModelAndView("constructorStanding/list");
+		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 		
-		if (!mapa.isEmpty()) {
-			dataPage = mapa.get("dataPage");
-
-			totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
-			pages = this.utilityService.getPages(totalPages);
-
-			totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
-			
+		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		pages = this.utilityService.getPages(totalPages);
+		
+		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+				
+		if (totalElements > 0) {
 			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 			valid_limit = (limit > totalElements) ? totalElements : limit;
-			
-			valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
-		
-			constructorStandingForm.setLimit(valid_limit);
-			constructorStandingForm.setOffset(valid_selectedPage);
-			
-			constructorsStanding = mapa.get("constructorsStanding");
-			
-			result.addObject("totalElements", totalElements);
-			result.addObject("limit", valid_limit);
-			result.addObject("selectedPage", valid_selectedPage);
-			result.addObject("totalPages", totalPages);
-			result.addObject("pages", pages);
-			
 		} else {
-			constructorsStanding = new ArrayList<Object>();
+			valid_limit = 1;
 		}
-
+		
+		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		
+		constructorStandingForm.setLimit(valid_limit);
+		constructorStandingForm.setOffset(valid_selectedPage);
+			
+		constructorsStanding = this.utilityService.getFromMap2(mapa, "constructorsStanding");
+		
+		result = new ModelAndView("constructorStanding/list");
+		
+		result.addObject("totalElements", totalElements);
+		result.addObject("limit", valid_limit);
+		result.addObject("selectedPage", valid_selectedPage);
+		result.addObject("totalPages", totalPages);
+		result.addObject("pages", pages);
 		result.addObject("constructorsStanding", constructorsStanding);
 		result.addObject("constructorStandingForm", constructorStandingForm);
 

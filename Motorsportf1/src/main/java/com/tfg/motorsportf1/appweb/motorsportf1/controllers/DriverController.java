@@ -114,8 +114,8 @@ public class DriverController {
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(0),
-					   		   Optional.of(10),
+			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
+					   		   Optional.of(UtilityService.DEFAULT_LIMIT),
 					   		   Optional.empty(),
 					   		   Optional.empty());
 		} else {
