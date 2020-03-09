@@ -28,47 +28,43 @@ public class ConstructorStandingService {
 		super();
 	}
 
-	public Map<String, List<Object>> findBySeason(String season, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findBySeason(String season, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
 
 		url = UtilityService.API_URI_PRE + "/constructor-standing/list/season/" + season;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByPosition(String position, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByPosition(String position, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
 
 		url = UtilityService.API_URI_PRE + "/constructor-standing/list/position/" + position;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByConstructor(String constructor, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByConstructor(String constructor, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
 
 		url = UtilityService.API_URI_PRE + "/constructor-standing/list/constructor/" + constructor;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 	
-	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, Object>> ls_map_constructorsStanding;
-		int totalPages, totalElements, valid_limit, valid_selectedPage, targetPage;
+		int totalPages, totalElements, valid_selectedPage, targetPage;
 		String season, position, constructorName, constructorCountry, constructorPrincipal;
 		Integer points;
 		Constructor constructor;
@@ -79,17 +75,15 @@ public class ConstructorStandingService {
 		LinkedHashMap<String, Object> o;
 
 		try {
-			temp = this.utilityService.mapJSON(url, 0, 2);
+			temp = this.utilityService.mapJSON(url, 0);
 			totalElements = (int) temp.get("totalElements");
 
-			// Validamos campos de la paginacion
-			valid_limit = this.utilityService.getValidLimit(limit, totalElements);
+			// Validamos offset de la paginacion
 			valid_selectedPage = this.utilityService.getValidOffset(selectedPage,
-																	valid_limit,
 																	totalElements);
 
 			targetPage = valid_selectedPage - 1;
-			map_json = this.utilityService.mapJSON(url, targetPage, valid_limit);
+			map_json = this.utilityService.mapJSON(url, targetPage);
 
 			results = new HashMap<String, List<Object>>();
 
@@ -128,8 +122,7 @@ public class ConstructorStandingService {
 				totalElements = (int) map_json.get("totalElements");
 				
 				dataPage = this.utilityService.fillDataPage(totalPages,
-															totalElements, 
-															valid_limit,
+															totalElements,
 															valid_selectedPage);
 			}
 
@@ -142,9 +135,7 @@ public class ConstructorStandingService {
 			results = new HashMap<String, List<Object>>();
 
 			constructorsStanding = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1,
-										UtilityService.DEFAULT_OFFSET_TO_USER,
-										UtilityService.DEFAULT_LIMIT);
+			dataPage = this.utilityService.fillDataPage(-1, -1, UtilityService.DEFAULT_OFFSET_TO_USER);
 
 			results.put("constructorsStanding", constructorsStanding);
 			results.put("dataPage", dataPage);

@@ -46,23 +46,21 @@ public class CircuitService {
 	}
 
 	public Map<String, List<Object>> findAll() {
-		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-				Optional.of(UtilityService.DEFAULT_LIMIT));
+		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
 	}
 
-	public Map<String, List<Object>> findAll(Optional<Integer> selectedPage, Optional<Integer> limit) {
+	public Map<String, List<Object>> findAll(Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
 
 		url = UtilityService.API_URI_PRE + "/circuit/list";
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByType(String type, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByType(String type, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedType;
 
@@ -70,13 +68,12 @@ public class CircuitService {
 		
 		url = UtilityService.API_URI_PRE + "/circuit/list/type/" + encodedType;
 		
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
 		return results;
 	}
 	
-	public Map<String, List<Object>> findByLocation(String location, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByLocation(String location, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedLocation;
 
@@ -84,27 +81,25 @@ public class CircuitService {
 		
 		url = UtilityService.API_URI_PRE + "/circuit/list/location/" + encodedLocation;
 		
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
 		return results;
 	}
 	
-	public Map<String, List<Object>> findBySeason(String season, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
-		Map<String, List<Object>> results;
+	public List<Object> findBySeason(String season) {
+		List<Object> results;
 		String url, encodedSeason;
 
 		encodedSeason = this.utilityService.getEncodedText(season);
 		
 		url = UtilityService.API_URI_PRE + "/circuit/list/season/" + encodedSeason;
 		
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataObjects(url);
 		
 		return results;
 	}
 	
-	public Map<String, List<Object>> findByName(String name, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByName(String name, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedName;
 
@@ -112,34 +107,31 @@ public class CircuitService {
 		
 		url = UtilityService.API_URI_PRE + "/circuit/list/name/" + encodedName;
 		
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
 		return results;
 	}
 	
-	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_circuits;
 		String type, lapDistance, location, name;
-		int totalPages, totalElements, valid_limit, valid_selectedPage, targetPage;
+		int totalPages, totalElements, valid_selectedPage, targetPage;
 		Map<String, Object> map_json, temp;
 		List<Object> circuits;
 		List<Object> dataPage;
 		Circuit circuit;
 
 		try {
-			temp = this.utilityService.mapJSON(url, 0, 2);
+			temp = this.utilityService.mapJSON(url, 0);
 			totalElements = (int) temp.get("totalElements");
 
-			// Validamos campos de la paginacion
-			valid_limit = this.utilityService.getValidLimit(limit, totalElements);
+			// Validamos offset de la paginacion
 			valid_selectedPage = this.utilityService.getValidOffset(selectedPage,
-																	valid_limit,
 																	totalElements);
 
 			targetPage = valid_selectedPage - 1;
-			map_json = this.utilityService.mapJSON(url, targetPage, valid_limit);
+			map_json = this.utilityService.mapJSON(url, targetPage);
 
 			results = new HashMap<String, List<Object>>();
 
@@ -165,7 +157,7 @@ public class CircuitService {
 				totalPages = (int) map_json.get("totalPages");
 				totalElements = (int) map_json.get("totalElements");
 
-				dataPage = this.utilityService.fillDataPage(totalPages, totalElements, valid_limit, valid_selectedPage);
+				dataPage = this.utilityService.fillDataPage(totalPages, totalElements, valid_selectedPage);
 			}
 
 			results.put("circuits", circuits);
@@ -179,9 +171,7 @@ public class CircuitService {
 			results = new HashMap<String, List<Object>>();
 
 			circuits = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1,
-					UtilityService.DEFAULT_OFFSET_TO_USER,
-					UtilityService.DEFAULT_LIMIT);
+			dataPage = this.utilityService.fillDataPage(-1, -1, UtilityService.DEFAULT_OFFSET_TO_USER);
 
 			results.put("circuits", circuits);
 			results.put("dataPage", dataPage);
@@ -190,4 +180,39 @@ public class CircuitService {
 		return results;
 	}
 
+	private List<Object> getDataObjects(String url) {
+		List<LinkedHashMap<String, String>> list_json;
+		String type, lapDistance, location, name;
+		List<Object> circuits;
+		Circuit circuit;
+
+		try {
+			list_json = this.utilityService.listJSON(url);
+
+			circuits = new ArrayList<Object>();
+
+			if (!list_json.isEmpty()) {
+				for (LinkedHashMap<String, String> mapCircuit : list_json) {
+					name = this.utilityService.getStringFromKey(mapCircuit, "name");
+					location = this.utilityService.getStringFromKey(mapCircuit, "location");
+					type = this.utilityService.getStringFromKey(mapCircuit, "type");
+					lapDistance = this.utilityService.getStringFromKey(mapCircuit, "lapDistance");
+					
+					circuit = new Circuit(name, location, type, lapDistance);
+
+					circuits.add(circuit);
+				}
+			}
+			
+		} catch (Throwable oops) {
+			log.info(
+					"CircuitService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: "
+							+ oops.getMessage());
+
+			circuits = new ArrayList<Object>();
+		}
+
+		return circuits;
+	}
+		
 }

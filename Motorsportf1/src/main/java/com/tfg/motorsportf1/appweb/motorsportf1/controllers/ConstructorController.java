@@ -40,10 +40,10 @@ public class ConstructorController {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-			@RequestParam("limit") Optional<Integer> limit, @RequestParam("name") Optional<String> name,
+			@RequestParam("name") Optional<String> name,
 			@RequestParam("country") Optional<String> country) {
 		String val_country, val_name;
-		int valid_limit, valid_offset;
+		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
@@ -53,21 +53,20 @@ public class ConstructorController {
 		val_country = country.orElse("");
 
 		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_country)) {
-			mapa = this.constructorService.findByParameters(val_name, val_country, selectedPage, limit);
+			mapa = this.constructorService.findByParameters(val_name, val_country, selectedPage);
 		} else if (!StringUtil.isBlank(val_name)) {
-			mapa = this.constructorService.findByName(val_name, selectedPage, limit);
+			mapa = this.constructorService.findByName(val_name, selectedPage);
 		} else if (!StringUtil.isBlank(val_country)) {
-			mapa = this.constructorService.findByCountry(val_country, selectedPage, limit);
+			mapa = this.constructorService.findByCountry(val_country, selectedPage);
 		} else {
-			mapa = this.constructorService.findAll(selectedPage, limit);
+			mapa = this.constructorService.findAll(selectedPage);
 		}
 
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		constructorForm = new ConstructorForm(valid_offset, valid_limit, val_name, val_country);
+		constructorForm = new ConstructorForm(valid_offset, val_name, val_country);
 
 		result = this.getModelAndView(mapa, constructorForm);
 
@@ -86,8 +85,7 @@ public class ConstructorController {
 			
 			result.addObject("constructor", constructor);
 		} else {
-			result = this.list(Optional.empty(), 
-							   Optional.empty(),
+			result = this.list(Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
 		}
@@ -100,12 +98,11 @@ public class ConstructorController {
 	public ModelAndView search(@Valid @ModelAttribute ConstructorForm constructorForm, BindingResult binding) {
 		ModelAndView result;
 		String country, name;
-		Integer offset, limit;
+		Integer offset;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
 			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.of(UtilityService.DEFAULT_LIMIT),
 					   		   Optional.empty(),
 					   		   Optional.empty());
 		} else {
@@ -113,11 +110,9 @@ public class ConstructorController {
 			// parametros de busquedas
 			country = constructorForm.getCountry().trim();
 			name = constructorForm.getName().trim();
-			limit = constructorForm.getLimit();
 			offset = constructorForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.ofNullable(limit),
 							   Optional.ofNullable(name),
 							   Optional.ofNullable(country));
 		}
@@ -138,7 +133,7 @@ public class ConstructorController {
 	}
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, ConstructorForm constructorForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		int totalPages, totalElements, valid_selectedPage;
 		List<Object> constructors;
 		ModelAndView result;
 		List<Integer> pages;
@@ -151,16 +146,8 @@ public class ConstructorController {
 
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
 
-		if (totalElements > 0) {
-			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
-			valid_limit = (limit > totalElements) ? totalElements : limit;
-		} else {
-			valid_limit = 1;
-		}
-
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		constructorForm.setLimit(valid_limit);
 		constructorForm.setOffset(valid_selectedPage);
 
 		constructors = this.utilityService.getFromMap2(mapa, "constructors");
@@ -168,7 +155,6 @@ public class ConstructorController {
 		result = new ModelAndView("constructor/list");
 
 		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);

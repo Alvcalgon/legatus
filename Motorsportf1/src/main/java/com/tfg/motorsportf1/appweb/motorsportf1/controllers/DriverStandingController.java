@@ -41,13 +41,12 @@ public class DriverStandingController {
 	
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-			 @RequestParam("limit") Optional<Integer> limit,
 			 @RequestParam("season") Optional<String> season,
 			 @RequestParam("position") Optional<String> position,
 			 @RequestParam("driver") Optional<String> driver) {
 		String val_season, val_position, val_driver;
 		DriverStandingForm driverStandingForm;
-		int valid_limit, valid_offset;
+		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
@@ -58,29 +57,23 @@ public class DriverStandingController {
 
 		if (!StringUtil.isBlank(val_season)) {
 			mapa = this.driverStandingService.findBySeason(val_season,
-																selectedPage,
-																limit);
+																selectedPage);
 		} else if (!StringUtil.isBlank(val_position)) {
 			mapa = this.driverStandingService.findByPosition(val_position, 
-																  selectedPage,
-																  limit);
+																  selectedPage);
 		} else if (!StringUtil.isBlank(val_driver)) {
 			mapa = this.driverStandingService.findByDriver(val_driver, 
-														   selectedPage,
-														   limit);
+														   selectedPage);
 		} else {
 			mapa = this.driverStandingService.findBySeason("2018", 
-														   selectedPage,
-														   limit);
+														   selectedPage);
 		}
 
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		driverStandingForm = new DriverStandingForm(valid_offset, 
-													valid_limit,
+		driverStandingForm = new DriverStandingForm(valid_offset,
 													val_season,
 													val_position,
 													val_driver);
@@ -95,11 +88,10 @@ public class DriverStandingController {
 	public ModelAndView search(@Valid @ModelAttribute DriverStandingForm driverStandingForm, BindingResult binding) {
 		ModelAndView result;
 		String season, position, driver;
-		Integer offset, limit;
+		Integer offset;
 		
 		if (binding.hasErrors()) {
 			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-							   Optional.of(UtilityService.DEFAULT_LIMIT),
 							   Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
@@ -109,11 +101,9 @@ public class DriverStandingController {
 			season = driverStandingForm.getSeason().trim();
 			position = driverStandingForm.getPosition().trim();
 			driver = driverStandingForm.getDriver().trim();
-			limit = driverStandingForm.getLimit();
 			offset = driverStandingForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.ofNullable(limit),
 							   Optional.ofNullable(season),
 							   Optional.ofNullable(position),
 							   Optional.ofNullable(driver));
@@ -126,14 +116,11 @@ public class DriverStandingController {
 	public ModelAndView reset(@ModelAttribute DriverStandingForm driverStandingForm) {
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
-		Integer offset, limit;
+		Integer offset;
 		
 		offset = driverStandingForm.getOffset();
-		limit = driverStandingForm.getLimit();
 		
-		mapa = this.driverStandingService.findBySeason("2018",
-									Optional.ofNullable(offset),
-									Optional.ofNullable(limit));
+		mapa = this.driverStandingService.findBySeason("2018", Optional.ofNullable(offset));
 		
 		result = this.getModelAndView(mapa);
 		
@@ -142,7 +129,7 @@ public class DriverStandingController {
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa,
 			                               DriverStandingForm driverStandingForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		int totalPages, totalElements, valid_selectedPage;
 		ModelAndView result;
 		List<Integer> pages;
 		List<Object> dataPage;
@@ -155,16 +142,8 @@ public class DriverStandingController {
 		
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
 		
-		if (totalElements > 0) {
-			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
-			valid_limit = (limit > totalElements) ? totalElements : limit;
-		} else {
-			valid_limit = 1;
-		}
-		
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
-		driverStandingForm.setLimit(valid_limit);
 		driverStandingForm.setOffset(valid_selectedPage);
 		
 		driversStanding = this.utilityService.getFromMap2(mapa, "driversStanding");
@@ -172,7 +151,6 @@ public class DriverStandingController {
 		result = new ModelAndView("driverStanding/list");
 			
 		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);

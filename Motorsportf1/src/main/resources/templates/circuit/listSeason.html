@@ -8,46 +8,13 @@
 				<div class="container">
 					<h1 th:text="#{circuit.list}">Lista de circuitos</h1>
 					
-					<div th:replace="circuit/search :: frag-circuit-search"></div>
-					<nav th:if="${pages.size() > 0}" class="nav justify-content-center">
-						<div class="enlaces-paginacion">
-							<ul class="pagination">
-								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}-1,
-															   type=${circuitForm.type},
-															   location=${circuitForm.location},
-															   name=${circuitForm.name})}"
-									   th:text="#{paginacion.previous}"
-									   class="page-link">
-									</a>
-								</li>
-								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
-									<a href="#" th:href="@{/circuit/list(offset=${page},
-															   type=${circuitForm.type},
-															   location=${circuitForm.location},
-															   name=${circuitForm.name})}"
-									   th:text="${page}"
-									   class="page-link">
-									</a>
-								</li>
-								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
-									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}+1,
-															   type=${circuitForm.type},
-															   location=${circuitForm.location},
-															   name=${circuitForm.name})}"
-									   th:text="#{paginacion.next}"
-									   class="page-link">
-									</a>
-								</li>
-							</ul>
-						</div>
-					</nav>
-				
+					<div th:replace="circuit/searchSeason :: frag-circuit-search"></div>
+					
 					<div class="results-container">
 						<h2 th:text="#{result.list}">Resultados encontrados</h2>
 						
 						<div class="info-size">
-							<span th:utext="#{paginacion.number(${totalElements})}">
+							<span th:utext="#{paginacion.number(${circuits.size()})}">
 								Numero de registros
 							</span>
 						</div>

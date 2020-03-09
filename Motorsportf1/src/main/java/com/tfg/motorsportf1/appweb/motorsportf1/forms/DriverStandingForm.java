@@ -27,12 +27,12 @@ public class DriverStandingForm extends PaginationForm {
 		super();
 	}
 	
-	public DriverStandingForm(int offset, int limit) {
-		super(offset, limit);
+	public DriverStandingForm(int offset) {
+		super(offset);
 	}
 	
-	public DriverStandingForm(int offset, int limit, String season, String position, String driver) {
-		super(offset, limit);
+	public DriverStandingForm(int offset, String season, String position, String driver) {
+		super(offset);
 		
 		this.season = season;
 		this.position = position;

@@ -19,12 +19,12 @@ public class ConstructorForm extends PaginationForm {
 		super();
 	}
 
-	public ConstructorForm(Integer offset, Integer limit) {
-		super(offset, limit);
+	public ConstructorForm(Integer offset) {
+		super(offset);
 	}
 
-	public ConstructorForm(int offset, int limit, String name, String country) {
-		super(offset, limit);
+	public ConstructorForm(int offset, String name, String country) {
+		super(offset);
 		
 		this.name = name;
 		this.country = country;

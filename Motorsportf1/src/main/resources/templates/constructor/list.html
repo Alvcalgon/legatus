@@ -14,7 +14,6 @@
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}-1,
-															   limit=${limit},
 															   name=${constructorForm.name},
 															   country=${constructorForm.country})}"
 									   th:text="#{paginacion.previous}"
@@ -23,7 +22,6 @@
 								</li>
 								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
 									<a href="#" th:href="@{/constructor/list(offset=${page},
-															   limit=${limit},
 															   name=${constructorForm.name},
 															   country=${constructorForm.country})}"
 									   th:text="${page}"
@@ -32,7 +30,6 @@
 								</li>
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}+1,
-															   limit=${limit},
 															   name=${constructorForm.name},
 															   country=${constructorForm.country})}"
 									   th:text="#{paginacion.next}"

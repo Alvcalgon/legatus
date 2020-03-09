@@ -36,8 +36,7 @@ public class UtilityService {
 	
 	public static final int POS_TOTAL_PAGES = 0;
 	public static final int POS_TOTAL_ELEMENTS = 1;
-	public static final int POS_LIMIT = 2;
-	public static final int POS_OFFSET = 3;
+	public static final int POS_OFFSET = 2;
 	
 	
 	@Autowired
@@ -69,12 +68,33 @@ public class UtilityService {
 		return result;
 	}
 
-	public Map<String, Object> mapJSON(String url, int offset, int limit) {
+	public List<LinkedHashMap<String, String>> listJSON(String url) {
+		List<LinkedHashMap<String, String>> results;
+		URI uri;
+		
+		try {
+			uri = new URI(url);
+			
+			results = this.restTemplate.getForObject(uri, List.class);
+		} catch (URISyntaxException use) {
+			log.info("Error en la url de la API: " + use.getMessage());
+		
+			results = new ArrayList<LinkedHashMap<String,String>>();
+		} catch (Throwable oops) {
+			log.info("Error al parsear los objetos del json: " + oops.getMessage());
+			
+			results = new ArrayList<LinkedHashMap<String,String>>();
+		}
+		
+		return results;
+	}
+	
+	public Map<String, Object> mapJSON(String url, int offset) {
 		Map<String, Object> results;
 		URI uri;
 		
 		try {
-			uri = new URI(url + "?offset=" + offset + "&limit=" + limit);
+			uri = new URI(url + "?offset=" + offset + "&limit=" + DEFAULT_LIMIT);
 			
 			results = this.restTemplate.getForObject(uri, Map.class);
 		} catch (URISyntaxException use) {
@@ -139,12 +159,14 @@ public class UtilityService {
 		return result;
 	}
 	
-	public int getValidOffset(Optional<Integer> selectedPage, int limit, int totalElements) {
+	public int getValidOffset(Optional<Integer> selectedPage, int totalElements) {
 		int result;
 		int totalPages;
 		
 		if (selectedPage != null && totalElements > 0) {
-			totalPages = (totalElements%limit == 0) ? totalElements/limit : (totalElements/limit)+1; 
+			totalPages = (totalElements%DEFAULT_LIMIT == 0) 
+					? totalElements/DEFAULT_LIMIT
+					: (totalElements/DEFAULT_LIMIT)+1; 
 			
 			result = (selectedPage.isPresent()) ? selectedPage.get() : 1;
 			if (result < 1) { result = 1; }
@@ -188,14 +210,13 @@ public class UtilityService {
 		return result;
 	}
 	
-	protected List<Object> fillDataPage(int totalPages, int totalElements, int limit, int offset) {
+	protected List<Object> fillDataPage(int totalPages, int totalElements, int offset) {
 		List<Object> results;
 		
 		results = new ArrayList<Object>();
 		
 		results.add(UtilityService.POS_TOTAL_PAGES, totalPages);
 		results.add(UtilityService.POS_TOTAL_ELEMENTS, totalElements);
-		results.add(UtilityService.POS_LIMIT, limit);
 		results.add(UtilityService.POS_OFFSET, offset);
 		
 		return results;

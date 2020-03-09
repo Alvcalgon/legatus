@@ -19,12 +19,12 @@ public class DriverForm extends PaginationForm {
 		super();
 	}
 	
-	public DriverForm(int offset, int limit) {
-		super(offset, limit);
+	public DriverForm(int offset) {
+		super(offset);
 	}
 	
-	public DriverForm(int offset, int limit, String fullname, String country) {
-		super(offset, limit);
+	public DriverForm(int offset, String fullname, String country) {
+		super(offset);
 		
 		this.fullname = fullname;
 		this.country = country;

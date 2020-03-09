@@ -15,12 +15,7 @@ public class CircuitForm extends PaginationForm {
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String location;
-	
-	@NotNull
-	@Pattern(regexp = "^[0-9]{0,4}$")
-	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
-	private String season;
-	
+		
 	@NotNull
 	@Pattern(regexp = "^[^0-9]*$")
 	
@@ -32,16 +27,15 @@ public class CircuitForm extends PaginationForm {
 		super();
 	}
 
-	public CircuitForm(Integer offset, Integer limit) {
-		super(offset, limit);
+	public CircuitForm(Integer offset) {
+		super(offset);
 	}
 
-	public CircuitForm(Integer offset, Integer limit, String type, String location, String season, String name) {
-		super(offset, limit);
+	public CircuitForm(Integer offset, String type, String location, String name) {
+		super(offset);
 		
 		this.type = type;
 		this.location = location;
-		this.season = season;
 		this.name = name;
 	}
 
@@ -61,14 +55,6 @@ public class CircuitForm extends PaginationForm {
 		this.location = location;
 	}
 
-	public String getSeason() {
-		return season;
-	}
-
-	public void setSeason(String season) {
-		this.season = season;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -80,7 +66,7 @@ public class CircuitForm extends PaginationForm {
 	
 	@Override
 	public String toString() {
-		return "CircuitForm [type=" + type + ", location=" + location + ", season=" + season + ", name=" + name + "]";
+		return "CircuitForm [type=" + type + ", location=" + location + ", name=" + name + "]";
 	}
 	
 }

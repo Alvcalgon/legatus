@@ -24,9 +24,16 @@
 							   th:text="#{constructor.list}">Lista de escuderias</a>
 						</li>
 						
-						<li class="nav-item">
-							<a class="nav-link" href="#" th:href="@{/circuit/list}"
-							   th:text="#{circuit.list}">Lista de circuits</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#"
+							   id="navbardrop" data-toggle="dropdown"
+							   th:text="#{menu.circuit}"> Circuitos </a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="#" th:href="@{/circuit/list}"
+							       th:text="#{circuit.list}">Lista de circuitos</a>
+								<a class="dropdown-item" href="#" th:href="@{/circuit/list-by-season}"
+							       th:text="#{circuit.list.season}">Lista de circuitos por temporada</a>
+							</div>
 						</li>
 						
 						<li class="nav-item dropdown">

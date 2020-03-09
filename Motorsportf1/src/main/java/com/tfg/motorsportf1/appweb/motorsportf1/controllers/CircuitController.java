@@ -1,9 +1,11 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.jsoup.internal.StringUtil;
@@ -38,16 +40,49 @@ public class CircuitController {
 		super();
 	}
 
+	@GetMapping(value = "/list-by-season")
+	public ModelAndView listBySeason(Optional<String> season) {
+		ModelAndView result;
+		List<Object> circuits;
+		String val_season;
+		
+		result = new ModelAndView("circuit/listSeason");
+		
+		if (season.isPresent()) {
+			val_season = season.get();
+			
+			circuits = this.circuitService.findBySeason(val_season.trim());
+			result.addObject("season", val_season.trim());
+		} else {
+			circuits = new ArrayList<>();
+			
+			result.addObject("season", "");
+		}
+		
+		result.addObject("circuits", circuits);
+		
+		return result;
+	}
+	
+	@PostMapping(value = "/list-by-season", params = "search")
+	public ModelAndView listBySeason(HttpServletRequest request) {
+		ModelAndView result;
+		String season;
+		
+		season = String.valueOf(request.getParameter("seasonSearch"));
+		
+		result = this.listBySeason(Optional.ofNullable(season));
+		
+		return result;
+	}
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-							 @RequestParam("limit") Optional<Integer> limit,
 							 @RequestParam("type") Optional<String> type,
 							 @RequestParam("location") Optional<String> location,
-							 @RequestParam("season") Optional<String> season,
 							 @RequestParam("name") Optional<String> name) {
-		String val_type, val_location, val_season, val_name;
-		int valid_limit, valid_offset;
+		String val_type, val_location, val_name;
+		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
@@ -55,49 +90,39 @@ public class CircuitController {
 		
 		val_name = name.orElse("");
 		val_type = type.orElse("");
-		val_season = season.orElse("");
 		val_location = location.orElse("");
 				
-		if (!StringUtil.isBlank(val_name) 
-				&& !StringUtil.isBlank(val_type)
-				&& !StringUtil.isBlank(val_location)
-				&& !StringUtil.isBlank(val_season)) {
+		if (!StringUtil.isBlank(val_name) && 
+			!StringUtil.isBlank(val_type) &&
+			!StringUtil.isBlank(val_location)) {
 			
-			mapa = this.circuitService.findByType(val_type, selectedPage, limit);
+			mapa = this.circuitService.findByType(val_type, selectedPage);
 			
 		} else if (!StringUtil.isBlank(val_type)) {
 			
-			mapa = this.circuitService.findByType(val_type, selectedPage, limit);
+			mapa = this.circuitService.findByType(val_type, selectedPage);
 			
 		} else if (!StringUtil.isBlank(val_location)) {			
 			
-			mapa = this.circuitService.findByLocation(val_location, selectedPage, limit);
-		
-		} else if (!StringUtil.isBlank(val_season)) {			
-				
-			mapa = this.circuitService.findBySeason(val_season, selectedPage, limit);
-				
+			mapa = this.circuitService.findByLocation(val_location, selectedPage);
+					
 		} else if (!StringUtil.isBlank(val_name)) {			
 			
-			mapa = this.circuitService.findByName(val_name, selectedPage, limit);
+			mapa = this.circuitService.findByName(val_name, selectedPage);
 				
 		} else {
 			
-			mapa = this.circuitService.findAll();
+			mapa = this.circuitService.findAll(selectedPage);
 		
 		}
 		
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 		
-		
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
 		circuitForm = new CircuitForm(valid_offset,
-									  valid_limit,
 									  val_type,
 									  val_location,
-									  val_season,
 									  val_name);
 		
 		result = this.getModelAndView(mapa, circuitForm);
@@ -116,9 +141,7 @@ public class CircuitController {
 			result = new ModelAndView("circuit/display");
 			result.addObject("circuit", circuit);
 		} else {
-			result = this.list(Optional.empty(), 
-							   Optional.empty(),
-							   Optional.empty(),
+			result = this.list(Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
@@ -130,14 +153,12 @@ public class CircuitController {
 	@PostMapping(value = "/list", params = "search")
 	public ModelAndView search(@Valid @ModelAttribute CircuitForm circuitForm, BindingResult binding) {
 		ModelAndView result;
-		String name, type, location, season;
-		Integer offset, limit;
+		String name, type, location;
+		Integer offset;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
 			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.of(UtilityService.DEFAULT_LIMIT),
-					   		   Optional.empty(),
 					   		   Optional.empty(),
 					   		   Optional.empty(),
 					   		   Optional.empty());
@@ -146,16 +167,12 @@ public class CircuitController {
 			// parametros de busquedas
 			type = circuitForm.getType().trim();
 			location = circuitForm.getLocation().trim();
-			season = circuitForm.getSeason().trim();
 			name = circuitForm.getName().trim();
-			limit = circuitForm.getLimit();
 			offset = circuitForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.ofNullable(limit),
 							   Optional.ofNullable(type),
 							   Optional.ofNullable(location),
-							   Optional.ofNullable(season),
 							   Optional.ofNullable(name));
 		}
 		
@@ -176,7 +193,7 @@ public class CircuitController {
 	}
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, CircuitForm circuitForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		int totalPages, totalElements, valid_selectedPage;
 		List<Object> circuits;
 		ModelAndView result;
 		List<Integer> pages;
@@ -189,16 +206,8 @@ public class CircuitController {
 
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
 
-		if (totalElements > 0) {
-			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
-			valid_limit = (limit > totalElements) ? totalElements : limit;
-		} else {
-			valid_limit = 1;
-		}
-
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		circuitForm.setLimit(valid_limit);
 		circuitForm.setOffset(valid_selectedPage);
 
 		circuits = this.utilityService.getFromMap2(mapa, "circuits");
@@ -206,7 +215,6 @@ public class CircuitController {
 		result = new ModelAndView("circuit/list");
 
 		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);

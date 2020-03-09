@@ -40,13 +40,12 @@ public class ConstructorStandingController {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-							 @RequestParam("limit") Optional<Integer> limit,
 							 @RequestParam("season") Optional<String> season,
 							 @RequestParam("position") Optional<String> position,
 							 @RequestParam("constructor") Optional<String> constructor) {
 		String val_season, val_position, val_constructor;
 		ConstructorStandingForm constructorStandingForm;
-		int valid_limit, valid_offset;
+		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
@@ -57,29 +56,23 @@ public class ConstructorStandingController {
 
 		if (!StringUtil.isBlank(val_season)) {
 			mapa = this.constructorStandingService.findBySeason(val_season,
-																selectedPage,
-																limit);
+																selectedPage);
 		} else if (!StringUtil.isBlank(val_position)) {
 			mapa = this.constructorStandingService.findByPosition(val_position, 
-																  selectedPage,
-																  limit);
+																  selectedPage);
 		} else if (!StringUtil.isBlank(val_constructor)) {
 			mapa = this.constructorStandingService.findByConstructor(val_constructor, 
-																	 selectedPage,
-																	 limit);
+																	 selectedPage);
 		} else {
 			mapa = this.constructorStandingService.findBySeason("2018", 
-																selectedPage,
-																limit);
+																selectedPage);
 		}
 
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 
 		constructorStandingForm = new ConstructorStandingForm(valid_offset,
-															  valid_limit,
 															  val_season,
 															  val_position,
 															  val_constructor);
@@ -94,12 +87,11 @@ public class ConstructorStandingController {
 	public ModelAndView search(@Valid @ModelAttribute ConstructorStandingForm constructorStandingForm, BindingResult binding) {
 		ModelAndView result;
 		String season, position, constructor;
-		Integer limit, offset;
+		Integer offset;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
 			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-							   Optional.of(UtilityService.DEFAULT_LIMIT),
 							   Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
@@ -110,11 +102,9 @@ public class ConstructorStandingController {
 			season = constructorStandingForm.getSeason().trim();
 			position = constructorStandingForm.getPosition().trim();
 			constructor = constructorStandingForm.getConstructor().trim();
-			limit = constructorStandingForm.getLimit();
 			offset = constructorStandingForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.of(limit),
 							   Optional.ofNullable(season),
 							   Optional.ofNullable(position),
 							   Optional.ofNullable(constructor));	
@@ -127,14 +117,11 @@ public class ConstructorStandingController {
 	public ModelAndView reset(@ModelAttribute ConstructorStandingForm constructorStandingForm) {
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
-		int offset, limit;
+		int offset;
 		
 		offset = constructorStandingForm.getOffset();
-		limit = constructorStandingForm.getLimit();
 		
-		mapa = this.constructorStandingService.findBySeason("2018",
-															Optional.ofNullable(offset),
-															Optional.ofNullable(limit));
+		mapa = this.constructorStandingService.findBySeason("2018", Optional.ofNullable(offset));
 	
 		result = this.getModelAndView(mapa);
 		
@@ -142,7 +129,7 @@ public class ConstructorStandingController {
 	}
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, ConstructorStandingForm constructorStandingForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		int totalPages, totalElements, valid_selectedPage;
 		ModelAndView result;
 		List<Integer> pages;
 		List<Object> dataPage;
@@ -154,17 +141,9 @@ public class ConstructorStandingController {
 		pages = this.utilityService.getPages(totalPages);
 		
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
-				
-		if (totalElements > 0) {
-			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
-			valid_limit = (limit > totalElements) ? totalElements : limit;
-		} else {
-			valid_limit = 1;
-		}
-		
+						
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
-		constructorStandingForm.setLimit(valid_limit);
 		constructorStandingForm.setOffset(valid_selectedPage);
 			
 		constructorsStanding = this.utilityService.getFromMap2(mapa, "constructorsStanding");
@@ -172,7 +151,6 @@ public class ConstructorStandingController {
 		result = new ModelAndView("constructorStanding/list");
 		
 		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);

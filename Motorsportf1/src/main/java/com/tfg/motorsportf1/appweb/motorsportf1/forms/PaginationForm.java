@@ -7,22 +7,16 @@ public class PaginationForm {
 	@Min(1)
 	private Integer offset;
 	
-	@Min(1)
-	private Integer limit;
-
-	
 	public PaginationForm() {
 		super();
 		
 		this.offset = 1;
-		this.limit = 10;
 	}
 	
-	public PaginationForm(Integer offset, Integer limit) {
+	public PaginationForm(Integer offset) {
 		super();
 		
 		this.offset = offset;
-		this.limit = limit;
 	}
 
 	public Integer getOffset() {
@@ -33,14 +27,10 @@ public class PaginationForm {
 		this.offset = offset;
 	}
 
-	public Integer getLimit() {
-		return limit;
+	
+	@Override
+	public String toString() {
+		return "PaginationForm [offset=" + offset + "]";
 	}
 
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
-	
-	
-	
 }

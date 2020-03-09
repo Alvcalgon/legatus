@@ -47,23 +47,21 @@ public class ConstructorService {
 	}
 
 	public Map<String, List<Object>> findAll() {
-		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-				Optional.of(UtilityService.DEFAULT_LIMIT));
+		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
 	}
 
-	public Map<String, List<Object>> findAll(Optional<Integer> selectedPage, Optional<Integer> limit) {
+	public Map<String, List<Object>> findAll(Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
 
 		url = UtilityService.API_URI_PRE + "/constructor/list";
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByCountry(String country, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByCountry(String country, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedCountry;
 
@@ -71,12 +69,12 @@ public class ConstructorService {
 
 		url = UtilityService.API_URI_PRE + "/constructor/list/country/" + encodedCountry;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByName(String name, Optional<Integer> selectedPage, Optional<Integer> limit) {
+	public Map<String, List<Object>> findByName(String name, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedName;
 
@@ -84,13 +82,12 @@ public class ConstructorService {
 
 		url = UtilityService.API_URI_PRE + "/constructor/list/name/" + encodedName;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	public Map<String, List<Object>> findByParameters(String name, String country, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	public Map<String, List<Object>> findByParameters(String name, String country, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedName, encodedCountry;
 
@@ -99,16 +96,15 @@ public class ConstructorService {
 
 		url = UtilityService.API_URI_PRE + "/constructor/list/country/" + encodedCountry + "/name/" + encodedName;
 
-		results = this.getDataPaginationAndObjects(url, selectedPage, limit);
+		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
 	}
 
-	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage,
-			Optional<Integer> limit) {
+	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_constructors;
-		int totalPages, totalElements, valid_limit, valid_selectedPage, targetPage;
+		int totalPages, totalElements, valid_selectedPage, targetPage;
 		String name, country;
 		Map<String, Object> map_json, temp;
 		List<Object> constructors;
@@ -116,15 +112,14 @@ public class ConstructorService {
 		Constructor constructor;
 
 		try {
-			temp = this.utilityService.mapJSON(url, 0, 2);
+			temp = this.utilityService.mapJSON(url, 0);
 			totalElements = (int) this.utilityService.getFromMap(temp, "totalElements");
 
-			// Validamos campos de la paginacion
-			valid_limit = this.utilityService.getValidLimit(limit, totalElements);
-			valid_selectedPage = this.utilityService.getValidOffset(selectedPage, valid_limit, totalElements);
+			// Validamos offset de la paginacion
+			valid_selectedPage = this.utilityService.getValidOffset(selectedPage, totalElements);
 
 			targetPage = valid_selectedPage - 1;
-			map_json = this.utilityService.mapJSON(url, targetPage, valid_limit);
+			map_json = this.utilityService.mapJSON(url, targetPage);
 
 			results = new HashMap<String, List<Object>>();
 
@@ -150,7 +145,7 @@ public class ConstructorService {
 				totalPages = (int) this.utilityService.getFromMap(map_json, "totalPages");
 				totalElements = (int) this.utilityService.getFromMap(map_json, "totalElements");
 
-				dataPage = this.utilityService.fillDataPage(totalPages, totalElements, valid_limit, valid_selectedPage);
+				dataPage = this.utilityService.fillDataPage(totalPages, totalElements, valid_selectedPage);
 			}
 
 			results.put("constructors", constructors);
@@ -164,8 +159,7 @@ public class ConstructorService {
 			results = new HashMap<String, List<Object>>();
 
 			constructors = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1, UtilityService.DEFAULT_OFFSET_TO_USER,
-					UtilityService.DEFAULT_LIMIT);
+			dataPage = this.utilityService.fillDataPage(-1, -1, UtilityService.DEFAULT_OFFSET_TO_USER);
 
 			results.put("constructors", constructors);
 			results.put("dataPage", dataPage);

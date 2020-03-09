@@ -40,11 +40,10 @@ public class DriverController {
 	
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-							 @RequestParam("limit") Optional<Integer> limit,
 							 @RequestParam("fullname") Optional<String> fullname,
 							 @RequestParam("country") Optional<String> country) {
 		String val_country, val_fullname;
-		int valid_limit, valid_offset;
+		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
@@ -56,28 +55,22 @@ public class DriverController {
 		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_country)) {
 			mapa = this.driverService.findByParameters(val_fullname,
 													   val_country,
-													   selectedPage,
-													   limit);
+													   selectedPage);
 		} else if (!StringUtil.isBlank(val_fullname)) {
 			mapa = this.driverService.findByFullname(val_fullname,
-													selectedPage,
-													limit);
+													selectedPage);
 		} else if (!StringUtil.isBlank(val_country)) {			
 			mapa = this.driverService.findByCountry(val_country,
-													selectedPage,
-													limit);
+													selectedPage);
 		} else {
-			mapa = this.driverService.findAll(selectedPage, limit);
+			mapa = this.driverService.findAll(selectedPage);
 		}
 		
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 		
-		
-		valid_limit = (int) dataPage.get(UtilityService.POS_LIMIT);
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
 		driverForm = new DriverForm(valid_offset,
-									valid_limit,
 									val_fullname.trim(),
 									val_country.trim());
 		
@@ -97,8 +90,7 @@ public class DriverController {
 			result = new ModelAndView("driver/display");
 			result.addObject("driver", driver);
 		} else {
-			result = this.list(Optional.empty(), 
-							   Optional.empty(),
+			result = this.list(Optional.empty(),
 							   Optional.empty(),
 							   Optional.empty());
 		}
@@ -110,12 +102,11 @@ public class DriverController {
 	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
 		ModelAndView result;
 		String country, fullname;
-		Integer offset, limit;
+		Integer offset;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
 			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.of(UtilityService.DEFAULT_LIMIT),
 					   		   Optional.empty(),
 					   		   Optional.empty());
 		} else {
@@ -123,11 +114,9 @@ public class DriverController {
 			// parametros de busquedas
 			country = driverForm.getCountry().trim();
 			fullname = driverForm.getFullname().trim();
-			limit = driverForm.getLimit();
 			offset = driverForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.ofNullable(limit),
 							   Optional.ofNullable(fullname),
 							   Optional.ofNullable(country));
 		}
@@ -151,7 +140,7 @@ public class DriverController {
 	
 	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, 
 										DriverForm driverForm) {
-		int totalPages, totalElements, valid_selectedPage, valid_limit, limit;
+		int totalPages, totalElements, valid_selectedPage;
 		List<Object> drivers;
 		ModelAndView result;
 		List<Integer> pages;
@@ -163,17 +152,9 @@ public class DriverController {
 		pages = this.utilityService.getPages(totalPages);
 	
 		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
-		
-		if (totalElements > 0) {
-			limit = (int) dataPage.get(UtilityService.POS_LIMIT);
-			valid_limit = (limit > totalElements) ? totalElements : limit;
-		} else {
-			valid_limit = 1;
-		}
-		
+				
 		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
 	
-		driverForm.setLimit(valid_limit);
 		driverForm.setOffset(valid_selectedPage);
 		
 		drivers = this.utilityService.getFromMap2(mapa, "drivers");
@@ -181,7 +162,6 @@ public class DriverController {
 		result = new ModelAndView("driver/list");
 	
 		result.addObject("totalElements", totalElements);
-		result.addObject("limit", valid_limit);
 		result.addObject("selectedPage", valid_selectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);

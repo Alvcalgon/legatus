@@ -9,32 +9,10 @@
 					  th:action="@{/driver-standing/list}" onsubmit="return validateDriverStandingForm()">
 					  
 					<input id="offset" type="hidden" th:field="*{offset}" />
-					
-					<div class="form-group" style="padding-right:20px;">
-						<label th:text="#{paginacion.length} + ':'" for="limit"></label>
-						<input class="form-control"
-						       id="limit"
-						       type="number"
-					      	   th:field="*{limit}"
-					      	   min="1"
-					      	   th:max="${totalElements}"
-					      	   onchange="validateLimit()"
-					      	   th:disabled="${totalElements} == 0 ? 'true' : 'false'" />
-					    <span class="form-text text-muted" th:text="#{driver.limit.info}">Información</span>
-					    <div class="valid-feedback"></div>
-						<div class="invalid-feedback">
-							<span class="error" 
-							      th:if="${#fields.hasErrors('limit')}"
-							      th:errors="*{limit}">Error nombre completo</span>
-							<span id="limitError"></span>
-						</div>
-					</div>
-					
+								
 					<div class="form-group">
 						<label th:text="#{driverStanding.season} + ':'" for="season"></label>
-						<input class="form-control is-invalid"
-							   id="season" 
-							   type="text"
+						<input class="form-control is-invalid" id="season" type="text"
 							   th:field="*{season}"
 							   placeholder="2018"
 							   onchange="validateSeason()" />
@@ -49,9 +27,7 @@
 					
 					<div class="form-group">
 						<label th:text="#{driverStanding.position} + ':'" for="position"></label>
-						<input class="form-control is-invalid"
-							   id="position"
-							   type="text"
+						<input class="form-control is-invalid" id="position" type="text"
 							   th:field="*{position}"
 							   placeholder="1"
 							   onchange="validatePosition()" />
@@ -66,9 +42,7 @@
 					
 					<div class="form-group">
 						<label th:text="#{driverStanding.driver} + ':'" for="driver"></label>
-						<input class="form-control is-invalid"
-							   id="driver"
-							   type="text"
+						<input class="form-control is-invalid" id="driver" type="text"
 							   th:field="*{driver}"
 							   placeholder="Fernando Alonso"
 							   onchange="validateDriver()" />

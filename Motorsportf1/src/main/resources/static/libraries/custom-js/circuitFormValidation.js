@@ -7,6 +7,12 @@ function validateCircuitForm() {
 	return errorName.length == 0 && errorLocation.length == 0 && errorLimit.length == 0 && errorSeason.length == 0;
 }
 
+function searchBySeason() {
+	var errorSeason = validateSeason();
+	
+	return errorSeason.length == 0;
+}
+
 function validateLimit() {
 	var input = document.getElementById("limit");
 	var limit = input.value;
@@ -26,7 +32,7 @@ function validateLimit() {
 }
 
 function validateSeason() {
-	var input = document.getElementById("season");
+	var input = document.getElementById("seasonSearch");
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{4}$/;

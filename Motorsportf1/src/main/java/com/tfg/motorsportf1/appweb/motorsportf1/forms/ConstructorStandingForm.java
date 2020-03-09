@@ -26,12 +26,12 @@ public class ConstructorStandingForm extends PaginationForm {
 		super();
 	}
 	
-	public ConstructorStandingForm(int offset, int limit) {
-		super(offset, limit);
+	public ConstructorStandingForm(int offset) {
+		super(offset);
 	}
 	
-	public ConstructorStandingForm(int offset, int limit, String season, String position, String constructor) {
-		super(offset, limit);
+	public ConstructorStandingForm(int offset, String season, String position, String constructor) {
+		super(offset);
 		
 		this.season = season;
 		this.position = position;
