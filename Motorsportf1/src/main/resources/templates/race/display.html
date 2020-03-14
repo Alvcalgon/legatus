@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{race.list}">Lista de carreras</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{race.display}">Detalles de un piloto</h1>
+					
+					<div class="detalles" style="background-color:'grey';">
+						<p>
+							<strong th:text="#{race.season} + ':'">Temporada</strong>
+							<span th:text="${race.season}"></span>
+						</p>
+						
+						<p>
+							<strong th:text="#{race.raceDate} + ':'">Fecha de la carrera</strong>
+							<span th:text="${race.raceDate}"> </span>
+							<!-- <span th:with="dateformat=#{date.format}" th:text="${#dates.format(race.raceDate, dateformat)}"></span> -->
+						</p>
+						
+						<p>
+							<strong th:text="#{race.event} + ':'">Evento</strong>
+							<span th:text="${race.event}"></span>
+						</p>
+						
+						<p>
+							<strong th:text="#{race.circuit} + ':'">Circuito</strong>
+							<a th:href="@{/circuit/display(name=${race.circuit.name})}" th:text="${race.circuit.name}">Enlace a circuito</a>
+						</p>
+						
+					</div>
+					
+					<div class="results-container">
+						<h2 th:text="#{result.list}">Resultados encontrados</h2>
+						
+						<div class="info-size">
+							<span th:utext="#{paginacion.number(${race.results.size()})}">
+								Numero de registros
+							</span>
+						</div>
+						
+						<table th:if="${race.results.size() > 0}" class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th th:text="#{result.position}">Position</th>
+									<th th:text="#{result.time}">Time</th>
+									<th th:text="#{result.laps}">Laps</th>
+									<th th:text="#{result.grid}">Grid</th>
+									<th th:text="#{result.points}">Points</th>
+									<th th:text="#{result.driver}">Driver</th>
+									<th th:text="#{result.constructor}">Constructor</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="result : ${race.results}">
+									<td th:text="${result.position}"></td>
+									<td th:text="${result.time}">Fecha de la carrera</td>
+									<td th:text="${result.laps}"></td>
+									<td th:text="${result.grid}"></td>
+									<td th:text="${result.points}"></td>
+									<td>
+										<a th:href="@{/driver/display(fullname=${result.driver.fullname})}"
+										   th:text="${result.driver.fullname}"> </a>
+									</td>
+									<td>
+										<a th:href="@{/constructor/display(name=${result.constructor.name})}"
+										   th:text="${result.constructor.name}"> </a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="cont volver atras">
+						<p>
+							<a th:href="@{/race/list}" th:text="#{link.return}">Volver atrás</a>
+						</p>
+					</div>	
+				</div>
+			</div>
+		</body>
+	</html>

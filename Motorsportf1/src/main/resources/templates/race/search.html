@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+		<body>
+			<div class="form race search container" th:fragment="frag-race-search">
+				<h2 th:text="#{search.finder}">Buscador</h2>
+				<form class="search was-validated needs-validation" th:action="@{/race/list}"
+				      th:object="${raceForm}" method="post" onsubmit="return validateRaceForm()">
+					
+					<input id="offset" type="hidden" th:field="*{offset}" />
+					
+					
+					<div class="form-group">
+						<label th:text="#{race.season} + ':'" for="season"></label>
+						<input class="form-control is-invalid" id="season" type="text"
+						       th:field="*{season}"
+						       placeholder="2017"
+						       onchange="validateSeason()" />
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" 
+							      th:if="${#fields.hasErrors('season')}"
+							      th:errors="*{season}">Error nombre completo</span>
+							<span id="seasonRaceError"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label th:text="#{race.event} + ':'" for="event"></label>
+						<input class="form-control is-invalid" id="event" type="text"
+							   th:field="*{event}"
+							   placeholder="German Grand Prix"
+							   onchange="validateEvent()" />
+						<span class="form-text text-muted" th:text="#{race.event.info}">Información</span>
+						<div class="valid-feedback"></div>
+						<div class="invalid-feedback">
+							<span class="error" th:if="${#fields.hasErrors('event')}"
+							      th:errors="*{event}">Error evento</span>
+							<span id="eventError"></span>
+						</div>
+					</div>
+					
+					<input type="submit" name="search" th:value="#{form.search}" class="btn btn-primary" />
+					<input type="submit" name="reset" th:value="#{form.reset}" class="btn btn-warning" />
+				</form>
+			</div>
+		</body>
+	</html>

@@ -29,6 +29,19 @@ public class Race {
 		this.results = new HashSet<Result>();
 	}	
 	
+	
+	
+	public Race(String season, Date raceDate, String event, Circuit circuit) {
+		super();
+		
+		this.season = season;
+		this.raceDate = raceDate;
+		this.event = event;
+		this.circuit = circuit;
+		this.results = new HashSet<Result>();
+	}
+
+
 	// Getters y setters ----------------
 	public String getSeason() {
 		return season;

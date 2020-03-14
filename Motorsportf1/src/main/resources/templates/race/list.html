@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{race.list}">Lista de carreras</title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{race.list}">Lista de carreras</h1>
+					
+					<div th:replace="race/search :: frag-race-search"></div>
+					<nav th:if="${pages.size() > 0}">
+						<div class="enlaces-paginacion">
+							<ul class="pagination justify-content-center">
+								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/race/list(offset=${selectedPage}-1,
+															   season=${raceForm.season},
+															   event=${raceForm.event})}"
+									   th:text="#{paginacion.previous}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+									<a href="#" th:href="@{/race/list(offset=${page},
+															   season=${raceForm.season},
+															   event=${raceForm.event})}"
+									   th:text="${page}"
+									   class="page-link">
+									</a>
+								</li>
+								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
+									<a href="#" th:href="@{/race/list(offset=${selectedPage}+1,
+															   season=${raceForm.season},
+															   event=${raceForm.event})}"
+									   th:text="#{paginacion.next}"
+									   class="page-link">
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				
+					<div class="results-container">
+						<h2 th:text="#{result.list}">Resultados encontrados</h2>
+						
+						<div class="info-size">
+							<span th:utext="#{paginacion.number(${totalElements})}">
+								Numero de registros
+							</span>
+						</div>
+						
+						<table th:if="${races.size() > 0}" class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th>
+									</th>
+									<th th:text="#{race.season}">Nombre completo</th>
+									<th th:text="#{race.raceDate}">Fecha de la carrera</th>
+									<th th:text="#{race.event}">Evento</th>
+									<th th:text="#{race.circuit}">Date of birth</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="race : ${races}">
+									<td>
+										<a th:href="@{/race/display(season=${race.season},event=${race.event})}" th:text="#{link.display}">Display</a>
+									</td>
+									<td th:text="${race.season}"></td>
+									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(race.raceDate, dateformat)}">Fecha de la carrera</td>
+									<td th:text="${race.event}"></td>
+									<td th:text="${race.circuit.name}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div th:if="${races.size() == 0}"
+						 class="no-elements bg-info text-white">
+						<span th:text="#{paginacion.empty}"></span>
+					</div>
+					
+					<div class="cont volver atras">
+						<p class="volver-atras"> 
+							<a class="btn btn-secondary" th:href="@{/}"
+							   th:text="#{link.return}">Volver atrás</a>
+						</p>
+					</div>
+				</div>		
+			</div>
+		</body>
+	</html>

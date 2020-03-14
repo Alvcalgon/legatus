@@ -89,6 +89,27 @@ public class UtilityService {
 		return results;
 	}
 	
+	public List<LinkedHashMap<String, Object>> listJSON2(String url) {
+		List<LinkedHashMap<String, Object>> results;
+		URI uri;
+		
+		try {
+			uri = new URI(url);
+			
+			results = this.restTemplate.getForObject(uri, List.class);
+		} catch (URISyntaxException use) {
+			log.info("Error en la url de la API: " + use.getMessage());
+		
+			results = new ArrayList<LinkedHashMap<String,Object>>();
+		} catch (Throwable oops) {
+			log.info("Error al parsear los objetos del json: " + oops.getMessage());
+			
+			results = new ArrayList<LinkedHashMap<String,Object>>();
+		}
+		
+		return results;
+	}
+	
 	public Map<String, Object> mapJSON(String url, int offset) {
 		Map<String, Object> results;
 		URI uri;
@@ -203,6 +224,14 @@ public class UtilityService {
 	}
 	
 	public String getStringFromKey(LinkedHashMap<String, String> map, String key) {
+		String result;
+		
+		result = (map.containsKey(key)) ? (String) map.get(key) : "";
+		
+		return result;
+	}
+	
+	public String getStringFromKey2(LinkedHashMap<String, Object> map, String key) {
 		String result;
 		
 		result = (map.containsKey(key)) ? (String) map.get(key) : "";
