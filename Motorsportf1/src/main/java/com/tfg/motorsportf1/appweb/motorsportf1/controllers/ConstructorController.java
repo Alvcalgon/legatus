@@ -85,9 +85,7 @@ public class ConstructorController {
 			
 			result.addObject("constructor", constructor);
 		} else {
-			result = this.list(Optional.empty(),
-							   Optional.empty(),
-							   Optional.empty());
+			result = this.getModelAndView(this.constructorService.findAll());
 		}
 		
 		return result;
@@ -101,12 +99,11 @@ public class ConstructorController {
 		Integer offset;
 		
 		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.empty(),
-					   		   Optional.empty());
+			// Si hay errores de validacion, se envian todos las escuderias
+			result = this.getModelAndView(this.constructorService.findAll(),
+										  constructorForm);
 		} else {
-			// Si no hay errores de validacion, se filtran los pilotos según los
+			// Si no hay errores de validacion, se filtran las escuderias según los
 			// parametros de busquedas
 			country = constructorForm.getCountry().trim();
 			name = constructorForm.getName().trim();

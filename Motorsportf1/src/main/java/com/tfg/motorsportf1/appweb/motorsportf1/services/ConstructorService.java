@@ -33,7 +33,7 @@ public class ConstructorService {
 		try {
 			encodedName = this.utilityService.getEncodedText(name);
 
-			url = UtilityService.API_URI_PRE + "/constructor/list/display/" + encodedName;
+			url = UtilityService.API_URI_PRE + "/constructor/display/" + encodedName;
 
 			result = this.utilityService.stringMapJSON(url);
 
@@ -105,7 +105,7 @@ public class ConstructorService {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_constructors;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
-		String name, country;
+		String name, country, principal;
 		Map<String, Object> map_json, temp;
 		List<Object> constructors;
 		List<Object> dataPage;
@@ -131,12 +131,11 @@ public class ConstructorService {
 
 				if (!ls_map_constructors.isEmpty()) {
 					for (LinkedHashMap<String, String> mapConstructor : ls_map_constructors) {
-						name = mapConstructor.get("name");
-						country = mapConstructor.get("country");
-
-						constructor = (mapConstructor.containsKey("principal"))
-								? new Constructor(name, country, mapConstructor.get("principal"))
-								: new Constructor(name, country);
+						name = this.utilityService.getStringFromKey(mapConstructor, "name");
+						country = this.utilityService.getStringFromKey(mapConstructor, "country");
+						principal = this.utilityService.getStringFromKey(mapConstructor, "principal");
+						
+						constructor = new Constructor(name, country, principal);
 
 						constructors.add(constructor);
 					}
@@ -153,7 +152,7 @@ public class ConstructorService {
 
 		} catch (Throwable oops) {
 			log.info(
-					"ConstructorService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: "
+					"ConstructorService::getDataPaginationAndObjects -> Algo fue mal al recuperar los objetos y datos de la paginacion: "
 							+ oops.getMessage());
 
 			results = new HashMap<String, List<Object>>();

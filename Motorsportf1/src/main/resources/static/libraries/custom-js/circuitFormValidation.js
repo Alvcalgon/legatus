@@ -1,34 +1,9 @@
 function validateCircuitForm() {
-	var errorName = validateName();
+	var errorName = validateNameCircuit();
 	var errorLocation = validateLocation();
 	var errorSeason = validateSeason();
-	var errorLimit = validateLimit();
 	
-	return errorName.length == 0 && errorLocation.length == 0 && errorLimit.length == 0 && errorSeason.length == 0;
-}
-
-function searchBySeason() {
-	var errorSeason = validateSeason();
-	
-	return errorSeason.length == 0;
-}
-
-function validateLimit() {
-	var input = document.getElementById("limit");
-	var limit = input.value;
-	var language = document.documentElement.lang;
-	var error = "";
-	
-	var valid = !isNaN(limit) && limit >= 1;
-	
-	if (!valid) {
-		error = (language == "es") ? "El tamaño de página debe ser entre 1 y el total de registros"
-				: "The limit must be a value between 1 and register total numbers";
-	}
-	
-	document.getElementById("limitError").innerHTML = error;
-	
-	return error;
+	return errorName.length == 0 && errorLocation.length == 0 && errorSeason.length == 0;
 }
 
 function validateSeason() {
@@ -49,7 +24,6 @@ function validateSeason() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("seasonErrorCS").innerHTML = error;
 	
 	return error;
@@ -72,13 +46,12 @@ function validateLocation() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("locationError").innerHTML = error;
 	
 	return error;
 }
 
-function validateName() {
+function validateNameCircuit() {
 	var input = document.getElementById("name");
 	var name = input.value.trim();
 	var language = document.documentElement.lang;
@@ -95,22 +68,8 @@ function validateName() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("nameError").innerHTML = error;
 	
 	return error;
-}
-
-function htmlScape(input) {
-	var tagsToReplace = {'&': '&amp;', '<': '&lt;', '>': 'gt;'};
-	var inputValue = input.value;
-	
-	var validValue = inputValue.replace(/[&<>]/g, function(tag) {
-		return tagsToReplace[tag] || tag;
-	});
-	
-	input.value = validValue;
-	
-	return true;
 }
 

@@ -64,7 +64,7 @@ public class ConstructorStandingController {
 			mapa = this.constructorStandingService.findByConstructor(val_constructor, 
 																	 selectedPage);
 		} else {
-			mapa = this.constructorStandingService.findBySeason("2018", 
+			mapa = this.constructorStandingService.findBySeason(UtilityService.LAST_SEASON, 
 																selectedPage);
 		}
 
@@ -90,18 +90,19 @@ public class ConstructorStandingController {
 		Integer offset;
 		
 		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-							   Optional.empty(),
-							   Optional.empty(),
-							   Optional.empty());
+			// Si hay errores de validacion, se envia la clasificación general de 2018
+			result = this.getModelAndView(
+					        this.constructorStandingService.findBySeason(
+							UtilityService.LAST_SEASON),
+					        constructorStandingForm
+		   );
 			
 		} else {
 			// Si no hay errores de validacion, se filtran los constructor
 			// standing según los parametros de busquedas
-			season = constructorStandingForm.getSeason().trim();
-			position = constructorStandingForm.getPosition().trim();
-			constructor = constructorStandingForm.getConstructor().trim();
+			season = constructorStandingForm.getSeason();
+			position = constructorStandingForm.getPosition();
+			constructor = constructorStandingForm.getConstructor();
 			offset = constructorStandingForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
@@ -121,7 +122,9 @@ public class ConstructorStandingController {
 		
 		offset = constructorStandingForm.getOffset();
 		
-		mapa = this.constructorStandingService.findBySeason("2018", Optional.ofNullable(offset));
+		mapa = this.constructorStandingService.findBySeason(
+				  UtilityService.LAST_SEASON,
+				  Optional.ofNullable(offset));
 	
 		result = this.getModelAndView(mapa);
 		

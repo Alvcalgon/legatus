@@ -1,6 +1,7 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class DriverService {
 		try {			
 			encodedFullname = this.utilityService.getEncodedText(fullname);
 			
-			url = UtilityService.API_URI_PRE + "/driver/list/name/" + encodedFullname;
+			url = UtilityService.API_URI_PRE + "/driver/display/" + encodedFullname;
 			
 			result = this.utilityService.stringMapJSON(url);
 
@@ -112,11 +113,13 @@ public class DriverService {
 				Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_drivers;
+		String fullname, country, str_dateOfBirth, placeOfBirth;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
 		Map<String, Object> map_json, temp;
 		List<Object> drivers;
 		List<Object> dataPage;
 		Driver driver;
+		Date dateOfBirth;
 		
 		try {
 			temp = this.utilityService.mapJSON(url, 0);
@@ -138,10 +141,13 @@ public class DriverService {
 
 				if (!ls_map_drivers.isEmpty()) {
 					for (LinkedHashMap<String, String> mapDriver : ls_map_drivers) {
-						driver = new Driver(mapDriver.get("fullname"),
-											mapDriver.get("placeOfBirth"),
-											mapDriver.get("country"),
-											this.utilityService.getDateFromString(mapDriver.get("dateOfBirth")));
+						fullname = this.utilityService.getStringFromKey(mapDriver, "fullname");
+						country = this.utilityService.getStringFromKey(mapDriver, "country");
+						placeOfBirth = this.utilityService.getStringFromKey(mapDriver, "placeOfBirth");
+						str_dateOfBirth = this.utilityService.getStringFromKey(mapDriver, "dateOfBirth");
+						dateOfBirth = this.utilityService.getDateFromString(str_dateOfBirth);
+						
+						driver = new Driver(fullname, placeOfBirth, country, dateOfBirth);
 
 						drivers.add(driver);
 					}
@@ -159,7 +165,8 @@ public class DriverService {
 			results.put("dataPage", dataPage);
 			
 		} catch (Throwable oops) {
-			log.info("DriverService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: "
+			log.info("DriverService::getDataPaginationAndObjects ->"
+					+ " Algo fue mal al recuperar los objetos y datos de la paginacion: "
 						+ oops.getMessage());
 
 			results = new HashMap<String, List<Object>>();

@@ -10,30 +10,35 @@
 					
 					<div class="detalles" style="background-color:'grey';">
 						<p>
-							<strong th:text="#{driver.fullname}">Nombre completo</strong>
+							<strong th:text="#{driver.fullname}">Nombre completo</strong>:
 							<span th:text="${driver.fullname}"></span>
 						</p>
 						
 						<p>
-							<strong th:text="#{driver.country}">Pais de nacimiento</strong>
+							<strong th:text="#{driver.country}">Pais de nacimiento</strong>:
 							<span th:text="${driver.country}"></span>
 						</p>
 						
 						<p>
-							<strong th:text="#{driver.placebirth}">Nombre completo</strong>
+							<strong th:text="#{driver.placebirth}">Lugar de nacimiento</strong>:
 							<span th:text="${driver.placeOfBirth}"></span>
 						</p>
 						
 						<p>
-							<strong th:text="#{driver.datebirth}">Nombre completo</strong>
-							<span th:text="${driver.dateOfBirth}"></span>
+							<strong th:text="#{driver.datebirth}">Fecha de nacimiento</strong>:
+							<span th:with="dateformat=#{date.format}"
+								  th:text="${#dates.format(dateOfBirth, dateformat)}"></span>
 						</p>
 						
 					</div>
 				
-					<p> <a th:href="@{/driver/list}"
-					  	   th:text="#{link.return}">Volver atrás</a> </p>
-				
+					<div class="cont volver atras">
+						<p class="volver-atras"> 
+							<a class="btn btn-secondary"
+							   th:href="@{/driver/list}"
+							   th:text="#{link.return}">Volver atrás</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</body>

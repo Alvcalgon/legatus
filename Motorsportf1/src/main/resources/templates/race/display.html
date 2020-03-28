@@ -16,8 +16,8 @@
 						
 						<p>
 							<strong th:text="#{race.raceDate} + ':'">Fecha de la carrera</strong>
-							<span th:text="${race.raceDate}"> </span>
-							<!-- <span th:with="dateformat=#{date.format}" th:text="${#dates.format(race.raceDate, dateformat)}"></span> -->
+							<span th:with="dateformat=#{date.format}" 
+							      th:text="${#dates.format(raceDate, dateformat)}"></span>
 						</p>
 						
 						<p>
@@ -41,7 +41,7 @@
 							</span>
 						</div>
 						
-						<table th:if="${race.results.size() > 0}" class="table table-striped">
+						<table th:if="${race.results.size() > 0}" id="raceResultsTable" class="table table-striped">
 							<thead class="thead-dark">
 								<tr>
 									<th th:text="#{result.position}">Position</th>
@@ -74,8 +74,10 @@
 					</div>
 					
 					<div class="cont volver atras">
-						<p>
-							<a th:href="@{/race/list}" th:text="#{link.return}">Volver atrás</a>
+						<p class="volver-atras"> 
+							<a class="btn btn-secondary"
+							   th:href="@{/race/list}"
+							   th:text="#{link.return}">Volver atrás</a>
 						</p>
 					</div>	
 				</div>

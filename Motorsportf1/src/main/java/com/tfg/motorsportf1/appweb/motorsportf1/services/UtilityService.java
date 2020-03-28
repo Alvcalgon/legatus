@@ -19,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
@@ -38,6 +40,7 @@ public class UtilityService {
 	public static final int POS_TOTAL_ELEMENTS = 1;
 	public static final int POS_OFFSET = 2;
 	
+	public static final String LAST_SEASON = "2018";
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -47,10 +50,40 @@ public class UtilityService {
 		SimpleDateFormat formatter;
 		String result;
 		
-		formatter = (LocaleContextHolder.getLocale().getLanguage() == "es") ? new SimpleDateFormat("dd/MM/yyyy HH:mm") : new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		formatter = (LocaleContextHolder.getLocale().getLanguage() == "es")
+						? new SimpleDateFormat("dd/MM/yyyy HH:mm")
+						: new SimpleDateFormat("yyyy/MM/dd HH:mm");
+						
 		result = formatter.format(new Date());
 		
 		return result;
+	}
+	
+	public Date getStringFromObject(Object object, int posAttribute) {
+		String result, str_object;
+		String str_raceDate;
+		String[] fields;
+		Date d;
+		int posDate;
+		
+		str_object = ObjectUtils.getDisplayString(object);
+		
+		d = null;
+		
+		if (StringUtils.hasText(str_object)) {
+			fields = str_object.split(",");
+			
+			str_raceDate = fields[posAttribute];
+			str_raceDate = str_raceDate.trim();
+			
+			posDate = str_raceDate.indexOf("=");
+			
+			result = str_raceDate.substring(posDate+1);
+			
+			d = this.getDateFromString(result);
+		}
+		
+		return d;
 	}
 	
 	public Date getDateFromString(String str_date) {
@@ -126,6 +159,9 @@ public class UtilityService {
 			log.info("Error al parsear los objetos del json: " + oops.getMessage());
 			
 			results = new HashMap<String, Object>();
+			results.put("content", new ArrayList<>());
+			results.put("totalPages", 0);
+			results.put("totalElements", 0);
 		}
 		
 		return results;
@@ -164,20 +200,6 @@ public class UtilityService {
 		}
 		
 		return results;
-	}
-	
-	public int getValidLimit(Optional<Integer>limit, int totalElements) {
-		int result;
-		
-		if (limit != null) {
-			result = (limit.isPresent()) ? limit.get() : 10;
-			if (result < 1 || result > totalElements) { result = 10; }
-		} else {
-			result = 10;
-		}
-		
-		
-		return result;
 	}
 	
 	public int getValidOffset(Optional<Integer> selectedPage, int totalElements) {

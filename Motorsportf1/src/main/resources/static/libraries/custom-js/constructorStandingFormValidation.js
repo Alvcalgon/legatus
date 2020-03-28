@@ -1,34 +1,62 @@
-function validateConstructorStandingForm() {
-	var errorSeason = validateSeason();
-	var errorPosition = validatePosition();
-	var errorConstructor = validateConstructor();
-	var errorLimit = validateLimit();
+function validateCSForm() {
+	var errorSeason = validateSeasonCS();
+	var errorPosition = validatePositionCS();
+	var errorConstructor = validateConstructorCS();
 	
-	return errorFullname.length == 0 && errorPosition.length == 0 && errorConstructor.length == 0 && errorLimit.length == 0;
+	return errorSeason.length == 0 && errorPosition.length == 0 && errorConstructor.length == 0;
 }
 
-function validateLimit() {
-	var input = document.getElementById("limit");
-	//var input = document.querySelectorAll("form.search input#fullname")[0];
-	var limit = input.value;
-	var language = document.documentElement.lang;
-	var error = "";
+
+function disableSeasonCS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputConstructor = document.getElementById("constructor");
 	
-	var valid = !isNaN(limit) && limit >= 1;
+	var season = inputSeason.value.trim();
 	
-	if (!valid) {
-		error = (language == "es") ? "El tamaño de página debe ser entre 1 y el total de registros"
-				: "The limit must be a value between 1 and register total numbers";
-	}
+	var actionDisable = season.length > 0;
 	
-	document.getElementById("limitErrorCS").innerHTML = error;
+	inputPosition.disabled = actionDisable;
+	inputConstructor.disabled = actionDisable;
 	
-	return error;
+	inputConstructor.style.border = "1px solid green";
+	inputPosition.style.border = "1px solid green";
 }
 
-function validateSeason() {
+function disablePositionCS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputConstructor = document.getElementById("constructor");
+	
+	var position = inputPosition.value.trim();
+	
+	var actionDisable = position.length > 0;
+	
+	inputSeason.disabled = actionDisable;
+	inputConstructor.disabled = actionDisable;
+
+	inputSeason.style.border = "1px solid green";
+	inputConstructor.style.border = "1px solid green";
+}
+
+function disableConstructorCS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputConstructor = document.getElementById("constructor");
+	
+	var constructor = inputConstructor.value.trim();
+	
+	var actionDisable = constructor.length > 0;
+	
+	inputSeason.disabled = actionDisable;
+	inputPosition.disabled = actionDisable;
+	
+	inputSeason.style.border = "1px solid green";
+	inputPosition.style.border = "1px solid green";
+}
+
+function validateSeasonCS() {
 	var input = document.getElementById("season");
-	//var input = document.querySelectorAll("form.search input#season")[0];
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{4}$/;
@@ -45,15 +73,13 @@ function validateSeason() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("seasonErrorCS").innerHTML = error;
 	
 	return error;
 }
 
-function validatePosition() {
+function validatePositionCS() {
 	var input = document.getElementById("position");
-	//var input = document.querySelectorAll("form.search input#position")[0];
 	var position = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{1,2}$/;
@@ -69,22 +95,21 @@ function validatePosition() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("positionErrorCS").innerHTML = error;
 	
 	return error;
 }
 
-function validateConstructor() {
+function validateConstructorCS() {
 	var input = document.getElementById("constructor");
 	var constructor = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]*$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
 	var valid = regExp.test(constructor);
 	
-	if (constructor != '' && !valid) {
+	if (!valid || constructor.includes("<script>") || constructor.includes("</script>")) {
 		error = (language == "es") ? "Escudería inválida" : "Invalid constructor"; 
 	
 		input.style.border = "1px solid red";
@@ -92,22 +117,9 @@ function validateConstructor() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("constructorErrorCS").innerHTML = error;
 	
 	return error;
 }
 
-function htmlScape(input) {
-	var tagsToReplace = {'&': '&amp;', '<': '&lt;', '>': 'gt;'};
-	var inputValue = input.value;
-	
-	var validValue = inputValue.replace(/[&<>]/g, function(tag) {
-		return tagsToReplace[tag] || tag;
-	});
-	
-	input.value = validValue;
-	
-	return true;
-}
 

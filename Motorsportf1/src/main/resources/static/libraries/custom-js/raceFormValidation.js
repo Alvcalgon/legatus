@@ -1,11 +1,11 @@
-function validateCircuitForm() {
-	var errorSeason = validateSeason();
-	var errorEvent = validateEvent();
+function validateRaceForm() {
+	var errorSeason = validateSeasonRace();
+	var errorEvent = validateEventRace();
 	
 	return errorEvent.length == 0 && errorSeason.length == 0;
 }
 
-function validateSeason() {
+function validateSeasonRace() {
 	var input = document.getElementById("season");
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
@@ -23,13 +23,12 @@ function validateSeason() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
 	document.getElementById("seasonRaceError").innerHTML = error;
 	
 	return error;
 }
 
-function validateEvent() {
+function validateEventRace() {
 	var input = document.getElementById("event");
 	var event = input.value.trim();
 	var language = document.documentElement.lang;
@@ -45,24 +44,8 @@ function validateEvent() {
 	} else {
 		input.style.border = "1px solid green";
 	}
-	
-	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("eventError").innerHTML = error;
+
+	document.getElementById("eventRaceError").innerHTML = error;
 	
 	return error;
 }
-
-
-function htmlScape(input) {
-	var tagsToReplace = {'&': '&amp;', '<': '&lt;', '>': 'gt;'};
-	var inputValue = input.value;
-	
-	var validValue = inputValue.replace(/[&<>]/g, function(tag) {
-		return tagsToReplace[tag] || tag;
-	});
-	
-	input.value = validValue;
-	
-	return true;
-}
-

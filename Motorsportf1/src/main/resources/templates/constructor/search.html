@@ -12,13 +12,13 @@
 						<label th:text="#{constructor.name} + ':'" for="name"></label>
 						<input class="form-control is-invalid" id="name" type="text"
 						       th:field="*{name}"
-						       onchange="validateName()" />
+						       onchange="validateNameConstructor()" />
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" 
 							      th:if="${#fields.hasErrors('name')}"
 							      th:errors="*{name}">Error nombre completo</span>
-							<span id="nameError"></span>
+							<span id="nameConstructorError"></span>
 						</div>
 					</div>
 					
@@ -28,12 +28,12 @@
 							   id="country"
 							   type="text"
 							   th:field="*{country}"
-							   onchange="validateCountry()" />
+							   onchange="validateCountryConstructor()" />
 						<span class="form-text text-muted" th:text="#{constructor.country.info}">Información</span>
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Error pais</span>
-							<span id="countryError"></span>
+							<span id="countryConstructorError"></span>
 						</div>
 					</div>
 					

@@ -13,13 +13,13 @@
 						<label th:text="#{driver.fullname} + ':'" for="fullname"></label>
 						<input class="form-control is-invalid" id="fullname" type="text"
 						       th:field="*{fullname}"
-						       onchange="validateFullname()" />
+						       onchange="validateFullnameDriver()" />
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" 
 							      th:if="${#fields.hasErrors('fullname')}"
 							      th:errors="*{fullname}">Error nombre completo</span>
-							<span id="fullnameError"></span>
+							<span id="fullnameDriverError"></span>
 						</div>
 					</div>
 					
@@ -27,12 +27,12 @@
 						<label th:text="#{driver.country} + ':'" for="country"></label>
 						<input class="form-control is-invalid" id="country" type="text"
 							   th:field="*{country}"
-							   onchange="validateCountry()" />
+							   onchange="validateCountryDriver()" />
 						<span class="form-text text-muted" th:text="#{driver.country.info}">Información</span>
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Error pais</span>
-							<span id="countryError"></span>
+							<span id="countryDriverError"></span>
 						</div>
 					</div>
 					

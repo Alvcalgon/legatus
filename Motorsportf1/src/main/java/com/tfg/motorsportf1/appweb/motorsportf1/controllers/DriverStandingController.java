@@ -41,9 +41,9 @@ public class DriverStandingController {
 	
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-			 @RequestParam("season") Optional<String> season,
-			 @RequestParam("position") Optional<String> position,
-			 @RequestParam("driver") Optional<String> driver) {
+			 				 @RequestParam("season") Optional<String> season,
+			 				 @RequestParam("position") Optional<String> position,
+			 				 @RequestParam("driver") Optional<String> driver) {
 		String val_season, val_position, val_driver;
 		DriverStandingForm driverStandingForm;
 		int valid_offset;
@@ -65,7 +65,7 @@ public class DriverStandingController {
 			mapa = this.driverStandingService.findByDriver(val_driver, 
 														   selectedPage);
 		} else {
-			mapa = this.driverStandingService.findBySeason("2018", 
+			mapa = this.driverStandingService.findBySeason(UtilityService.LAST_SEASON, 
 														   selectedPage);
 		}
 
@@ -98,9 +98,9 @@ public class DriverStandingController {
 		} else {
 			// Si no hay errores de validacion, se filtran los constructor
 			// standing según los parametros de busquedas
-			season = driverStandingForm.getSeason().trim();
-			position = driverStandingForm.getPosition().trim();
-			driver = driverStandingForm.getDriver().trim();
+			season = driverStandingForm.getSeason();
+			position = driverStandingForm.getPosition();
+			driver = driverStandingForm.getDriver();
 			offset = driverStandingForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
@@ -120,7 +120,8 @@ public class DriverStandingController {
 		
 		offset = driverStandingForm.getOffset();
 		
-		mapa = this.driverStandingService.findBySeason("2018", Optional.ofNullable(offset));
+		mapa = this.driverStandingService.findBySeason(UtilityService.LAST_SEASON,
+				                                       Optional.ofNullable(offset));
 		
 		result = this.getModelAndView(mapa);
 		

@@ -51,6 +51,11 @@ public class RaceService {
 		return result;
 	}
 	
+	public Map<String, List<Object>> findBySeason(String season) {
+		return this.findBySeason(season,
+				     Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
+	}
+	
 	public Map<String, List<Object>> findBySeason(String season, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url, encodedSeason;
@@ -139,6 +144,22 @@ public class RaceService {
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
+	}
+	
+	public Race getRaceFromObject(Object race) {
+		Race result;
+		
+		result = (Race) race;
+		
+		return result;
+	}
+	
+	public String getStringFromObject(LinkedHashMap<String, Object> linkObject) {
+		String result;
+		
+		result = this.utilityService.getStringFromKey2(linkObject, "raceDate");
+		
+		return result;
 	}
 	
 	private List<Object> getDataObjects(String url) {

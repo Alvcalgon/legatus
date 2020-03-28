@@ -120,10 +120,8 @@ public class CircuitController {
 		
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
-		circuitForm = new CircuitForm(valid_offset,
-									  val_type,
-									  val_location,
-									  val_name);
+		circuitForm = new CircuitForm(valid_offset, val_type,
+									  val_location, val_name);
 		
 		result = this.getModelAndView(mapa, circuitForm);
 		
@@ -141,10 +139,7 @@ public class CircuitController {
 			result = new ModelAndView("circuit/display");
 			result.addObject("circuit", circuit);
 		} else {
-			result = this.list(Optional.empty(),
-							   Optional.empty(),
-							   Optional.empty(),
-							   Optional.empty());
+			result = this.getModelAndView(this.circuitService.findAll());
 		}
 		
 		return result;
@@ -157,13 +152,10 @@ public class CircuitController {
 		Integer offset;
 		
 		if (binding.hasErrors()) {
-			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.empty(),
-					   		   Optional.empty(),
-					   		   Optional.empty());
+			// Si hay errores de validacion, se envian todos los circuitos
+			result = this.getModelAndView(this.circuitService.findAll(), circuitForm);
 		} else {
-			// Si no hay errores de validacion, se filtran los pilotos según los
+			// Si no hay errores de validacion, se filtran los circuitos según los
 			// parametros de busquedas
 			type = circuitForm.getType().trim();
 			location = circuitForm.getLocation().trim();

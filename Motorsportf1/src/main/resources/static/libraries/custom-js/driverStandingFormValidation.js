@@ -1,33 +1,63 @@
-function validateConstructorStandingForm() {
-	var errorSeason = validateSeason();
-	var errorPosition = validatePosition();
-	var errorDriver = validateDriver();
-	var errorLimit = validateLimit();
+function validateDriverStandingForm() {
+	var errorSeason = validateSeasonDS();
+	var errorPosition = validatePositionDS();
+	var errorDriver = validateDriverDS();
 	
-	return errorFullname.length == 0 && errorPosition.length == 0 && errorDriver.length == 0 && errorLimit.length == 0;
+	return errorSeason.length == 0 && errorPosition.length == 0 && errorDriver.length == 0;
 }
 
-function validateLimit() {
-	var input = document.getElementById("limit");
-	//var input = document.querySelectorAll("form.search input#fullname")[0];
-	var limit = input.value;
-	var language = document.documentElement.lang;
-	var error = "";
+
+function disableSeasonDS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputDriver = document.getElementById("driver");
 	
-	var valid = !isNaN(limit) && limit >= 1;
+	var season = inputSeason.value.trim();
 	
-	if (!valid) {
-		error = (language == "es") ? "El tamaño de página debe ser entre 1 y el total de registros"
-				: "The limit must be a value between 1 and register total numbers";
-	}
+	var actionDisable = season.length > 0;
 	
-	document.getElementById("limitError").innerHTML = error;
-	
-	return error;
+	inputPosition.disabled = actionDisable;
+	inputDriver.disabled = actionDisable;
+
+	inputDriver.style.border = "1px solid green";
+	inputPosition.style.border = "1px solid green";
 }
 
-function validateSeason() {
-	var input = document.querySelectorAll("form.search input#season")[0];
+function disablePositionDS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputDriver = document.getElementById("driver");
+	
+	var position = inputPosition.value.trim();
+	
+	var actionDisable = position.length > 0;
+	
+	inputSeason.disabled = actionDisable;
+	inputDriver.disabled = actionDisable;
+	
+	inputSeason.style.border = "1px solid green";
+	inputDriver.style.border = "1px solid green";
+}
+
+function disableDriverDS() {
+	var inputSeason = document.getElementById("season");
+	var inputPosition = document.getElementById("position");
+	var inputDriver = document.getElementById("driver");
+	
+	var driver = inputDriver.value.trim();
+	
+	var actionDisable = driver.length > 0;
+	
+	inputSeason.disabled = actionDisable;
+	inputPosition.disabled = actionDisable;
+	
+	inputSeason.style.border = "1px solid green";
+	inputPosition.style.border = "1px solid green";
+}
+
+
+function validateSeasonDS() {
+	var input = document.getElementById("season");
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{4}$/;
@@ -44,14 +74,13 @@ function validateSeason() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("seasonErrorCS").innerHTML = error;
+	document.getElementById("seasonErrorDS").innerHTML = error;
 	
 	return error;
 }
 
-function validatePosition() {
-	var input = document.querySelectorAll("form.search input#position")[0];
+function validatePositionDS() {
+	var input = document.getElementById("position");
 	var position = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[0-9]{1,2}$/;
@@ -67,22 +96,21 @@ function validatePosition() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("positionErrorCS").innerHTML = error;
+	document.getElementById("positionErrorDS").innerHTML = error;
 	
 	return error;
 }
 
-function validateDriver() {
-	var input = document.querySelectorAll("form.search input#driver")[0];
-	var driver = document.forms["driver-standing-finder"]["driver"].value.trim();
+function validateDriverDS() {
+	var input = document.getElementById("driver");
+	var driver = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]*$/;
+	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
 	var valid = regExp.test(driver);
 	
-	if (driver != '' && !valid) {
+	if (!valid || driver.includes("<script>") || driver.includes("</script>")) {
 		error = (language == "es") ? "Piloto inválida" : "Invalid driver"; 
 	
 		input.style.border = "1px solid red";
@@ -90,22 +118,9 @@ function validateDriver() {
 		input.style.border = "1px solid green";
 	}
 	
-	var avoidXSSAttack = htmlScape(input);
-	document.getElementById("pilotoErrorCS").innerHTML = error;
+	document.getElementById("driverErrorDS").innerHTML = error;
 	
 	return error;
 }
 
-function htmlScape(input) {
-	var tagsToReplace = {'&': '&amp;', '<': '&lt;', '>': 'gt;'};
-	var inputValue = input.value;
-	
-	var validValue = inputValue.replace(/[&<>]/g, function(tag) {
-		return tagsToReplace[tag] || tag;
-	});
-	
-	input.value = validValue;
-	
-	return true;
-}
 

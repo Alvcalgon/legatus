@@ -1,5 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,8 +72,8 @@ public class DriverController {
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
 		driverForm = new DriverForm(valid_offset,
-									val_fullname.trim(),
-									val_country.trim());
+									val_fullname,
+									val_country);
 		
 		result = this.getModelAndView(mapa, driverForm);
 		
@@ -83,16 +84,19 @@ public class DriverController {
 	public ModelAndView display(@RequestParam("fullname") String fullname) {			
 		ModelAndView result;
 		Object driver;
+		Date dateBirth;
 		
 		driver = this.driverService.findOne(fullname.trim());
 		
 		if (driver != null) {
 			result = new ModelAndView("driver/display");
+			
+			dateBirth = this.utilityService.getStringFromObject(driver, 3);
+		
+			result.addObject("dateOfBirth", dateBirth);
 			result.addObject("driver", driver);
 		} else {
-			result = this.list(Optional.empty(),
-							   Optional.empty(),
-							   Optional.empty());
+			result = this.getModelAndView(this.driverService.findAll());
 		}
 		
 		return result;
@@ -106,9 +110,7 @@ public class DriverController {
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.empty(),
-					   		   Optional.empty());
+			result = this.getModelAndView(this.driverService.findAll(), driverForm);
 		} else {
 			// Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas

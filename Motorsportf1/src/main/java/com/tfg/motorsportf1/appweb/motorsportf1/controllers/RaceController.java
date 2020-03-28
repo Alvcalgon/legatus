@@ -1,5 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.comparator.ResultCompare;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.RaceForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.RaceService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
@@ -43,14 +45,25 @@ public class RaceController {
 								@RequestParam("event") String event) {			
 		ModelAndView result;
 		Object race;
+		Date dateRace;
+		ResultCompare comparator;
 		
 		race = this.raceService.findOne(season, event);
 		
 		if (race != null) {
 			result = new ModelAndView("race/display");
+		
+			dateRace = this.utilityService.getStringFromObject(race, 1);
+			
+			comparator = new ResultCompare();
+			
+			result.addObject("raceDate", dateRace);
 			result.addObject("race", race);
+			result.addObject("comparator", comparator);
 		} else {
-			result = this.list(Optional.empty(), Optional.empty(), Optional.empty());
+			result = this.getModelAndView(
+					this.raceService.findBySeason(UtilityService.LAST_SEASON)
+			);
 		}
 		
 		return result;
@@ -84,8 +97,9 @@ public class RaceController {
 							
 		} else {
 			
-			mapa = this.raceService.findBySeason("2018", selectedPage);
-		
+			mapa = this.raceService.findBySeason(UtilityService.LAST_SEASON,
+					                             selectedPage);
+			
 		}
 		
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
@@ -107,9 +121,9 @@ public class RaceController {
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los pilotos
-			result = this.list(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER),
-					   		   Optional.empty(),
-					   		   Optional.empty());
+			result = this.getModelAndView(this.raceService.findBySeason(
+					UtilityService.LAST_SEASON)
+			);
 		} else {
 			// Si no hay errores de validacion, se filtran los resultados según los
 			// parametros de busquedas
@@ -130,8 +144,8 @@ public class RaceController {
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		
-		mapa = this.raceService.findBySeason("2018", 
-				Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
+		mapa = this.raceService.findBySeason(UtilityService.LAST_SEASON, 
+						   Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
 		
 		result = this.getModelAndView(mapa);
 		

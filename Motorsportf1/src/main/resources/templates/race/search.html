@@ -13,8 +13,7 @@
 						<label th:text="#{race.season} + ':'" for="season"></label>
 						<input class="form-control is-invalid" id="season" type="text"
 						       th:field="*{season}"
-						       placeholder="2017"
-						       onchange="validateSeason()" />
+						       onchange="validateSeasonRace()" />
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" 
@@ -29,13 +28,13 @@
 						<input class="form-control is-invalid" id="event" type="text"
 							   th:field="*{event}"
 							   placeholder="German Grand Prix"
-							   onchange="validateEvent()" />
+							   onchange="validateEventRace()" />
 						<span class="form-text text-muted" th:text="#{race.event.info}">Información</span>
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
 							<span class="error" th:if="${#fields.hasErrors('event')}"
 							      th:errors="*{event}">Error evento</span>
-							<span id="eventError"></span>
+							<span id="eventRaceError"></span>
 						</div>
 					</div>
 					

@@ -28,6 +28,19 @@ public class ConstructorStandingService {
 		super();
 	}
 
+	
+	public Map<String, List<Object>> findBySeason(String season) {
+		Map<String, List<Object>> results;
+		String url;
+
+		url = UtilityService.API_URI_PRE + "/constructor-standing/list/season/" + season;
+
+		results = this.getDataPaginationAndObjects(url, 
+				Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
+
+		return results;
+	}
+	
 	public Map<String, List<Object>> findBySeason(String season, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;

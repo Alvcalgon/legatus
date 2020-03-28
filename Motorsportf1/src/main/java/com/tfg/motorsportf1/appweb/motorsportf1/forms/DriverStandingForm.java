@@ -1,24 +1,20 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.forms;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.SafeHtml;
 
 public class DriverStandingForm extends PaginationForm {
 
-	@NotNull
 	@Pattern(regexp = "^[0-9]{0,4}$")
 	//TODO:@Range(min = 1950, max = 2018)
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String season;
 	
-	@NotNull
 	@Pattern(regexp = "^[0-9]{0,2}$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String position;
 	
-	@NotNull
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String driver;
 
