@@ -3,9 +3,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<body>
 		<div class="menu-principal" th:fragment="frag-menu">
-			<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<nav class="navbar navbar-expand-sm navbar-light bg-light">
 				<a class="nav-item navbar-brand" href="#" th:href="@{/}">
-					Motorsport F1
+					<img class="img-fluid" 
+						 th:src="@{/images/logoF1.png}"
+						 alt="Motorsport F1" height="200px" width="200px" />
 				</a>
 				
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

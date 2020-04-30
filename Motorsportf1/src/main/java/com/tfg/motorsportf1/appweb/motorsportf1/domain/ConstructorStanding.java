@@ -12,6 +12,8 @@ public class ConstructorStanding {
 	
 	private Integer points;
 		
+	private Integer wins;
+	
 	private Constructor constructor;
 	
 	
@@ -22,13 +24,15 @@ public class ConstructorStanding {
 	
 	public ConstructorStanding(String season, 
 							   String position, 
-							   Integer points, 
+							   Integer points,
+							   Integer wins,
 							   Constructor constructor) {
 		super();
 		
 		this.season = season;
 		this.position = position;
 		this.points = points;
+		this.wins = wins;
 		this.constructor = constructor;
 	}
 	
@@ -55,6 +59,14 @@ public class ConstructorStanding {
 
 	public void setPoints(Integer points) {
 		this.points = points;
+	}
+	
+	public Integer getWins() {
+		return wins;
+	}
+
+	public void setWins(Integer wins) {
+		this.wins = wins;
 	}
 
 	public Constructor getConstructor() {

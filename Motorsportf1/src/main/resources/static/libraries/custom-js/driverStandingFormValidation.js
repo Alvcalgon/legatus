@@ -66,8 +66,8 @@ function validateSeasonDS() {
 	var valid = regExp.test(season);
 	
 	if (season != '' && !valid) {
-		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1955 y 2018"
-				: "Invalid season: Fill a value between 1955 and 2018";
+		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1955 y 2019"
+				: "Invalid season: Fill a value between 1955 and 2019";
 	
 		input.style.border = "1px solid red";
 	} else {
@@ -111,7 +111,7 @@ function validateDriverDS() {
 	var valid = regExp.test(driver);
 	
 	if (!valid || driver.includes("<script>") || driver.includes("</script>")) {
-		error = (language == "es") ? "Piloto inválida" : "Invalid driver"; 
+		error = (language == "es") ? "Piloto inválido" : "Invalid driver"; 
 	
 		input.style.border = "1px solid red";
 	} else {

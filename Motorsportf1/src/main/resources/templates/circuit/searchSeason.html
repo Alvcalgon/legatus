@@ -8,17 +8,21 @@
 				      method="post"
 				      onsubmit="return searchBySeason()">
 							
-					<div class="form-group">
-						<label th:text="#{circuit.season} + ':'" for="seasonSearch"></label>
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+					      <span class="input-group-text"
+					            th:text="#{circuit.season}"></span>
+					    </div>
+						
 						<input class="form-control is-invalid" 
 							   name="seasonSearch"
 							   id="seasonSearch"
 							   type="text"
 							   th:value="${season}"
-						       onchange="validateSeason()" />
+						       onchange="validateSeasonCircuit()" />
 						<div class="valid-feedback"></div>
 						<div class="invalid-feedback">
-							<span id="seasonErrorCS"></span>
+							<span id="seasonCircuitError"></span>
 						</div>
 					</div>
 					

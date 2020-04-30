@@ -5,12 +5,16 @@
 	font-family: "Segoe UI", Arial, sans-serif;
 }
 
+body {
+	background-color: rgb(248, 249, 250) !important;
+}
+
 div.results-container, div.enlaces-paginacion, div.info-size {
 	margin-top:25px;
 }
 
-.footer {
-	background-color: #9ACD32;
+a {
+	text-decoration:none;
 }
 
 span.error {
@@ -30,8 +34,8 @@ ul.navbar-nav li.nav-item.right-link {
 	float:right !important;
 }
 
-footer.footer div div {
-	text-align:center;
+ul.navbar li.nav-item a {
+	color: black;
 }
 
 div.no-elements {
@@ -42,3 +46,43 @@ div.no-elements {
 p.volver-atras {
 	margin: 25px;
 }
+
+
+/* Selector de idioma */
+div.language {
+	width: 15rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	margin-left: 3rem;
+}
+
+
+/* footer */
+#piePagina {
+	/*background-color: #008e97; */
+}
+
+#copyright p {
+	color: white;
+}
+
+#terms, #cookies {
+	margin-top: 20px;
+}
+
+#terms a, #cookies a {
+	color: white;
+}  
+
+#copyright {
+	margin-top: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+	#terms, #cookies {
+		margin-top: 2rem;		
+	}	
+}
+
+/* ------------------- */
+

@@ -9,29 +9,31 @@
 					<h1 th:text="#{constructor.list}">Lista de escuderías</h1>
 					
 					<div th:replace="constructor/search :: frag-constructor-search"></div>
-					<nav th:if="${pages.size() > 0}">
+					<nav th:if="${pages.size() > 0}" class="nav justify-content-center">
 						<div class="enlaces-paginacion">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}-1,
 															   name=${constructorForm.name},
-															   country=${constructorForm.country})}"
+															   nationality=${constructorForm.nationality})}"
 									   th:text="#{paginacion.previous}"
 									   class="page-link">
 									</a>
 								</li>
-								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+								
+								<li class="page-item active">
 									<a href="#" th:href="@{/constructor/list(offset=${page},
 															   name=${constructorForm.name},
-															   country=${constructorForm.country})}"
-									   th:text="${page}"
+															   nationality=${constructorForm.nationality})}"
+									   th:text="${selectedPage}"
 									   class="page-link">
 									</a>
 								</li>
+								
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/constructor/list(offset=${selectedPage}+1,
 															   name=${constructorForm.name},
-															   country=${constructorForm.country})}"
+															   nationality=${constructorForm.nationality})}"
 									   th:text="#{paginacion.next}"
 									   class="page-link">
 									</a>
@@ -55,8 +57,8 @@
 									<th>
 									</th>
 									<th th:text="#{constructor.name}">Nombre</th>
-									<th th:text="#{constructor.country}">Country</th>
-									<th th:text="#{constructor.principal}">Current principal</th>
+									<th th:text="#{constructor.nationality}">Nationality</th>
+									<th>Wikipedia</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -65,8 +67,10 @@
 										<a th:href="@{/constructor/display(name=${constructor.name})}" th:text="#{link.display}">Display</a>
 									</td>
 									<td th:text="${constructor.name}"></td>
-									<td th:text="${constructor.country}"></td>
-									<td th:text="${constructor.principal}"></td>
+									<td th:text="${constructor.nationality}"></td>
+									<td>
+										<a target="_blank" th:text="#{driver.information}" th:href="${constructor.information}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

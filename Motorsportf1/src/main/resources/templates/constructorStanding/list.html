@@ -57,6 +57,7 @@
 									<th th:text="#{constructorStanding.season}">Temporada</th>
 									<th th:text="#{constructorStanding.position}">Posición</th>
 									<th th:text="#{constructorStanding.points}">Puntos</th>
+									<th th:text="#{constructorStanding.wins}">Victorias</th>
 									<th th:text="#{constructorStanding.constructor}">Escudería</th>
 								</tr>
 							</thead>
@@ -65,7 +66,11 @@
 									<td th:text="${constructorStd.season}"></td>
 									<td th:text="${constructorStd.position}"></td>
 									<td th:text="${constructorStd.points}"></td>
-									<td th:text="${constructorStd.constructor.name}"></td>
+									<td th:text="${constructorStd.wins}"></td>
+									<td>
+										<a th:text="${constructorStd.constructor.name}"
+										   th:href="@{/constructor/display(name=${constructorStd.constructor.name})}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

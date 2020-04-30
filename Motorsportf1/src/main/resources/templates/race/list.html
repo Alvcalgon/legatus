@@ -66,9 +66,11 @@
 										<a th:href="@{/race/display(season=${race.season},event=${race.event})}" th:text="#{link.display}">Display</a>
 									</td>
 									<td th:text="${race.season}"></td>
-									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(race.raceDate, dateformat)}">Fecha de la carrera</td>
+									<td th:text="${race.raceDate}"></td>
 									<td th:text="${race.event}"></td>
-									<td th:text="${race.circuit.name}"></td>
+									<td>
+										<a target="_blank" th:text="${race.circuit.name}" th:href="@{circuit/display(name=${race.circuit.name})}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

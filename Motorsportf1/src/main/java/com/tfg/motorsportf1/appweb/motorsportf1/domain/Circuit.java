@@ -9,24 +9,24 @@ public class Circuit {
 	// Atributos --------------------------------	
 	private String name;
 	
-	private String location;
+	private String locality;
 	
-	private String type;
+	private String country;
 	
-	private String lapDistance;
-	
-	
+	private String information;
+		
 	// Constructores ------------------------------
 	public Circuit() {
 		super();
 	}
 	
-	public Circuit(String name, String location, String type, String lapDistance) {
+	public Circuit(String name, String locality, String country, String information) {
 		super();
+		
 		this.name = name;
-		this.location = location;
-		this.type = type;
-		this.lapDistance = lapDistance;
+		this.locality = locality;
+		this.country = country;
+		this.information = information;
 	}
 
 	// Getters y setters ----------------------
@@ -38,44 +38,38 @@ public class Circuit {
 		this.name = name;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getLocality() {
+		return locality;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 
-	public String getType() {
-		return type;
+	public String getCountry() {
+		return country;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
-	public String getLapDistance() {
-		return lapDistance;
+	public String getInformation() {
+		return information;
 	}
 
-	public void setLapDistance(String lapDistance) {
-		this.lapDistance = lapDistance;
-	}
-		
-	
-	@Override
-	public String toString() {
-		return "Circuit [name=" + this.name + ", location=" + this.location + ", type=" + this.type + ", distance=" + this.lapDistance + "]";
+	public void setInformation(String information) {
+		this.information = information;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((lapDistance == null) ? 0 : lapDistance.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((information == null) ? 0 : information.hashCode());
+		result = prime * result + ((locality == null) ? 0 : locality.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -88,27 +82,32 @@ public class Circuit {
 		if (getClass() != obj.getClass())
 			return false;
 		Circuit other = (Circuit) obj;
-		if (lapDistance == null) {
-			if (other.lapDistance != null)
+		if (country == null) {
+			if (other.country != null)
 				return false;
-		} else if (!lapDistance.equals(other.lapDistance))
+		} else if (!country.equals(other.country))
 			return false;
-		if (location == null) {
-			if (other.location != null)
+		if (information == null) {
+			if (other.information != null)
 				return false;
-		} else if (!location.equals(other.location))
+		} else if (!information.equals(other.information))
+			return false;
+		if (locality == null) {
+			if (other.locality != null)
+				return false;
+		} else if (!locality.equals(other.locality))
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
 		return true;
 	}
-		
+
+	@Override
+	public String toString() {
+		return "Circuit [name=" + name + "]";
+	}
+	
 }

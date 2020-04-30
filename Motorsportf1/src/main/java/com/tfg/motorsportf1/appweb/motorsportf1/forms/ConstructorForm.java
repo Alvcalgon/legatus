@@ -12,7 +12,7 @@ public class ConstructorForm extends PaginationForm {
 	
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
-	private String country;
+	private String nationality;
 
 	
 	public ConstructorForm() {
@@ -23,11 +23,11 @@ public class ConstructorForm extends PaginationForm {
 		super(offset);
 	}
 
-	public ConstructorForm(int offset, String name, String country) {
+	public ConstructorForm(int offset, String name, String nationality) {
 		super(offset);
 		
 		this.name = name;
-		this.country = country;
+		this.nationality = nationality;
 	}
 
 	public String getName() {
@@ -38,18 +38,17 @@ public class ConstructorForm extends PaginationForm {
 		this.name = name;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getNationality() {
+		return nationality;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "ConstructorForm [name=" + this.name + ", country=" + this.country + "]";
+		return "ConstructorForm [name=" + name + ", nationality=" + nationality + "]";
 	}
 		
 }

@@ -22,10 +22,14 @@ public class ConstructorService {
 	@Autowired
 	private UtilityService utilityService;
 
+	@Autowired
+	private ResultService resultService;
+	
 	public ConstructorService() {
 		super();
 	}
 
+	
 	public Object findOne(String name) {
 		Object result;
 		String encodedName, url;
@@ -61,13 +65,13 @@ public class ConstructorService {
 		return results;
 	}
 
-	public Map<String, List<Object>> findByCountry(String country, Optional<Integer> selectedPage) {
+	public Map<String, List<Object>> findByNationality(String nationality, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
-		String url, encodedCountry;
+		String url, encodedNationality;
 
-		encodedCountry = this.utilityService.getEncodedText(country);
+		encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		url = UtilityService.API_URI_PRE + "/constructor/list/country/" + encodedCountry;
+		url = UtilityService.API_URI_PRE + "/constructor/list/nationality/" + encodedNationality;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -87,14 +91,14 @@ public class ConstructorService {
 		return results;
 	}
 
-	public Map<String, List<Object>> findByParameters(String name, String country, Optional<Integer> selectedPage) {
+	public Map<String, List<Object>> findByParameters(String name, String nationality, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
-		String url, encodedName, encodedCountry;
+		String url, encodedName, encodedNationality;
 
 		encodedName = this.utilityService.getEncodedText(name);
-		encodedCountry = this.utilityService.getEncodedText(country);
+		encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		url = UtilityService.API_URI_PRE + "/constructor/list/country/" + encodedCountry + "/name/" + encodedName;
+		url = UtilityService.API_URI_PRE + "/constructor/list/nationality/" + encodedNationality + "/name/" + encodedName;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -105,7 +109,7 @@ public class ConstructorService {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_constructors;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
-		String name, country, principal;
+		String name, nationality, information;
 		Map<String, Object> map_json, temp;
 		List<Object> constructors;
 		List<Object> dataPage;
@@ -132,10 +136,10 @@ public class ConstructorService {
 				if (!ls_map_constructors.isEmpty()) {
 					for (LinkedHashMap<String, String> mapConstructor : ls_map_constructors) {
 						name = this.utilityService.getStringFromKey(mapConstructor, "name");
-						country = this.utilityService.getStringFromKey(mapConstructor, "country");
-						principal = this.utilityService.getStringFromKey(mapConstructor, "principal");
+						nationality = this.utilityService.getStringFromKey(mapConstructor, "nationality");
+						information = this.utilityService.getStringFromKey(mapConstructor, "information");
 						
-						constructor = new Constructor(name, country, principal);
+						constructor = new Constructor(name, nationality, information);
 
 						constructors.add(constructor);
 					}

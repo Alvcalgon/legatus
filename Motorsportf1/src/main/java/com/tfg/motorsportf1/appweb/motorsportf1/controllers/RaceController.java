@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tfg.motorsportf1.appweb.motorsportf1.comparator.ResultCompare;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.RaceForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.RaceService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
@@ -46,20 +45,13 @@ public class RaceController {
 		ModelAndView result;
 		Object race;
 		Date dateRace;
-		ResultCompare comparator;
 		
 		race = this.raceService.findOne(season, event);
 		
 		if (race != null) {
 			result = new ModelAndView("race/display");
-		
-			dateRace = this.utilityService.getStringFromObject(race, 1);
 			
-			comparator = new ResultCompare();
-			
-			result.addObject("raceDate", dateRace);
 			result.addObject("race", race);
-			result.addObject("comparator", comparator);
 		} else {
 			result = this.getModelAndView(
 					this.raceService.findBySeason(UtilityService.LAST_SEASON)

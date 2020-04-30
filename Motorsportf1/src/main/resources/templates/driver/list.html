@@ -9,29 +9,31 @@
 					<h1 th:text="#{driver.list}">Lista de pilotos</h1>
 					
 					<div th:replace="driver/search :: frag-driver-search"></div>
-					<nav th:if="${pages.size() > 0}">
+					<nav th:if="${pages.size() > 0}" class="nav justify-content-center">
 						<div class="enlaces-paginacion">
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/driver/list(offset=${selectedPage}-1,
 															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   nationality=${driverForm.nationality})}"
 									   th:text="#{paginacion.previous}"
 									   class="page-link">
 									</a>
 								</li>
-								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
+								
+								<li class="page-item active">
 									<a href="#" th:href="@{/driver/list(offset=${page},
 															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
-									   th:text="${page}"
+															   nationality=${driverForm.nationality})}"
+									   th:text="${selectedPage}"
 									   class="page-link">
 									</a>
 								</li>
+								
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/driver/list(offset=${selectedPage}+1,
 															   fullname=${driverForm.fullname},
-															   country=${driverForm.country})}"
+															   nationality=${driverForm.nationality})}"
 									   th:text="#{paginacion.next}"
 									   class="page-link">
 									</a>
@@ -55,9 +57,9 @@
 									<th>
 									</th>
 									<th th:text="#{driver.fullname}">Nombre completo</th>
-									<th th:text="#{driver.placebirth}">Place of birth</th>
-									<th th:text="#{driver.country}">Country</th>
+									<th th:text="#{driver.nationality}">Country</th>
 									<th th:text="#{driver.datebirth}">Date of birth</th>
+									<th>Wikipedia</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -66,9 +68,11 @@
 										<a th:href="@{/driver/display(fullname=${driver.fullname})}" th:text="#{link.display}">Display</a>
 									</td>
 									<td th:text="${driver.fullname}"></td>
-									<td th:text="${driver.placeOfBirth}"></td>
-									<td th:text="${driver.country}"></td>
-									<td th:with="dateformat=#{date.format}" th:text="${#dates.format(driver.dateOfBirth, dateformat)}"></td>
+									<td th:text="${driver.nationality}"></td>
+									<td th:text="${driver.dateOfBirth}"></td>
+									<td>
+										<a target="_blank" th:text="#{driver.information}" th:href="${driver.information}"></a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

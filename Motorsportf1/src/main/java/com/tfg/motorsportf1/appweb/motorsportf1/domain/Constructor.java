@@ -8,29 +8,23 @@ public class Constructor {
 	// Atributos --------------------------------------------
 	private String name;
 	
-	private String country;
+	private String nationality;
 	
-	private String principal;
+	private String information;
 	
 	// Constructores -----------------------------------------
 	public Constructor() {
 		super();
 	}
 	
-	public Constructor(String name, String country) {
+	public Constructor(String name, String nationality, String information) {
 		super();
 		
 		this.name = name;
-		this.country = country;
+		this.nationality = nationality;
+		this.information = information;
 	}
 	
-	public Constructor(String name, String country, String principal) {
-		super();
-		
-		this.name = name;
-		this.country = country;
-		this.principal = principal;
-	}
 	
 	// Getters y setters ---------------------------
 	public String getName() {
@@ -41,35 +35,32 @@ public class Constructor {
 		this.name = name;
 	}
 	
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getPrincipal() {
-		return principal;
-	}
-
-	public void setPrincipal(String principal) {
-		this.principal = principal;
-	}
 	
 
-	@Override
-	public String toString() {
-		return "Constructor [name=" + this.name + "]";
+	public String getNationality() {
+		return nationality;
 	}
 
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((information == null) ? 0 : information.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((principal == null) ? 0 : principal.hashCode());
+		result = prime * result + ((nationality == null) ? 0 : nationality.hashCode());
 		return result;
 	}
 
@@ -82,22 +73,27 @@ public class Constructor {
 		if (getClass() != obj.getClass())
 			return false;
 		Constructor other = (Constructor) obj;
-		if (country == null) {
-			if (other.country != null)
+		if (information == null) {
+			if (other.information != null)
 				return false;
-		} else if (!country.equals(other.country))
+		} else if (!information.equals(other.information))
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (principal == null) {
-			if (other.principal != null)
+		if (nationality == null) {
+			if (other.nationality != null)
 				return false;
-		} else if (!principal.equals(other.principal))
+		} else if (!nationality.equals(other.nationality))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Constructor [name=" + this.name + "]";
 	}
 	
 }

@@ -22,23 +22,20 @@
 						<table th:if="${circuits.size() > 0}" class="table table-striped">
 							<thead class="thead-dark">
 								<tr>
-									<th>
-									</th>
 									<th th:text="#{circuit.name}">Nombre</th>
-									<th th:text="#{circuit.type}">Tipo</th>
-									<th th:text="#{circuit.location}">Localización</th>
-									<th th:text="#{circuit.lapDistance}">Distancia</th>
+									<th th:text="#{circuit.locality}">Localidad</th>
+									<th th:text="#{circuit.country}">País</th>
+									<th>Wikipedia</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="circuit : ${circuits}">
-									<td>
-										<a th:href="@{/circuit/display(name=${circuit.name})}" th:text="#{link.display}">Display</a>
-									</td>
 									<td th:text="${circuit.name}"></td>
-									<td th:text="${circuit.type}"></td>
-									<td th:text="${circuit.location}"></td>
-									<td th:text="${circuit.lapDistance}"></td>
+									<td th:text="${circuit.locality}"></td>
+									<td th:text="${circuit.country}"></td>
+									<td>
+										<a target="_blank" th:text="#{driver.information}" th:href="${circuit.information}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

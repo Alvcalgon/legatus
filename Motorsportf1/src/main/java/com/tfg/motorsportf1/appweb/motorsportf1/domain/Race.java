@@ -1,7 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,30 +12,25 @@ public class Race {
 	// Atributos -----------------------	
 	private String season;
 	
-	private Date raceDate;
+	private String raceDate;
 	
 	private String event;
 	
+	private String information;
+	
 	private Circuit circuit;
 	
-	Set<Result> results;
+	private Set<Result> results;
 	
 	
 	// Constructores -----------------------
-	public Race() {
-		super();
-		
-		this.results = new HashSet<Result>();
-	}	
-	
-	
-	
-	public Race(String season, Date raceDate, String event, Circuit circuit) {
+	public Race(String season, String raceDate, String event, String information, Circuit circuit) {
 		super();
 		
 		this.season = season;
 		this.raceDate = raceDate;
 		this.event = event;
+		this.information = information;
 		this.circuit = circuit;
 		this.results = new HashSet<Result>();
 	}
@@ -51,11 +45,11 @@ public class Race {
 		this.season = season;
 	}
 
-	public Date getRaceDate() {
+	public String getRaceDate() {
 		return raceDate;
 	}
 
-	public void setRaceDate(Date raceDate) {
+	public void setRaceDate(String raceDate) {
 		this.raceDate = raceDate;
 	}
 	
@@ -66,6 +60,15 @@ public class Race {
 	public void setEvent(String event) {
 		this.event = event;
 	}
+	
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
 
 	public Circuit getCircuit() {
 		return circuit;

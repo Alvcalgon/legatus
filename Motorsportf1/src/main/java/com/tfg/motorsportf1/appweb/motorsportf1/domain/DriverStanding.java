@@ -5,9 +5,11 @@ public class DriverStanding {
 	// Atributos --------------------------
 	private String season;
 	
-	private Integer points;
+	private Double points;
 	
 	private String position;
+	
+	private Integer wins;
 	
 	private Driver driver;
 	
@@ -18,13 +20,14 @@ public class DriverStanding {
 		super();
 	}
 	
-	public DriverStanding(String season, Integer points, String position,
-						  Driver driver, Constructor constructor) {
+	public DriverStanding(String season, Double points, String position,
+			              Integer wins, Driver driver, Constructor constructor) {
 		super();
 		
 		this.season = season;
 		this.points = points;
 		this.position = position;
+		this.wins = wins;
 		this.driver = driver;
 		this.constructor = constructor;
 	}
@@ -38,11 +41,11 @@ public class DriverStanding {
 		this.season = season;
 	}
 
-	public Integer getPoints() {
+	public Double getPoints() {
 		return points;
 	}
 
-	public void setPoints(Integer points) {
+	public void setPoints(Double points) {
 		this.points = points;
 	}
 
@@ -52,6 +55,14 @@ public class DriverStanding {
 
 	public void setPosition(String position) {
 		this.position = position;
+	}
+
+	public Integer getWins() {
+		return wins;
+	}
+
+	public void setWins(Integer wins) {
+		this.wins = wins;
 	}
 
 	public Driver getDriver() {
@@ -72,18 +83,11 @@ public class DriverStanding {
 
 	
 	@Override
-	public String toString() {
-		return "DriverStanding [season=" + this.season + ", driver=" + this.getDriver().getFullname() + ", constructor=" + this.getConstructor().getName() + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((constructor == null) ? 0 : constructor.hashCode());
 		result = prime * result + ((driver == null) ? 0 : driver.hashCode());
-		result = prime * result + ((points == null) ? 0 : points.hashCode());
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
 		result = prime * result + ((season == null) ? 0 : season.hashCode());
 		return result;
 	}
@@ -107,22 +111,18 @@ public class DriverStanding {
 				return false;
 		} else if (!driver.equals(other.driver))
 			return false;
-		if (points == null) {
-			if (other.points != null)
-				return false;
-		} else if (!points.equals(other.points))
-			return false;
-		if (position == null) {
-			if (other.position != null)
-				return false;
-		} else if (!position.equals(other.position))
-			return false;
 		if (season == null) {
 			if (other.season != null)
 				return false;
 		} else if (!season.equals(other.season))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "DriverStanding [season=" + season + ", points=" + points + ", position=" + position + ", driver="
+				+ driver + "]";
 	}
 	
 }

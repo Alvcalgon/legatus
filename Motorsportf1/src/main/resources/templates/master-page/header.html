@@ -2,13 +2,29 @@
 	<html xmlns:th="http://www.thymeleaf.org">
 		<body>
 			<div class="header" th:fragment="frag-header">
-				<div th:replace="master-page/banner :: frag-banner"></div>
-				
 				<div th:replace="master-page/menu :: frag-menu"></div>
 				
-				<div class="selectorLanguage" style="margin:10px 0px 0px 25px;">
-					<a href="?language=en">en</a> | <a href="?language=es">es</a>
-				</div>
+				<div class="input-group mb-3 language">
+				    <div class="input-group-prepend">
+				      <span class="input-group-text"
+				            th:text="#{language.change}"></span>
+				    </div>
+				 	
+				 	<select class="form-control" id="selectLanguage-custom">
+						<option value="en" th:text="#{language.english}" 
+								th:selected="__${#locale}__ == 'en' ? 'true' : 'false'">en</option>
+						<option value="es" th:text="#{language.spanish}"
+								th:selected="__${#locale}__ == 'es' ? 'true' : 'false'">es</option>
+					</select>
+				 	
+				 </div>
+							
+				<script>
+					$(document).ready(function(){						
+						changeLanguageAction();
+					});
+				</script>
+				
 			</div>
 		</body>
 	</html>

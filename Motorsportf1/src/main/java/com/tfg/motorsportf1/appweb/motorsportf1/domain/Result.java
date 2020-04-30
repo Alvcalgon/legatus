@@ -3,7 +3,7 @@ package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Result implements Comparable<Result> {
+public class Result {
 
 	// Atributos --------------------------------	
 	private String position;
@@ -162,22 +162,5 @@ public class Result implements Comparable<Result> {
 			return false;
 		return true;
 	}
-
-	@Override
-	public int compareTo(Result res) {
-		int result;
-		
-		if (res == null) {
-			throw new IllegalArgumentException();
-		}
-		
-		result = this.getPosition().compareTo(res.getPosition());
-		
-		if (result == 0) {
-			result = this.getGrid().compareTo(res.getGrid());
-		}
-		
-		return result;
-	}
-		
+	
 }

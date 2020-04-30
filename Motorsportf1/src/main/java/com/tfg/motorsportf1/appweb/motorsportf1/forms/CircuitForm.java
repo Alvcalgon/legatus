@@ -8,10 +8,6 @@ import org.hibernate.validator.constraints.SafeHtml;
 public class CircuitForm extends PaginationForm {
 
 	@NotNull
-	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
-	private String type;
-	
-	@NotNull
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String location;
@@ -31,21 +27,13 @@ public class CircuitForm extends PaginationForm {
 		super(offset);
 	}
 
-	public CircuitForm(Integer offset, String type, String location, String name) {
+	public CircuitForm(Integer offset, String location, String name) {
 		super(offset);
 		
-		this.type = type;
 		this.location = location;
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getLocation() {
 		return location;
@@ -63,10 +51,9 @@ public class CircuitForm extends PaginationForm {
 		this.name = name;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "CircuitForm [type=" + type + ", location=" + location + ", name=" + name + "]";
+		return "CircuitForm [location=" + location + ", name=" + name + "]";
 	}
 	
 }

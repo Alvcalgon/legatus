@@ -9,27 +9,56 @@
 					<h1 th:text="#{driver.display}">Detalles de un piloto</h1>
 					
 					<div class="detalles" style="background-color:'grey';">
+						<h2 th:text="#{driver.display.data}"></h2>
 						<p>
 							<strong th:text="#{driver.fullname}">Nombre completo</strong>:
 							<span th:text="${driver.fullname}"></span>
 						</p>
 						
 						<p>
-							<strong th:text="#{driver.country}">Pais de nacimiento</strong>:
-							<span th:text="${driver.country}"></span>
+							<strong th:text="#{driver.nationality}">Nacionalidad</strong>:
+							<span th:text="${driver.nacionality}"></span>
 						</p>
-						
-						<p>
-							<strong th:text="#{driver.placebirth}">Lugar de nacimiento</strong>:
-							<span th:text="${driver.placeOfBirth}"></span>
-						</p>
-						
+												
 						<p>
 							<strong th:text="#{driver.datebirth}">Fecha de nacimiento</strong>:
-							<span th:with="dateformat=#{date.format}"
-								  th:text="${#dates.format(dateOfBirth, dateformat)}"></span>
+							<span th:text="${driver.dateOfBirth}"></span>
 						</p>
 						
+						<p>
+							<strong>Wikipedia</strong>:
+							<a target="_blank" th:href="${driver.information}" th:text="#{driver.information}"></a>
+						</p>
+					</div>
+					
+					<div>
+						<h2 th:text="#{table.info}">Detalles de un piloto</h2>
+						<table class="table table-striped">
+							<tr>
+								<th th:text="#{table.info.titles.driver}"></th>
+								<td th:text="${titles}"> </td>
+							</tr>
+							
+							<tr>
+								<th th:text="#{table.info.races}"></th>
+								<td th:text="${races}"> </td>
+							</tr>
+							
+							<tr>
+								<th th:text="#{table.info.victories}"></th>
+								<td th:text="${victories}"> </td>
+							</tr>
+							
+							<tr>
+								<th th:text="#{table.info.podiums}"></th>
+								<td th:text="${podiums}"> </td>
+							</tr>
+							
+							<tr>
+								<th th:text="#{table.info.poles}"></th>
+								<td th:text="${poles}"> </td>
+							</tr>
+						</table>
 					</div>
 				
 					<div class="cont volver atras">

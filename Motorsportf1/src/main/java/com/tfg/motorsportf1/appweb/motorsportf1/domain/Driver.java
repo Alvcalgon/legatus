@@ -1,7 +1,5 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.domain;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -9,26 +7,28 @@ public class Driver {
 	
 	// Atributos --------------------------
 	private String fullname;
+		
+	private String nationality;
+		
+	private String dateOfBirth;	
 	
-	private String placeOfBirth;
-	
-	private String country;
-	
-	private Date dateOfBirth;	
-	
+	private String information;
 	
 	// Constructores -------------------------
 	public Driver() {
 		super();
 	}
 		
-	public Driver(String fullname, String placeOfBirth, String country, Date dateOfBirth) {
+	public Driver(String fullname,
+				  String nationality,
+				  String dateOfBirth,
+			      String information) {
 		super();
 		
 		this.fullname = fullname;
-		this.placeOfBirth = placeOfBirth;
-		this.country = country;
+		this.nationality = nationality;
 		this.dateOfBirth = dateOfBirth;
+		this.information = information;
 	}
 	
 
@@ -41,44 +41,39 @@ public class Driver {
 		this.fullname = fullname;
 	}
 	
-	public String getPlaceOfBirth() {
-		return placeOfBirth;
+	public String getNationality() {
+		return nationality;
 	}
 
-	public void setPlaceOfBirth(String placeOfBirth) {
-		this.placeOfBirth = placeOfBirth;
-	}
-	
-	public String getCountry() {
-		return country;
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public String getInformation() {
+		return information;
 	}
 
-	public Date getDateOfBirth() {
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 	
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-	
-	@Override
-	public String toString() {
-		return "Driver [fullname=" + this.fullname + ", country=" + this.country + "]";
-	}
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
 		result = prime * result + ((fullname == null) ? 0 : fullname.hashCode());
-		result = prime * result + ((placeOfBirth == null) ? 0 : placeOfBirth.hashCode());
+		result = prime * result + ((information == null) ? 0 : information.hashCode());
+		result = prime * result + ((nationality == null) ? 0 : nationality.hashCode());
 		return result;
 	}
 
@@ -91,11 +86,6 @@ public class Driver {
 		if (getClass() != obj.getClass())
 			return false;
 		Driver other = (Driver) obj;
-		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
 		if (dateOfBirth == null) {
 			if (other.dateOfBirth != null)
 				return false;
@@ -106,12 +96,22 @@ public class Driver {
 				return false;
 		} else if (!fullname.equals(other.fullname))
 			return false;
-		if (placeOfBirth == null) {
-			if (other.placeOfBirth != null)
+		if (information == null) {
+			if (other.information != null)
 				return false;
-		} else if (!placeOfBirth.equals(other.placeOfBirth))
+		} else if (!information.equals(other.information))
+			return false;
+		if (nationality == null) {
+			if (other.nationality != null)
+				return false;
+		} else if (!nationality.equals(other.nationality))
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Driver [fullname=" + this.fullname + ", nationality=" + this.nationality + "]";
+	}
+
 }

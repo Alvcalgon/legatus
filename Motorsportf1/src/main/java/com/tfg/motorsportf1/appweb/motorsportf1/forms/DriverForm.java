@@ -12,7 +12,7 @@ public class DriverForm extends PaginationForm {
 	
 	@Pattern(regexp = "^[^0-9]*$")
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
-	private String country;
+	private String nationality;
 	
 	
 	public DriverForm() {
@@ -23,11 +23,11 @@ public class DriverForm extends PaginationForm {
 		super(offset);
 	}
 	
-	public DriverForm(int offset, String fullname, String country) {
+	public DriverForm(int offset, String fullname, String nationality) {
 		super(offset);
 		
 		this.fullname = fullname;
-		this.country = country;
+		this.nationality = nationality;
 	}
 	
 	
@@ -39,17 +39,17 @@ public class DriverForm extends PaginationForm {
 		this.fullname = fullname;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getNationality() {
+		return nationality;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 	
 	@Override
 	public String toString() {
-		return "DriverForm [fullname=" + this.fullname + ", country=" + this.country + "]";
+		return "DriverForm [fullname=" + this.fullname + ", nationality=" + this.nationality + "]";
 	}
 	
 }

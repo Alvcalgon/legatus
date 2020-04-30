@@ -65,8 +65,8 @@ function validateSeasonCS() {
 	var valid = regExp.test(season);
 	
 	if (season != '' && !valid) {
-		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2018"
-				: "Invalid season: Fill a value between 1958 and 2018";
+		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2019"
+				: "Invalid season: Fill a value between 1958 and 2019";
 		
 		input.style.border = "1px solid red";
 	} else {

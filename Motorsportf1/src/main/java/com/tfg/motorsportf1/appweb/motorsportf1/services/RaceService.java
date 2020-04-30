@@ -1,7 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -161,13 +160,12 @@ public class RaceService {
 		
 		return result;
 	}
-	
+
 	private List<Object> getDataObjects(String url) {
 		List<LinkedHashMap<String, Object>> list_json;
-		String season, str_raceDate, event;
-		String name, location, type, lapDistance;
+		String season, raceDate, event;
+		String name, locality, country, info, infoCircuit;
 		LinkedHashMap<String, Object> o;
-		Date raceDate;
 		Circuit circuit;
 		List<Object> races;
 		Race race;
@@ -181,10 +179,11 @@ public class RaceService {
 				for (LinkedHashMap<String, Object> mapRace : list_json) {
 					season = this.utilityService.getStringFromKey2(mapRace, "season");
 					
-					str_raceDate = this.utilityService.getStringFromKey2(mapRace, "raceDate");
-					raceDate = this.utilityService.getDateFromString(str_raceDate);
+					raceDate = this.utilityService.getStringFromKey2(mapRace, "raceDate");
 					
 					event = this.utilityService.getStringFromKey2(mapRace, "event");
+					
+					info = this.utilityService.getStringFromKey2(mapRace, "information");
 					
 					circuit = null;
 					
@@ -192,14 +191,14 @@ public class RaceService {
 						o = (LinkedHashMap<String, Object>) mapRace.get("circuit");
 						
 						name = this.utilityService.getStringFromKey2(o, "name");
-						location = this.utilityService.getStringFromKey2(o, "location");
-						type = this.utilityService.getStringFromKey2(o, "type");
-						lapDistance = this.utilityService.getStringFromKey2(o, "lapDistance");
+						locality = this.utilityService.getStringFromKey2(o, "locality");
+						country = this.utilityService.getStringFromKey2(o, "country");
+						infoCircuit = this.utilityService.getStringFromKey2(o, "information");
 					
-						circuit = new Circuit(name, location, type, lapDistance);
+						circuit = new Circuit(name, locality, country, infoCircuit);
 					}
 					
-					race = new Race(season, raceDate, event, circuit);
+					race = new Race(season, raceDate, event, info, circuit);
 					races.add(race);
 				}
 			}
@@ -215,18 +214,18 @@ public class RaceService {
 		return races;
 	}
 	
+
 	private Map<String, List<Object>> getDataPaginationAndObjects(String url, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, Object>> ls_map_races;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
-		String name, location, type, lapDistance;
-		String season, str_raceDate, event;
+		String name, locality, country, info, infoCircuit;
+		String season, raceDate, event;
 		Map<String, Object> map_json, temp;
 		LinkedHashMap<String, Object> o;
 		List<Object> races;
 		List<Object> dataPage;
 		Circuit circuit;
-		Date raceDate;
 		Race race;
 		
 		try {
@@ -251,11 +250,9 @@ public class RaceService {
 				if (!ls_map_races.isEmpty()) {
 					for (LinkedHashMap<String, Object> mapRace : ls_map_races) {
 						season = this.utilityService.getStringFromKey2(mapRace, "season");
-						
-						str_raceDate = this.utilityService.getStringFromKey2(mapRace, "raceDate");
-						raceDate = this.utilityService.getDateFromString(str_raceDate);
-						
+						raceDate = this.utilityService.getStringFromKey2(mapRace, "raceDate");
 						event = this.utilityService.getStringFromKey2(mapRace, "event");
+						info = this.utilityService.getStringFromKey2(mapRace, "information");
 						
 						circuit = null;
 						
@@ -263,14 +260,14 @@ public class RaceService {
 							o = (LinkedHashMap<String, Object>) mapRace.get("circuit");
 							
 							name = this.utilityService.getStringFromKey2(o, "name");
-							location = this.utilityService.getStringFromKey2(o, "location");
-							type = this.utilityService.getStringFromKey2(o, "type");
-							lapDistance = this.utilityService.getStringFromKey2(o, "lapDistance");
+							locality = this.utilityService.getStringFromKey2(o, "locality");
+							country = this.utilityService.getStringFromKey2(o, "country");
+							infoCircuit = this.utilityService.getStringFromKey2(o, "information");
 						
-							circuit = new Circuit(name, location, type, lapDistance);
+							circuit = new Circuit(name, locality, country, infoCircuit);
 						}
 						
-						race = new Race(season, raceDate, event, circuit);
+						race = new Race(season, raceDate, event, info, circuit);
 						races.add(race);
 					}
 				}
@@ -287,7 +284,8 @@ public class RaceService {
 			results.put("dataPage", dataPage);
 
 		} catch (Throwable oops) {
-			log.info("RaceService::getDataPaginationAndObjects - Algo fue mal al recuperar los objetos y datos de la paginacion: " + oops.getMessage());
+			log.info("RaceService::getDataPaginationAndObjects - Algo fue mal al recuperar los"
+					+ " objetos y datos de la paginacion: " + oops.getMessage());
 
 			results = new HashMap<String, List<Object>>();
 

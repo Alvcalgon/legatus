@@ -14,7 +14,6 @@
 							<ul class="pagination">
 								<li th:class="${selectedPage > 1} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}-1,
-															   type=${circuitForm.type},
 															   location=${circuitForm.location},
 															   name=${circuitForm.name})}"
 									   th:text="#{paginacion.previous}"
@@ -23,7 +22,6 @@
 								</li>
 								<li th:each="page: ${pages}" th:class="${page==selectedPage} ? 'page-item active' : 'page-item'">
 									<a href="#" th:href="@{/circuit/list(offset=${page},
-															   type=${circuitForm.type},
 															   location=${circuitForm.location},
 															   name=${circuitForm.name})}"
 									   th:text="${page}"
@@ -32,7 +30,6 @@
 								</li>
 								<li th:class="${selectedPage < totalPages} ? 'page-item' : 'page-item disabled'">
 									<a href="#" th:href="@{/circuit/list(offset=${selectedPage}+1,
-															   type=${circuitForm.type},
 															   location=${circuitForm.location},
 															   name=${circuitForm.name})}"
 									   th:text="#{paginacion.next}"
@@ -55,23 +52,20 @@
 						<table th:if="${circuits.size() > 0}" class="table table-striped">
 							<thead class="thead-dark">
 								<tr>
-									<th>
-									</th>
 									<th th:text="#{circuit.name}">Nombre</th>
-									<th th:text="#{circuit.type}">Tipo</th>
-									<th th:text="#{circuit.location}">Localización</th>
-									<th th:text="#{circuit.lapDistance}">Distancia</th>
+									<th th:text="#{circuit.locality}">Localidad</th>
+									<th th:text="#{circuit.country}">País</th>
+									<th>Wikipedia</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="circuit : ${circuits}">
-									<td>
-										<a th:href="@{/circuit/display(name=${circuit.name})}" th:text="#{link.display}">Display</a>
-									</td>
 									<td th:text="${circuit.name}"></td>
-									<td th:text="${circuit.type}"></td>
-									<td th:text="${circuit.location}"></td>
-									<td th:text="${circuit.lapDistance}"></td>
+									<td th:text="${circuit.locality}"></td>
+									<td th:text="${circuit.country}"></td>
+									<td>
+										<a target="_blank" th:text="#{driver.information}" th:href="${circuit.information}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

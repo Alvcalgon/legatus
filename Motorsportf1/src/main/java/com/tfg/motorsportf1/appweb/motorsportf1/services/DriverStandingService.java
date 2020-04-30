@@ -1,7 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.tfg.motorsportf1.appweb.motorsportf1.domain.Constructor;
 import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
@@ -59,12 +57,44 @@ public class DriverStandingService {
 												  Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
+		String encoded_driver;
+		
+		encoded_driver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/driver-standing/list/driver/" + driver;
+		url = UtilityService.API_URI_PRE + "/driver-standing/list/driver/" + encoded_driver;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
 		return results;
+	}
+	
+	public Integer findCountByDriver(String driver) {
+		Integer result;
+		String url;
+		String encoded_driver;
+		
+		encoded_driver = this.utilityService.getEncodedText(driver);
+		
+		url = UtilityService.API_URI_PRE + "/driver-standing/count/driver/" + encoded_driver;
+		
+		result = this.utilityService.countJSON(url);
+		
+		return result;
+	}
+	
+	public Integer findCountByDriverAndPosition(String driver, String position) {
+		Integer result;
+		String url;
+		String encoded_driver;
+		
+		encoded_driver = this.utilityService.getEncodedText(driver);
+		
+		url = UtilityService.API_URI_PRE + "/driver-standing/count/driver/" + encoded_driver +
+				"/position/" + position;
+		
+		result = this.utilityService.countJSON(url);
+		
+		return result;
 	}
 	
 	private Map<String, List<Object>> getDataPaginationAndObjects(String url,
@@ -72,11 +102,11 @@ public class DriverStandingService {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, Object>> ls_map_driverssStanding;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
+		String driverFullname, driverInfo, driverNationality, driverDateBirth;
+		String constructorName, constructorNationality, constructorInfo;
 		String season, position;
-		String driverFullname, driverPlaceOfBirth, driverCountry, driverDateBirth_str;
-		Date driverBirthDate;
-		String constructorName, constructorCountry, constructorPrincipal;
-		Integer points;
+		Double points;
+		Integer wins;
 		Constructor constructor;
 		Driver driver;
 		Map<String, Object> map_json, temp;
@@ -109,34 +139,32 @@ public class DriverStandingService {
 						// Atributos de driverStanding
 						season = (String) mapDriverStanding.get("season");
 						position = (String) mapDriverStanding.get("position");
-						points = (Integer) mapDriverStanding.get("points");
+						points = (Double) mapDriverStanding.get("points");
+						wins = (Integer) mapDriverStanding.get("wins");
 						
 						// Atributos de DriverStanding::constructor
 						o = (LinkedHashMap<String, Object>) mapDriverStanding.get("constructor");
 						constructorName = (String) o.get("name");
-						constructorCountry = (String) o.get("country");
-						constructorPrincipal = (StringUtils.isEmpty(o.get("principal")))
-								? null : (String) o.get("principal"); 
+						constructorNationality = (String) o.get("nationality");
+						constructorInfo = (String) o.get("information");
 						
 						constructor = new Constructor(constructorName,
-													  constructorCountry,
-													  constructorPrincipal);
+													  constructorNationality,
+													  constructorInfo);
 						
 						// Atributos de DriverStanding::driver
 						o = (LinkedHashMap<String, Object>) mapDriverStanding.get("driver");
 						driverFullname = (String) o.get("fullname");
-						driverCountry = (String) o.get("country");
-						driverPlaceOfBirth = (String) o.get("placeOfBirth");
-						driverDateBirth_str = (String) o.get("dateOfBirth");
-						
-						driverBirthDate = this.utilityService.getDateFromString(driverDateBirth_str);
-						
+						driverNationality = (String) o.get("nacionality");
+						driverInfo = (String) o.get("information");
+						driverDateBirth = (String) o.get("dateOfBirth");
+												
 						driver = new Driver(driverFullname,
-											driverPlaceOfBirth,
-											driverCountry,
-											driverBirthDate);
+											driverNationality,
+											driverDateBirth,
+											driverInfo);
 											
-						ds = new DriverStanding(season, points, position, driver, constructor);
+						ds = new DriverStanding(season, points, position, wins, driver, constructor);
 
 						driversStanding.add(ds);
 					}

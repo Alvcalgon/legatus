@@ -5,6 +5,7 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/global.css}" />
+			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/header.css}" />
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/custom-css/responsive.css}" />
 			<link rel="stylesheet" type="text/css" th:href="@{/libraries/bootstrap/4.1.3/css/bootstrap.min.css}" />
 			
@@ -16,6 +17,7 @@
 			<script type="text/javascript" th:src="@{/libraries/custom-js/driverStandingFormValidation.js}"></script>
 			<script type="text/javascript" th:src="@{/libraries/custom-js/raceFormValidation.js}"></script>
 			<script type="text/javascript" th:src="@{/libraries/custom-js/sortRaceTable.js}"></script>
+			<script type="text/javascript" th:src="@{/libraries/custom-js/language.js}"></script>
 													
 			<script type="text/javascript" th:src="@{/libraries/popper.js/1.14.4/js/popper.min.js}"></script>
 			<script type="text/javascript" th:src="@{/libraries/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
@@ -33,7 +35,7 @@
 			</section>
 			
 			<section class="master-page footer">
-				<div class="master-page-footer" th:insert="master-page/footer :: frag-footer"></div>
+				<div id="piePagina" class="master-page-footer" th:insert="master-page/footer :: frag-footer"></div>
 			</section>
 		</body>
 	</html>

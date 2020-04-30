@@ -30,7 +30,7 @@ public class UtilityService {
 	private static final Log log = LogFactory.getLog(UtilityService.class);
 	
 	public static final String API_URI_DEPLOY = "https://fone-api.herokuapp.com/fone";
-	public static final String API_URI_PRE = "http://localhost:8080/fone";
+	public static final String API_URI_PRE = "http://localhost:8081/fone";
 	
 	public static final int DEFAULT_LIMIT = 10;
 	public static final int DEFAULT_OFFSET_TO_USER = 1;
@@ -40,7 +40,7 @@ public class UtilityService {
 	public static final int POS_TOTAL_ELEMENTS = 1;
 	public static final int POS_OFFSET = 2;
 	
-	public static final String LAST_SEASON = "2018";
+	public static final String LAST_SEASON = "2019";
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -141,6 +141,27 @@ public class UtilityService {
 		}
 		
 		return results;
+	}
+	
+	public Integer countJSON(String url) {
+		Integer result;
+		URI uri;
+		
+		try {
+			uri = new URI(url);
+			
+			result = this.restTemplate.getForObject(uri, Integer.class);
+		} catch (URISyntaxException use) {
+			log.info("Error en la url de la API: " + use.getMessage());
+		
+			result = null;
+		} catch (Throwable oops) {
+			log.info("Error al parsear los objetos del json: " + oops.getMessage());
+			
+			result = null;
+		}
+		
+		return result;
 	}
 	
 	public Map<String, Object> mapJSON(String url, int offset) {

@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.SafeHtml;
 public class DriverStandingForm extends PaginationForm {
 
 	@Pattern(regexp = "^[0-9]{0,4}$")
-	//TODO:@Range(min = 1950, max = 2018)
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String season;
 	

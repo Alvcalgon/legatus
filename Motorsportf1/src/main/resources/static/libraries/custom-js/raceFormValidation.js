@@ -15,8 +15,8 @@ function validateSeasonRace() {
 	var valid = regExp.test(season);
 	
 	if (season != '' && !valid) {
-		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2018"
-				: "Invalid season: Fill a value between 1958 and 2018";
+		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2019"
+				: "Invalid season: Fill a value between 1958 and 2019";
 		
 		input.style.border = "1px solid red";
 	} else {
@@ -37,7 +37,7 @@ function validateEventRace() {
 	
 	var valid = regExp.test(event);
 	
-	if (!valid) {
+	if (!valid || event.includes("<script>") || event.includes("</script>")) {
 		error = (language == "es") ? "Introduzca un evento válido" : "You must enter a valid event";
 		
 		input.style.border = "1px solid red";

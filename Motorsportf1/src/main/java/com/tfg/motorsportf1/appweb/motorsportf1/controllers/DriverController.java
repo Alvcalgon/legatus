@@ -1,6 +1,5 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.DriverForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverService;
+import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverStandingService;
+import com.tfg.motorsportf1.appweb.motorsportf1.services.ResultService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 
 @Controller
@@ -32,6 +33,12 @@ public class DriverController {
 	private DriverService driverService;
 	
 	@Autowired
+	private DriverStandingService driverStandingService;
+	
+	@Autowired
+	private ResultService resultService;
+	
+	@Autowired
 	private UtilityService utilityService;
 	
 	
@@ -42,26 +49,24 @@ public class DriverController {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 							 @RequestParam("fullname") Optional<String> fullname,
-							 @RequestParam("country") Optional<String> country) {
-		String val_country, val_fullname;
-		int valid_offset;
+							 @RequestParam("nationality") Optional<String> nationality) {
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
 		List<Object> dataPage;
 		DriverForm driverForm;
 		
-		val_fullname = fullname.orElse("");
-		val_country = country.orElse("");
+		String val_fullname = fullname.orElse("");
+		String val_nationality = nationality.orElse("");
 		
-		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_country)) {
+		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_nationality)) {
 			mapa = this.driverService.findByParameters(val_fullname,
-													   val_country,
+													   val_nationality,
 													   selectedPage);
 		} else if (!StringUtil.isBlank(val_fullname)) {
 			mapa = this.driverService.findByFullname(val_fullname,
 													selectedPage);
-		} else if (!StringUtil.isBlank(val_country)) {			
-			mapa = this.driverService.findByCountry(val_country,
+		} else if (!StringUtil.isBlank(val_nationality)) {			
+			mapa = this.driverService.findByNationality(val_nationality,
 													selectedPage);
 		} else {
 			mapa = this.driverService.findAll(selectedPage);
@@ -69,11 +74,11 @@ public class DriverController {
 		
 		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
 		
-		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
+		int valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
 		driverForm = new DriverForm(valid_offset,
 									val_fullname,
-									val_country);
+									val_nationality);
 		
 		result = this.getModelAndView(mapa, driverForm);
 		
@@ -83,19 +88,38 @@ public class DriverController {
 	@GetMapping("/display")
 	public ModelAndView display(@RequestParam("fullname") String fullname) {			
 		ModelAndView result;
+		String fullnameTrim;
 		Object driver;
-		Date dateBirth;
+		Integer races;
+		Integer victories;
+		Integer podiums;
+		Integer poles;
+		Integer titles;
 		
-		driver = this.driverService.findOne(fullname.trim());
+		fullnameTrim = fullname.trim();
 		
-		if (driver != null) {
-			result = new ModelAndView("driver/display");
-			
-			dateBirth = this.utilityService.getStringFromObject(driver, 3);
+		driver = this.driverService.findOne(fullnameTrim);
 		
-			result.addObject("dateOfBirth", dateBirth);
-			result.addObject("driver", driver);
-		} else {
+		try {
+			if (driver != null) {
+				result = new ModelAndView("driver/display");
+								
+				races = this.resultService.findCountByDriver(fullnameTrim);
+				victories = this.resultService.findCountByPositionAndDriver(fullnameTrim, "1");
+				podiums = this.driverService.getPodiums(fullnameTrim);
+				poles = this.resultService.findCountByGridAndDriver(fullnameTrim, "1");
+				titles = this.driverStandingService.findCountByDriverAndPosition(fullnameTrim,
+																				 "1");
+				result.addObject("driver", driver);
+				result.addObject("races", races);
+				result.addObject("victories", victories);
+				result.addObject("podiums", podiums);
+				result.addObject("poles", poles);
+				result.addObject("titles", titles);
+			} else {
+				result = this.getModelAndView(this.driverService.findAll());
+			}
+		} catch (Throwable oops) {
 			result = this.getModelAndView(this.driverService.findAll());
 		}
 		
@@ -105,7 +129,7 @@ public class DriverController {
 	@PostMapping(value = "/list", params = "search")
 	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
 		ModelAndView result;
-		String country, fullname;
+		String nationality, fullname;
 		Integer offset;
 		
 		if (binding.hasErrors()) {
@@ -114,13 +138,13 @@ public class DriverController {
 		} else {
 			// Si no hay errores de validacion, se filtran los pilotos según los
 			// parametros de busquedas
-			country = driverForm.getCountry().trim();
+			nationality = driverForm.getNationality().trim();
 			fullname = driverForm.getFullname().trim();
 			offset = driverForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
 							   Optional.ofNullable(fullname),
-							   Optional.ofNullable(country));
+							   Optional.ofNullable(nationality));
 		}
 		
 		return result;

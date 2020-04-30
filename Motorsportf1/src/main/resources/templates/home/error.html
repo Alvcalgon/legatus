@@ -6,7 +6,14 @@
 		
 		<body>
 			<div class="content">
+				<a href="#" th:href="@{/}">
+					<img class="img-fluid" 
+						th:src="@{/images/logoF1.png}"
+						 alt="Motorsport F1" height="200px" width="200px" />
+				</a>
+				
 				<p th:text="#{error.text}">Texto</p>
+				
 				<p> <a th:href="@{/}" th:text="#{error.return}"> </a> </p>
 			</div>
 		</body>

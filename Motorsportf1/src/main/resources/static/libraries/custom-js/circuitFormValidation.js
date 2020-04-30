@@ -1,12 +1,18 @@
 function validateCircuitForm() {
 	var errorName = validateNameCircuit();
-	var errorLocation = validateLocation();
-	var errorSeason = validateSeason();
+	var errorLocation = validateLocationCircuit();
 	
-	return errorName.length == 0 && errorLocation.length == 0 && errorSeason.length == 0;
+	return errorName.length == 0 && errorLocation.length == 0;
 }
 
-function validateSeason() {
+function searchBySeason() {
+	var errorSeason = validateSeasonCircuit();
+	
+	return errorSeason.length == 0;
+}
+
+
+function validateSeasonCircuit() {
 	var input = document.getElementById("seasonSearch");
 	var season = input.value.trim();
 	var language = document.documentElement.lang;
@@ -16,20 +22,21 @@ function validateSeason() {
 	var valid = regExp.test(season);
 	
 	if (season != '' && !valid) {
-		error = (language == "es") ? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2018"
-				: "Invalid season: Fill a value between 1958 and 2018";
+		error = (language == "es") 
+				? "Temporada inválida. Introduza un valor comprendido entre 1958 y 2019"
+				: "Invalid season: Fill a value between 1958 and 2019";
 		
 		input.style.border = "1px solid red";
 	} else {
 		input.style.border = "1px solid green";
 	}
 	
-	document.getElementById("seasonErrorCS").innerHTML = error;
+	document.getElementById("seasonCircuitError").innerHTML = error;
 	
 	return error;
 }
 
-function validateLocation() {
+function validateLocationCircuit() {
 	var input = document.getElementById("location");
 	var location = input.value.trim();
 	var language = document.documentElement.lang;
@@ -38,8 +45,10 @@ function validateLocation() {
 	
 	var valid = regExp.test(location);
 	
-	if (!valid) {
-		error = (language == "es") ? "Introduzca una localización válido." : "You must enter a valid location.";
+	if (!valid || location.includes("<script>") || location.includes("</script>")) {
+		error = (language == "es") 
+				? "Introduzca una localización válida."
+				: "You must enter a valid location.";
 		
 		input.style.border = "1px solid red";
 	} else {
@@ -60,8 +69,10 @@ function validateNameCircuit() {
 	
 	var valid = regExp.test(name);
 	
-	if (!valid) {
-		error = (language == "es") ? "Introduzca un nombre válido." : "You must enter a valid name.";
+	if (!valid || name.includes("<script>") || name.includes("</script>")) {
+		error = (language == "es")
+				? "Introduzca un nombre válido."
+				: "You must enter a valid name.";
 		
 		input.style.border = "1px solid red";
 	} else {

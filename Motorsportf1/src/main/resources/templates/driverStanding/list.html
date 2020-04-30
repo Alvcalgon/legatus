@@ -57,6 +57,7 @@
 									<th th:text="#{driverStanding.season}">Temporada</th>
 									<th th:text="#{driverStanding.position}">Posición</th>
 									<th th:text="#{driverStanding.points}">Puntos</th>
+									<th th:text="#{driverStanding.wins}">Victorias</th>
 									<th th:text="#{driverStanding.driver}">Driver</th>
 									<th th:text="#{driverStanding.constructor}">Escudería</th>
 								</tr>
@@ -66,8 +67,15 @@
 									<td th:text="${driverStd.season}"></td>
 									<td th:text="${driverStd.position}"></td>
 									<td th:text="${driverStd.points}"></td>
-									<td th:text="${driverStd.driver.fullname}"></td>
-									<td th:text="${driverStd.constructor.name}"></td>
+									<td th:text="${driverStd.wins}"></td>
+									<td>
+										<a th:text="${driverStd.driver.fullname}" 
+										   th:href="@{/driver/display(fullname=${driverStd.driver.fullname})}"> </a>
+									</td>
+									<td>
+										<a th:text="${driverStd.constructor.name}"
+										   th:href="@{/constructor/display(name=${driverStd.constructor.name})}"> </a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

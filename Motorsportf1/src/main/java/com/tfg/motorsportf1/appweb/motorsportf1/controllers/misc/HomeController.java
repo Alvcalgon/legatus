@@ -44,13 +44,9 @@ public class HomeController {
 	@GetMapping("/home/welcome")
 	public ModelAndView welcome() {
 		ModelAndView result;
-		String moment;
-		
+	
 		try {
-			moment = this.utilityService.getCurrentMomentString();
-			
 			result = new ModelAndView("home/index");
-			result.addObject("moment", moment);
 		
 			log.info("HomeController::welcome");
 		} catch (Throwable oops) {

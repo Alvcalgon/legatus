@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.CircuitForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.CircuitService;
@@ -67,21 +68,21 @@ public class CircuitController {
 	@PostMapping(value = "/list-by-season", params = "search")
 	public ModelAndView listBySeason(HttpServletRequest request) {
 		ModelAndView result;
-		String season;
+		String season, val_season;
 		
 		season = String.valueOf(request.getParameter("seasonSearch"));
+		val_season = HtmlUtils.htmlEscape(season);
 		
-		result = this.listBySeason(Optional.ofNullable(season));
+		result = this.listBySeason(Optional.ofNullable(val_season));
 		
 		return result;
 	}
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
-							 @RequestParam("type") Optional<String> type,
 							 @RequestParam("location") Optional<String> location,
 							 @RequestParam("name") Optional<String> name) {
-		String val_type, val_location, val_name;
+		String val_location, val_name;
 		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
@@ -89,19 +90,12 @@ public class CircuitController {
 		CircuitForm circuitForm;
 		
 		val_name = name.orElse("");
-		val_type = type.orElse("");
 		val_location = location.orElse("");
 				
-		if (!StringUtil.isBlank(val_name) && 
-			!StringUtil.isBlank(val_type) &&
-			!StringUtil.isBlank(val_location)) {
+		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_location)) {
 			
-			mapa = this.circuitService.findByType(val_type, selectedPage);
-			
-		} else if (!StringUtil.isBlank(val_type)) {
-			
-			mapa = this.circuitService.findByType(val_type, selectedPage);
-			
+			mapa = this.circuitService.findByAllParameters(val_location, val_name, selectedPage);
+		
 		} else if (!StringUtil.isBlank(val_location)) {			
 			
 			mapa = this.circuitService.findByLocation(val_location, selectedPage);
@@ -120,50 +114,32 @@ public class CircuitController {
 		
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 		
-		circuitForm = new CircuitForm(valid_offset, val_type,
-									  val_location, val_name);
+		circuitForm = new CircuitForm(valid_offset, val_location, val_name);
 		
 		result = this.getModelAndView(mapa, circuitForm);
 		
 		return result;
 	}
-	
-	@GetMapping("/display")
-	public ModelAndView display(@RequestParam("name") String name) {			
-		ModelAndView result;
-		Object circuit;
 		
-		circuit = this.circuitService.findOne(name);
-		
-		if (circuit != null) {
-			result = new ModelAndView("circuit/display");
-			result.addObject("circuit", circuit);
-		} else {
-			result = this.getModelAndView(this.circuitService.findAll());
-		}
-		
-		return result;
-	}
-	
 	@PostMapping(value = "/list", params = "search")
-	public ModelAndView search(@Valid @ModelAttribute CircuitForm circuitForm, BindingResult binding) {
+	public ModelAndView search(@Valid @ModelAttribute CircuitForm circuitForm,
+							   BindingResult binding) {
 		ModelAndView result;
-		String name, type, location;
+		String name, location;
 		Integer offset;
 		
 		if (binding.hasErrors()) {
 			// Si hay errores de validacion, se envian todos los circuitos
-			result = this.getModelAndView(this.circuitService.findAll(), circuitForm);
+			result = this.getModelAndView(this.circuitService.findAll(),
+										  circuitForm);
 		} else {
 			// Si no hay errores de validacion, se filtran los circuitos según los
 			// parametros de busquedas
-			type = circuitForm.getType().trim();
 			location = circuitForm.getLocation().trim();
 			name = circuitForm.getName().trim();
 			offset = circuitForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
-							   Optional.ofNullable(type),
 							   Optional.ofNullable(location),
 							   Optional.ofNullable(name));
 		}
@@ -184,7 +160,8 @@ public class CircuitController {
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, CircuitForm circuitForm) {
+	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa,
+										   CircuitForm circuitForm) {
 		int totalPages, totalElements, valid_selectedPage;
 		List<Object> circuits;
 		ModelAndView result;

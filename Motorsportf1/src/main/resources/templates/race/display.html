@@ -16,8 +16,7 @@
 						
 						<p>
 							<strong th:text="#{race.raceDate} + ':'">Fecha de la carrera</strong>
-							<span th:with="dateformat=#{date.format}" 
-							      th:text="${#dates.format(raceDate, dateformat)}"></span>
+							<span th:text="${race.raceDate}"></span>
 						</p>
 						
 						<p>
@@ -26,8 +25,16 @@
 						</p>
 						
 						<p>
+							<strong>Wikipedia</strong>
+							<a th:text="#{driver.information}" target="_blank"
+							   th:href="${race.information}"></a>
+						</p>
+						
+						<p>
 							<strong th:text="#{race.circuit} + ':'">Circuito</strong>
-							<a th:href="@{/circuit/display(name=${race.circuit.name})}" th:text="${race.circuit.name}">Enlace a circuito</a>
+							<a target="_blank" 
+							   th:href="@{/circuit/display(name=${race.circuit.name})}"
+							   th:text="${race.circuit.name}">Enlace a circuito</a>
 						</p>
 						
 					</div>
@@ -49,6 +56,7 @@
 									<th th:text="#{result.laps}">Laps</th>
 									<th th:text="#{result.grid}">Grid</th>
 									<th th:text="#{result.points}">Points</th>
+									<th>Status</th>
 									<th th:text="#{result.driver}">Driver</th>
 									<th th:text="#{result.constructor}">Constructor</th>
 								</tr>
@@ -60,13 +68,14 @@
 									<td th:text="${result.laps}"></td>
 									<td th:text="${result.grid}"></td>
 									<td th:text="${result.points}"></td>
+									<td th:text="${result.status}"></td>
 									<td>
 										<a th:href="@{/driver/display(fullname=${result.driver.fullname})}"
-										   th:text="${result.driver.fullname}"> </a>
+										   th:text="${result.driver.fullname}" target="_blank"> </a>
 									</td>
 									<td>
 										<a th:href="@{/constructor/display(name=${result.constructor.name})}"
-										   th:text="${result.constructor.name}"> </a>
+										   th:text="${result.constructor.name}" target="_blank"> </a>
 									</td>
 								</tr>
 							</tbody>

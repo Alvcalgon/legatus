@@ -1,16 +1,12 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ResultService {
 
-	private static final Log log = LogFactory.getLog(ResultService.class);
+	//private static final Log log = LogFactory.getLog(ResultService.class);
 	
 	@Autowired
 	private UtilityService utilityService;
@@ -20,30 +16,30 @@ public class ResultService {
 		super();
 	}
 
-	public Integer findResultsByPositionAndDriver(String driver, String position) {
+	public Integer findCountByPositionAndDriver(String driver, String position) {
 		Integer result;
 		String url;
 		String encodedDriver;
 		
 		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/result/list/driver/" + encodedDriver + "/position/" + position;
+		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver + "/position/" + position;
 
-		result = this.getTotalElements(url);
+		result = this.utilityService.countJSON(url);
 
 		return result;
 	}
 
-	public Integer findResultsByGridAndDriver(String driver, String grid) {
+	public Integer findCountByGridAndDriver(String driver, String grid) {
 		Integer result;
 		String url;
 		String encodedDriver;
 		
 		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/result/list/driver/" + encodedDriver + "/grid/" + grid;
+		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver + "/grid/" + grid;
 
-		result = this.getTotalElements(url);
+		result = this.utilityService.countJSON(url);
 
 		return result;
 	}
@@ -55,9 +51,9 @@ public class ResultService {
 		
 		encodedConstructor = this.utilityService.getEncodedText(constructor);
 
-		url = UtilityService.API_URI_PRE + "/result/list/constructor/" + encodedConstructor + "/position/" + position;
+		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor + "/position/" + position;
 
-		result = this.getTotalElements(url);
+		result = this.utilityService.countJSON(url);
 
 		return result;
 	}
@@ -69,26 +65,37 @@ public class ResultService {
 		
 		encodedConstructor = this.utilityService.getEncodedText(constructor);
 
-		url = UtilityService.API_URI_PRE + "/result/list/constructor/" + encodedConstructor + "/grid/" + grid;
+		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor + "/grid/" + grid;
 
-		result = this.getTotalElements(url);
+		result = this.utilityService.countJSON(url);
 
 		return result;
 	}
 	
-	private Integer getTotalElements(String url) {
-		Map<String, Object> temp;
+	public Integer findCountByDriver(String driver) {
 		Integer result;
+		String url;
+		String encodedDriver;
+		
+		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		try {
-			temp = this.utilityService.mapJSON(url, 0);
-			result = (int) temp.get("totalElements");
+		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver;
 
-		} catch (Throwable oops) {
-			log.info("ResultService::getTotalElements - Algo fue mal al recuperar los objetos y datos de la paginacion: " + oops.getMessage());
+		result = this.utilityService.countJSON(url);
 
-			result = null;
-		}
+		return result;
+	}
+
+	public Integer findCountByConstructor(String constructor) {
+		Integer result;
+		String url;
+		String encodedConstructor;
+		
+		encodedConstructor = this.utilityService.getEncodedText(constructor);
+
+		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor;
+
+		result = this.utilityService.countJSON(url);
 
 		return result;
 	}

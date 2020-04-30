@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.ConstructorForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.ConstructorService;
+import com.tfg.motorsportf1.appweb.motorsportf1.services.ConstructorStandingService;
+import com.tfg.motorsportf1.appweb.motorsportf1.services.ResultService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 
 @Controller
@@ -32,6 +34,12 @@ public class ConstructorController {
 	private ConstructorService constructorService;
 
 	@Autowired
+	private ResultService resultService;
+	
+	@Autowired
+	private ConstructorStandingService constructorStandingService;
+	
+	@Autowired
 	private UtilityService utilityService;
 
 	public ConstructorController() {
@@ -41,8 +49,8 @@ public class ConstructorController {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 			@RequestParam("name") Optional<String> name,
-			@RequestParam("country") Optional<String> country) {
-		String val_country, val_name;
+			@RequestParam("country") Optional<String> nationality) {
+		String val_nationality, val_name;
 		int valid_offset;
 		Map<String, List<Object>> mapa;
 		ModelAndView result;
@@ -50,14 +58,14 @@ public class ConstructorController {
 		ConstructorForm constructorForm;
 
 		val_name = name.orElse("");
-		val_country = country.orElse("");
+		val_nationality = nationality.orElse("");
 
-		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_country)) {
-			mapa = this.constructorService.findByParameters(val_name, val_country, selectedPage);
+		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_nationality)) {
+			mapa = this.constructorService.findByParameters(val_name, val_nationality, selectedPage);
 		} else if (!StringUtil.isBlank(val_name)) {
 			mapa = this.constructorService.findByName(val_name, selectedPage);
-		} else if (!StringUtil.isBlank(val_country)) {
-			mapa = this.constructorService.findByCountry(val_country, selectedPage);
+		} else if (!StringUtil.isBlank(val_nationality)) {
+			mapa = this.constructorService.findByNationality(val_nationality, selectedPage);
 		} else {
 			mapa = this.constructorService.findAll(selectedPage);
 		}
@@ -66,7 +74,7 @@ public class ConstructorController {
 
 		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
 
-		constructorForm = new ConstructorForm(valid_offset, val_name, val_country);
+		constructorForm = new ConstructorForm(valid_offset, val_name, val_nationality);
 
 		result = this.getModelAndView(mapa, constructorForm);
 
@@ -77,14 +85,38 @@ public class ConstructorController {
 	public ModelAndView display(@RequestParam("name") String name) {			
 		ModelAndView result;
 		Object constructor;
+		String nameTrim;
+		Integer driversTitles;
+		Integer constructorTitles;
+		Integer poles;
+		Integer victories;
+		Integer podiums;
+		Integer races;
 		
-		constructor = this.constructorService.findOne(name.trim());
+		nameTrim = name.trim();
 		
-		if (constructor != null) {
-			result = new ModelAndView("constructor/display");
-			
-			result.addObject("constructor", constructor);
-		} else {
+		constructor = this.constructorService.findOne(nameTrim);
+		
+		try {
+			if (constructor != null) {
+				result = new ModelAndView("constructor/display");
+				
+				driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(nameTrim);
+				constructorTitles = this.constructorStandingService.findCountByConstructorAndPosition(nameTrim, "1");
+				poles = this.resultService.findResultsByGridAndConstructor(nameTrim, "1");
+				victories = this.resultService.findResultsByPositionAndConstructor(nameTrim, "1");
+				races = this.resultService.findCountByConstructor(nameTrim);
+				
+				result.addObject("driversTitles", driversTitles);
+				result.addObject("constructorTitles", constructorTitles);
+				result.addObject("victories", victories);
+				result.addObject("poles", poles);
+				result.addObject("races", races);
+				result.addObject("constructor", constructor);
+			} else {
+				result = this.getModelAndView(this.constructorService.findAll());
+			}
+		} catch (Throwable oops) {
 			result = this.getModelAndView(this.constructorService.findAll());
 		}
 		
@@ -95,7 +127,7 @@ public class ConstructorController {
 	@PostMapping(value = "/list", params = "search")
 	public ModelAndView search(@Valid @ModelAttribute ConstructorForm constructorForm, BindingResult binding) {
 		ModelAndView result;
-		String country, name;
+		String nationality, name;
 		Integer offset;
 		
 		if (binding.hasErrors()) {
@@ -105,13 +137,13 @@ public class ConstructorController {
 		} else {
 			// Si no hay errores de validacion, se filtran las escuderias según los
 			// parametros de busquedas
-			country = constructorForm.getCountry().trim();
+			nationality = constructorForm.getNationality().trim();
 			name = constructorForm.getName().trim();
 			offset = constructorForm.getOffset();
 			
 			result = this.list(Optional.ofNullable(offset),
 							   Optional.ofNullable(name),
-							   Optional.ofNullable(country));
+							   Optional.ofNullable(nationality));
 		}
 		
 		return result;

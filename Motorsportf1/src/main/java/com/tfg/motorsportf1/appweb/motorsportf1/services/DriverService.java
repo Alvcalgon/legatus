@@ -1,7 +1,6 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,12 +21,26 @@ public class DriverService {
 
 	@Autowired
 	private UtilityService utilityService;
-
+	
+	@Autowired
+	private ResultService resultService;
 	
 	public DriverService() {
 		super();
 	}
 
+	
+	public Integer getPodiums(String fullname) {
+		Integer result, first, second, third;
+		
+		first = this.resultService.findCountByPositionAndDriver(fullname, "1");
+		second = this.resultService.findCountByPositionAndDriver(fullname, "2");
+		third = this.resultService.findCountByPositionAndDriver(fullname, "3");
+		
+		result =  first + second + third;
+		
+		return result;
+	}
 
 	public Object findOne(String fullname) {
 		Object result;
@@ -68,13 +81,13 @@ public class DriverService {
 
 	// source:
 	// https://www.journaldev.com/2552/spring-rest-example-tutorial-spring-restful-web-services
-	public Map<String, List<Object>> findByCountry(String country, Optional<Integer> selectedPage) {
+	public Map<String, List<Object>> findByNationality(String nationality, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
-		String url, encodedCountry;
+		String url, encodedNationality;
 
-		encodedCountry = this.utilityService.getEncodedText(country);
+		encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		url = UtilityService.API_URI_PRE + "/driver/list/country/" + encodedCountry;
+		url = UtilityService.API_URI_PRE + "/driver/list/nationality/" + encodedNationality;
 		
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
@@ -94,15 +107,15 @@ public class DriverService {
 		return results;
 	}
 	
-	public Map<String, List<Object>> findByParameters(String fullname, String country,
+	public Map<String, List<Object>> findByParameters(String fullname, String nationality,
 			Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
-		String url, encodedFullname, encodedCountry;
+		String url, encodedFullname, encodedNationality;
 
 		encodedFullname = this.utilityService.getEncodedText(fullname);
-		encodedCountry = this.utilityService.getEncodedText(country);
+		encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		url = UtilityService.API_URI_PRE + "/driver/list/country/" + encodedCountry + "/fullname/" + encodedFullname;
+		url = UtilityService.API_URI_PRE + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -113,13 +126,12 @@ public class DriverService {
 				Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		List<LinkedHashMap<String, String>> ls_map_drivers;
-		String fullname, country, str_dateOfBirth, placeOfBirth;
+		String fullname, nationality, info, dateOfBirth;
 		int totalPages, totalElements, valid_selectedPage, targetPage;
 		Map<String, Object> map_json, temp;
 		List<Object> drivers;
 		List<Object> dataPage;
 		Driver driver;
-		Date dateOfBirth;
 		
 		try {
 			temp = this.utilityService.mapJSON(url, 0);
@@ -142,12 +154,11 @@ public class DriverService {
 				if (!ls_map_drivers.isEmpty()) {
 					for (LinkedHashMap<String, String> mapDriver : ls_map_drivers) {
 						fullname = this.utilityService.getStringFromKey(mapDriver, "fullname");
-						country = this.utilityService.getStringFromKey(mapDriver, "country");
-						placeOfBirth = this.utilityService.getStringFromKey(mapDriver, "placeOfBirth");
-						str_dateOfBirth = this.utilityService.getStringFromKey(mapDriver, "dateOfBirth");
-						dateOfBirth = this.utilityService.getDateFromString(str_dateOfBirth);
+						nationality = this.utilityService.getStringFromKey(mapDriver, "nacionality");
+						dateOfBirth = this.utilityService.getStringFromKey(mapDriver, "dateOfBirth");
+						info = this.utilityService.getStringFromKey(mapDriver, "information");
 						
-						driver = new Driver(fullname, placeOfBirth, country, dateOfBirth);
+						driver = new Driver(fullname, nationality, dateOfBirth, info);
 
 						drivers.add(driver);
 					}

@@ -1,8 +1,8 @@
 function validateConstructorForm() {
 	var errorName = validateNameConstructor();
-	var errorCountry = validateCountryConstructor();
+	var errorNationality = validateNationalityConstructor();
 	
-	return errorName.length == 0 && errorCountry.length == 0;
+	return errorName.length == 0 && errorNationality.length == 0;
 }
 
 
@@ -28,24 +28,24 @@ function validateNameConstructor() {
 	return error;
 }
 
-function validateCountryConstructor() {
-	var input = document.getElementById("country");
-	var country = input.value.trim();
+function validateNationalityConstructor() {
+	var input = document.getElementById("nationality");
+	var nationality = input.value.trim();
 	var language = document.documentElement.lang;
 	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
-	var valid = regExp.test(country);
+	var valid = regExp.test(nationality);
 	
-	if (!valid || country.includes("<script>") || country.includes("</script>")) {
-		error = (language == "es") ? "País inválido" : "Invalid country"; 
+	if (!valid || nationality.includes("<script>") || nationality.includes("</script>")) {
+		error = (language == "es") ? "Nacionalidad inválido" : "Invalid nationality"; 
 	
 		input.style.border = "1px solid red";
 	} else {
 		input.style.border = "1px solid green";
 	}
 	
-	document.getElementById("countryConstructorError").innerHTML = error;
+	document.getElementById("nationalityConstructorError").innerHTML = error;
 	
 	return error;
 }
