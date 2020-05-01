@@ -3,24 +3,33 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
+	<groupId>com.tfg.motorsportf1.appweb</groupId>
+	<artifactId>Motorsportf1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>Motorsportf1</name>
+	<description>application web for Spring Boot</description>
+	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	
-	<groupId>com.tfg.motorsportf1.appweb</groupId>
-	<artifactId>Motorsportf1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	
-	<name>Motorsportf1</name>
-	<description>application web for Spring Boot</description>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
@@ -59,14 +68,5 @@
 		</dependency>
 		
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
+	
 </project>

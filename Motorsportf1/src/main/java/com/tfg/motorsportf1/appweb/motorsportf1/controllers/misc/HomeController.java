@@ -44,10 +44,14 @@ public class HomeController {
 	@GetMapping("/home/welcome")
 	public ModelAndView welcome() {
 		ModelAndView result;
-	
+		String swaggerURL;
+		
+		swaggerURL = UtilityService.API_URI + "/swagger-ui.html";
+		
 		try {
 			result = new ModelAndView("home/index");
-		
+			result.addObject("swaggerURL", swaggerURL);
+			
 			log.info("HomeController::welcome");
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/error");
@@ -61,8 +65,31 @@ public class HomeController {
 	@GetMapping("/api")
 	public ModelAndView infoAPI() {
 		ModelAndView result;
+		String driverURL;
+		String constructorURL;
+		String circuitURL;
+		String raceURL;
+		String driverStdURL;
+		String constructorStdURL;
+		String swaggerURL;
+		
+		driverURL = UtilityService.API_URI + "/driver/list";
+		constructorURL = UtilityService.API_URI + "/constructor/list";
+		circuitURL = UtilityService.API_URI + "/circuit/list";
+		raceURL = UtilityService.API_URI + "/race/list/season/2019";
+		driverStdURL = UtilityService.API_URI + "/driver-standing/list/season/2019";
+		constructorStdURL = UtilityService.API_URI + "/constructor-standing/list/season/2019";
+		swaggerURL = UtilityService.API_URI + "/swagger-ui.html";
 		
 		result = new ModelAndView("home/api");
+		result.addObject("driverURL", driverURL);
+		result.addObject("constructorURL", constructorURL);
+		result.addObject("circuitURL", circuitURL);
+		result.addObject("raceURL", raceURL);
+		result.addObject("driverStdURL", driverStdURL);
+		result.addObject("constructorStdURL", constructorStdURL);
+		result.addObject("swaggerURL", swaggerURL);
+		
 		log.info("HomeController::infoAPI");
 		
 		return result;

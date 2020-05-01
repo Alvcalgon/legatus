@@ -1,5 +1,7 @@
 @charset "ISO-8859-1";
 
+/* General */
+
 * {
 	box-sizing: border-box;
 	font-family: "Segoe UI", Arial, sans-serif;
@@ -9,10 +11,6 @@ body {
 	background-color: rgb(248, 249, 250) !important;
 }
 
-div.results-container, div.enlaces-paginacion, div.info-size {
-	margin-top:25px;
-}
-
 a {
 	text-decoration:none;
 }
@@ -20,6 +18,12 @@ a {
 span.error {
 	color:red;
 }
+
+div.results-container, div.enlaces-paginacion, div.info-size {
+	margin-top:25px;
+}
+
+/* ------------------------------ */
 
 
 div.enlaces-paginacion ul li {
@@ -48,6 +52,13 @@ p.volver-atras {
 }
 
 
+@media screen and (max-width: 600px) {
+	nav.nav {
+		margin-left: 7rem;
+		margin-right: 5rem;
+	}
+}
+
 /* Selector de idioma */
 div.language {
 	width: 15rem;
@@ -55,6 +66,73 @@ div.language {
 	margin-bottom: 1rem;
 	margin-left: 3rem;
 }
+
+
+/* index */
+@media screen and (min-width: 992px) {
+	.systems {
+    overflow: hidden;
+	}
+
+	#descripcionAppWeb, #descripcionAPI {
+	    width: 25rem;
+	}
+	
+	#descripcionAppWeb {
+	    float: left;
+	}
+	
+	#descripcionAPI {
+	    float: right;
+	    margin-left: 2rem;
+	}
+	
+	.vl {
+	    border-left: 6px solid grey;
+	    height: 15rem;
+	    display: inline-block;
+	    position: absolute;
+	    left: 50%;
+	    margin-left: -3px
+	}
+	
+	.system-custom {
+	    display: inline-block;
+	    padding: 1rem;
+	}
+}
+
+
+/* ------------------ */
+
+/* Display */
+@media screen and (min-width: 992px) {
+	.display-object {
+    overflow: hidden;
+}
+
+	.parte {
+	    display: inline-block;
+	    padding: 1rem;
+	}
+	
+	#info-personal {
+	    float:left;
+	    margin-left: 2rem;
+	}
+	
+	.vl.display {
+	    height: 20rem;
+	}
+	
+	#info-dashboard {
+	    float: right;
+	    margin-right: 2rem;
+	}
+}
+
+
+/* ----------------- /*
 
 
 /* footer */

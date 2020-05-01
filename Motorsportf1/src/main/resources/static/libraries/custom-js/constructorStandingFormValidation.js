@@ -82,7 +82,7 @@ function validatePositionCS() {
 	var input = document.getElementById("position");
 	var position = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[0-9]{1,2}$/;
+	var regExp = /^[0-9]{1,3}$/;
 	var error = "";
 	
 	var valid = regExp.test(position);

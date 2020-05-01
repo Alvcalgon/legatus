@@ -8,18 +8,24 @@
 			<div class="content container">
 				<h1 class="text-center" th:text="#{master.welcome}"></h1>
 				
-				<div id="descripcionAppWeb">
-					<h2 th:text="#{master.appweb.name}">Aplicación web</h2>
+				<div class="systems">
+					<div class="system-custom" id="descripcionAppWeb">
+						<h2 th:text="#{master.appweb.name}">Aplicación web</h2>
+						
+						<p th:text="#{master.appweb.description}">Descripción de la aplicación web</p>
+					</div>
+					<div class="vl"></div>
+					<div class="system-custom" id="descripcionAPI">
+						<h2 th:text="#{master.api.name}">API REST</h2>
+						
+						<p th:text="#{master.api.description}">Descripción de la API REST</p>
 					
-					<p th:text="#{master.appweb.description}">Descripción de la aplicación web</p>
-				</div>
-				
-				<div id="descripcionAPI">
-					<h2 th:text="#{master.api.name}">API REST</h2>
-					
-					<p th:text="#{master.api.description}">Descripción de la API REST</p>
-				
-					<p> <a th:text="#{master.api.link}" href=""> </a> </p>
+						<p>
+							<a th:text="#{master.api.link}"
+							   th:href="${swaggerURL}"
+							   target="_blank"> </a>
+						 </p>
+					</div>
 				</div>
 				
 			</div>

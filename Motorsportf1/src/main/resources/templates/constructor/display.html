@@ -1,4 +1,4 @@
-f<!DOCTYPE html>
+<!DOCTYPE html>
 	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
 		<head>
 			<title th:text="#{constructor.list}">Lista de escuderías</title>
@@ -8,55 +8,61 @@ f<!DOCTYPE html>
 				<div class="container">
 					<h1 th:text="#{constructor.display}">Detalles de una escudería</h1>
 					
-					<div class="detalles" style="background-color:'grey';">
-						<h2 th:text="#{constructor.display.data}"> </h2>
-						<p>
-							<strong th:text="#{constructor.name}">Nombre</strong>
-							<span th:text="${constructor.name}"></span>
-						</p>
+					<div class="display-object">
 						
-						<p>
-							<strong th:text="#{constructor.nationality}">Pais de origen</strong>
-							<span th:text="${constructor.nationality}"></span>
-						</p>
-						
-						<p>
-							<strong>Wikipedia</strong>
-							<a target="_blank" th:text="#{driver.information}" th:href="${constructor.information}"> </a>
-						</p>
-					</div>
+						<div id="info-personal" class="parte detalles" style="background-color:'grey';">
+							<h2 th:text="#{constructor.display.data}"> </h2>
+							<p>
+								<strong th:text="#{constructor.name}">Nombre</strong>:
+								<span th:text="${constructor.name}"></span>
+							</p>
+							
+							<p>
+								<strong th:text="#{constructor.nationality}">Pais de origen</strong>:
+								<span th:text="${constructor.nationality}"></span>
+							</p>
+							
+							<p>
+								<strong>Wikipedia</strong>:
+								<a target="_blank" th:text="#{driver.information}" th:href="${constructor.information}"> </a>
+							</p>
+						</div>	
 					
-					<div>
-						<h2 th:text="#{table.info}">Detalles de una escudería</h2>
-						<table class="table table-striped">
-							<tr>
-								<th th:text="#{table.info.titles.driver}"></th>
-								<td th:text="${driversTitles}"> </td>
-							</tr>
-							
-							<tr>
-								<th th:text="#{table.info.titles.constructor}"></th>
-								<td th:text="${constructorTitles}"> </td>
-							</tr>
-							
-							<tr>
-								<th th:text="#{table.info.races}"></th>
-								<td th:text="${races}"> </td>
-							</tr>
-							
-							<tr>
-								<th th:text="#{table.info.victories}"></th>
-								<td th:text="${victories}"> </td>
-							</tr>
-														
-							<tr>
-								<th th:text="#{table.info.poles}"></th>
-								<td th:text="${poles}"> </td>
-							</tr>
-						</table>
-					</div>
+						<div class="vl display"> </div>
+					
+						<div id="info-dashboard" class="parte">
+							<h2 th:text="#{table.info}">Detalles de una escudería</h2>
+							<table class="table table-striped">
+								<tr>
+									<th th:text="#{table.info.titles.driver}"></th>
+									<td th:text="${driversTitles}"> </td>
+								</tr>
+								
+								<tr>
+									<th th:text="#{table.info.titles.constructor}"></th>
+									<td th:text="${constructorTitles}"> </td>
+								</tr>
+								
+								<tr>
+									<th th:text="#{table.info.races}"></th>
+									<td th:text="${races}"> </td>
+								</tr>
+								
+								<tr>
+									<th th:text="#{table.info.victories}"></th>
+									<td th:text="${victories}"> </td>
+								</tr>
+															
+								<tr>
+									<th th:text="#{table.info.poles}"></th>
+									<td th:text="${poles}"> </td>
+								</tr>
+							</table>
+						</div>
+					</div>	
 									
-					<p> <a th:href="@{/constructor/list}"
+					<p> <a class="btn btn-secondary"
+						   th:href="@{/constructor/list}"
 					  	   th:text="#{link.return}">Volver atrás</a> </p>
 				
 				</div>

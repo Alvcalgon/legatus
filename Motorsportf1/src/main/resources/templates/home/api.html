@@ -17,37 +17,43 @@
 				<p th:text="#{api.resources.request}">Peticiones</p>
 				<ul>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/driver/list"
+						<a target="_blank"
+						   th:href="${driverURL}"
 						   th:text="#{api.resources.driver.href}">
 						</a>
 						<span th:text="#{api.resources.driver}"> </span>	   
 					</li>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/constructor/list"
+						<a target="_blank"
+						   th:href="${constructorURL}"
 						   th:text="#{api.resources.constructor.href}">
 						</a>
 						<span th:text="#{api.resources.constructor}"> </span>	   
 					</li>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/circuit/list"
+						<a target="_blank"
+						   th:href="${circuitURL}"
 						   th:text="#{api.resources.circuit.href}">
 						</a>
 						<span th:text="#{api.resources.circuit}"> </span>	   
 					</li>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/races/list/season/2018"
+						<a target="_blank"
+						   th:href="${raceURL}"
 						   th:text="#{api.resources.races.href}">
 						</a>
 						<span th:text="#{api.resources.races}"> </span>	   
 					</li>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/driver-standing/list/season/2018"
+						<a target="_blank"
+						   th:href="${driverStdURL}"
 						   th:text="#{api.resources.driversstanding.href}">
 						</a>
 						<span th:text="#{api.resources.driversstanding}"> </span>	   
 					</li>
 					<li>
-						<a target="_blank" href="https://fone-api.herokuapp.com/fone/constructor-standing/list/season/2018"
+						<a target="_blank" 
+						   th:href="${constructorStdURL}"
 						   th:text="#{api.resources.constructorstanding.href}">
 						</a>
 						<span th:text="#{api.resources.constructorstanding}"> </span>	   
@@ -59,6 +65,9 @@
 			<div class="development">
 				<h2 th:text="#{api.development}">Cabecera</h2>
 				<p th:text="#{api.development.text}">Texto</p>
+				<p> <a th:text="#{master.api.link}"
+					   th:href="${swaggerURL}"
+					   target="_blank"> </a> </p>
 			</div>
 		</div>
 	</body>
