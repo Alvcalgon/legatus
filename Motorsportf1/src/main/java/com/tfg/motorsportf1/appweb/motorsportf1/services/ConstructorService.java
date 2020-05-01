@@ -37,7 +37,7 @@ public class ConstructorService {
 		try {
 			encodedName = this.utilityService.getEncodedText(name);
 
-			url = UtilityService.API_URI_PRE + "/constructor/display/" + encodedName;
+			url = UtilityService.API_URI + "/constructor/display/" + encodedName;
 
 			result = this.utilityService.stringMapJSON(url);
 
@@ -58,7 +58,7 @@ public class ConstructorService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/constructor/list";
+		url = UtilityService.API_URI + "/constructor/list";
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -71,7 +71,7 @@ public class ConstructorService {
 
 		encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		url = UtilityService.API_URI_PRE + "/constructor/list/nationality/" + encodedNationality;
+		url = UtilityService.API_URI + "/constructor/list/nationality/" + encodedNationality;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -84,7 +84,7 @@ public class ConstructorService {
 
 		encodedName = this.utilityService.getEncodedText(name);
 
-		url = UtilityService.API_URI_PRE + "/constructor/list/name/" + encodedName;
+		url = UtilityService.API_URI + "/constructor/list/name/" + encodedName;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -98,7 +98,7 @@ public class ConstructorService {
 		encodedName = this.utilityService.getEncodedText(name);
 		encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		url = UtilityService.API_URI_PRE + "/constructor/list/nationality/" + encodedNationality + "/name/" + encodedName;
+		url = UtilityService.API_URI + "/constructor/list/nationality/" + encodedNationality + "/name/" + encodedName;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 

@@ -37,7 +37,7 @@ public class RaceService {
 			encodedSeason = this.utilityService.getEncodedText(season);
 			encodedEvent = this.utilityService.getEncodedText(event);
 
-			url = UtilityService.API_URI_PRE + "/race//display/season/" +
+			url = UtilityService.API_URI + "/race//display/season/" +
 					encodedSeason +  "/event/" + encodedEvent;
 
 			result = this.utilityService.stringMapJSON(url);
@@ -61,7 +61,7 @@ public class RaceService {
 		
 		encodedSeason = this.utilityService.getEncodedText(season);
 		
-		url = UtilityService.API_URI_PRE + "/race/list/season/" + encodedSeason;
+		url = UtilityService.API_URI + "/race/list/season/" + encodedSeason;
 		
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
@@ -72,7 +72,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/circuit/" + circuit;
+		url = UtilityService.API_URI + "/race/list/circuit/" + circuit;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -83,7 +83,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/driver/" + driver;
+		url = UtilityService.API_URI + "/race/list/driver/" + driver;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -94,7 +94,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/constructor/" + constructor;
+		url = UtilityService.API_URI + "/race/list/constructor/" + constructor;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -105,7 +105,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/driver/" + driver + "/season/" + season;
+		url = UtilityService.API_URI + "/race/list/driver/" + driver + "/season/" + season;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -116,7 +116,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/constructor/" + constructor + "/season/" + season;
+		url = UtilityService.API_URI + "/race/list/constructor/" + constructor + "/season/" + season;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -127,7 +127,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/event/" + event;
+		url = UtilityService.API_URI + "/race/list/event/" + event;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -138,7 +138,7 @@ public class RaceService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/race/list/season/" + season + "/event/" + event;
+		url = UtilityService.API_URI + "/race/list/season/" + season + "/event/" + event;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 

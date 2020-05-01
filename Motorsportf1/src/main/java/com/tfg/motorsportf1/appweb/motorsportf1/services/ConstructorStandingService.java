@@ -32,7 +32,7 @@ public class ConstructorStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/constructor-standing/list/season/" + season;
+		url = UtilityService.API_URI + "/constructor-standing/list/season/" + season;
 
 		results = this.getDataPaginationAndObjects(url, 
 				Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
@@ -44,7 +44,7 @@ public class ConstructorStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/constructor-standing/list/season/" + season;
+		url = UtilityService.API_URI + "/constructor-standing/list/season/" + season;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -56,7 +56,7 @@ public class ConstructorStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/constructor-standing/list/position/" + position;
+		url = UtilityService.API_URI + "/constructor-standing/list/position/" + position;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -68,7 +68,7 @@ public class ConstructorStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/constructor-standing/list/constructor/" + constructor;
+		url = UtilityService.API_URI + "/constructor-standing/list/constructor/" + constructor;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -82,7 +82,7 @@ public class ConstructorStandingService {
 		
 		encoded_constructor = this.utilityService.getEncodedText(constructor);
 		
-		url = UtilityService.API_URI_PRE + "/constructor-standing/count/constructor/"
+		url = UtilityService.API_URI + "/constructor-standing/count/constructor/"
 				+ encoded_constructor;
 		
 		result = this.utilityService.countJSON(url);
@@ -97,7 +97,7 @@ public class ConstructorStandingService {
 		
 		encoded_constructor = this.utilityService.getEncodedText(constructor);
 		
-		url = UtilityService.API_URI_PRE + "/constructor-standing/count/constructor/"
+		url = UtilityService.API_URI + "/constructor-standing/count/constructor/"
 				+ encoded_constructor + "/position/" + position;
 		
 		result = this.utilityService.countJSON(url);
@@ -112,7 +112,7 @@ public class ConstructorStandingService {
 		
 		encoded_constructor = this.utilityService.getEncodedText(constructor);
 		
-		url = UtilityService.API_URI_PRE + "/constructor-standing/drivers-titles/"
+		url = UtilityService.API_URI + "/constructor-standing/drivers-titles/"
 				+ encoded_constructor;
 		
 		result = this.utilityService.countJSON(url);

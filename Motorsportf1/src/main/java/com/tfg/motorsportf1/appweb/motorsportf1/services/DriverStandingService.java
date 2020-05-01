@@ -34,7 +34,7 @@ public class DriverStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/driver-standing/list/season/" + season;
+		url = UtilityService.API_URI + "/driver-standing/list/season/" + season;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -46,7 +46,7 @@ public class DriverStandingService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/driver-standing/list/position/" + position;
+		url = UtilityService.API_URI + "/driver-standing/list/position/" + position;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -61,7 +61,7 @@ public class DriverStandingService {
 		
 		encoded_driver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/driver-standing/list/driver/" + encoded_driver;
+		url = UtilityService.API_URI + "/driver-standing/list/driver/" + encoded_driver;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -75,7 +75,7 @@ public class DriverStandingService {
 		
 		encoded_driver = this.utilityService.getEncodedText(driver);
 		
-		url = UtilityService.API_URI_PRE + "/driver-standing/count/driver/" + encoded_driver;
+		url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver;
 		
 		result = this.utilityService.countJSON(url);
 		
@@ -89,7 +89,7 @@ public class DriverStandingService {
 		
 		encoded_driver = this.utilityService.getEncodedText(driver);
 		
-		url = UtilityService.API_URI_PRE + "/driver-standing/count/driver/" + encoded_driver +
+		url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver +
 				"/position/" + position;
 		
 		result = this.utilityService.countJSON(url);

@@ -29,8 +29,8 @@ public class UtilityService {
 	
 	private static final Log log = LogFactory.getLog(UtilityService.class);
 	
-	public static final String API_URI_DEPLOY = "https://fone-api.herokuapp.com/fone";
-	public static final String API_URI_PRE = "http://localhost:8081/fone";
+	public static final String API_URI = "https://fone-api.herokuapp.com/fone";
+	//public static final String API_URI = "http://localhost:8081/fone";
 	
 	public static final int DEFAULT_LIMIT = 10;
 	public static final int DEFAULT_OFFSET_TO_USER = 1;

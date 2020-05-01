@@ -49,7 +49,7 @@ public class DriverService {
 		try {			
 			encodedFullname = this.utilityService.getEncodedText(fullname);
 			
-			url = UtilityService.API_URI_PRE + "/driver/display/" + encodedFullname;
+			url = UtilityService.API_URI + "/driver/display/" + encodedFullname;
 			
 			result = this.utilityService.stringMapJSON(url);
 
@@ -72,7 +72,7 @@ public class DriverService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/driver/list";
+		url = UtilityService.API_URI + "/driver/list";
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -87,7 +87,7 @@ public class DriverService {
 
 		encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		url = UtilityService.API_URI_PRE + "/driver/list/nationality/" + encodedNationality;
+		url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality;
 		
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
@@ -100,7 +100,7 @@ public class DriverService {
 
 		encodedFullname = this.utilityService.getEncodedText(fullname);
 		
-		url = UtilityService.API_URI_PRE + "/driver/list/fullname/" + encodedFullname;
+		url = UtilityService.API_URI + "/driver/list/fullname/" + encodedFullname;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -115,7 +115,7 @@ public class DriverService {
 		encodedFullname = this.utilityService.getEncodedText(fullname);
 		encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		url = UtilityService.API_URI_PRE + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
+		url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 

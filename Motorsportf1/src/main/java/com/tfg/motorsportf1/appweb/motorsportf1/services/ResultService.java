@@ -23,7 +23,7 @@ public class ResultService {
 		
 		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver + "/position/" + position;
+		url = UtilityService.API_URI + "/result/count/driver/" + encodedDriver + "/position/" + position;
 
 		result = this.utilityService.countJSON(url);
 
@@ -37,7 +37,7 @@ public class ResultService {
 		
 		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver + "/grid/" + grid;
+		url = UtilityService.API_URI + "/result/count/driver/" + encodedDriver + "/grid/" + grid;
 
 		result = this.utilityService.countJSON(url);
 
@@ -51,7 +51,7 @@ public class ResultService {
 		
 		encodedConstructor = this.utilityService.getEncodedText(constructor);
 
-		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor + "/position/" + position;
+		url = UtilityService.API_URI + "/result/count/constructor/" + encodedConstructor + "/position/" + position;
 
 		result = this.utilityService.countJSON(url);
 
@@ -65,7 +65,7 @@ public class ResultService {
 		
 		encodedConstructor = this.utilityService.getEncodedText(constructor);
 
-		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor + "/grid/" + grid;
+		url = UtilityService.API_URI + "/result/count/constructor/" + encodedConstructor + "/grid/" + grid;
 
 		result = this.utilityService.countJSON(url);
 
@@ -79,7 +79,7 @@ public class ResultService {
 		
 		encodedDriver = this.utilityService.getEncodedText(driver);
 
-		url = UtilityService.API_URI_PRE + "/result/count/driver/" + encodedDriver;
+		url = UtilityService.API_URI + "/result/count/driver/" + encodedDriver;
 
 		result = this.utilityService.countJSON(url);
 
@@ -93,7 +93,7 @@ public class ResultService {
 		
 		encodedConstructor = this.utilityService.getEncodedText(constructor);
 
-		url = UtilityService.API_URI_PRE + "/result/count/constructor/" + encodedConstructor;
+		url = UtilityService.API_URI + "/result/count/constructor/" + encodedConstructor;
 
 		result = this.utilityService.countJSON(url);
 

@@ -35,7 +35,7 @@ public class CircuitService {
 		Map<String, List<Object>> results;
 		String url;
 
-		url = UtilityService.API_URI_PRE + "/circuit/list";
+		url = UtilityService.API_URI + "/circuit/list";
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -49,7 +49,7 @@ public class CircuitService {
 
 		encodedLocation = this.utilityService.getEncodedText(location);
 		
-		url = UtilityService.API_URI_PRE + "/circuit/list/location/" + encodedLocation;
+		url = UtilityService.API_URI + "/circuit/list/location/" + encodedLocation;
 		
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
@@ -62,7 +62,7 @@ public class CircuitService {
 
 		encodedSeason = this.utilityService.getEncodedText(season);
 		
-		url = UtilityService.API_URI_PRE + "/circuit/list/season/" + encodedSeason;
+		url = UtilityService.API_URI + "/circuit/list/season/" + encodedSeason;
 		
 		results = this.getDataObjects(url);
 		
@@ -78,7 +78,7 @@ public class CircuitService {
 		encodedLocation = this.utilityService.getEncodedText(location);
 		encodedName = this.utilityService.getEncodedText(name);
 
-		url = UtilityService.API_URI_PRE + "/circuit/list/location/" + encodedLocation + "/name/" + encodedName;
+		url = UtilityService.API_URI + "/circuit/list/location/" + encodedLocation + "/name/" + encodedName;
 
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 
@@ -91,7 +91,7 @@ public class CircuitService {
 
 		encodedName = this.utilityService.getEncodedText(name);
 		
-		url = UtilityService.API_URI_PRE + "/circuit/list/name/" + encodedName;
+		url = UtilityService.API_URI + "/circuit/list/name/" + encodedName;
 		
 		results = this.getDataPaginationAndObjects(url, selectedPage);
 		
