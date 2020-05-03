@@ -103,8 +103,8 @@ public class ConstructorController {
 				
 				driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(nameTrim);
 				constructorTitles = this.constructorStandingService.findCountByConstructorAndPosition(nameTrim, "1");
-				poles = this.resultService.findResultsByGridAndConstructor(nameTrim, "1");
-				victories = this.resultService.findResultsByPositionAndConstructor(nameTrim, "1");
+				poles = this.resultService.findCountByGridAndConstructor(nameTrim, "1");
+				victories = this.resultService.findCountByPositionAndConstructor(nameTrim, "1");
 				races = this.resultService.findCountByConstructor(nameTrim);
 				
 				result.addObject("driversTitles", driversTitles);

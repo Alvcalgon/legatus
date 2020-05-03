@@ -13,82 +13,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.tfg.motorsportf1.appweb.motorsportf1.services.utilities.AbstractTest;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DriverServiceTest extends AbstractTest {
+public class CircuitServiceTest {
 
-	// Service under testing ---------------
+	// Service under testing ----------------
 	@Autowired
-	private DriverService driverService;
+	private CircuitService circuitService;
 	
-	
-	// Suite test -------------------------
-	@Test
-	public void getPodiums() {
-		String fullname = "Fernando Alonso";
-		Integer podiums;
-		
-		podiums = this.driverService.getPodiums(fullname);
-		
-		assertTrue(podiums == 97);
-	}
-	
-	@Test
-	public void positiveTest_display_uno() {
-		Object driver;
-		String fullname;
-		
-		fullname = "Fernando Alonso";
-		driver = this.driverService.findOne(fullname);
-		
-		assertNotNull(driver);
-	}
-	
-	@Test
-	public void positiveTest_display_dos() {
-		Object driver;
-		String fullname;
-		
-		fullname = "Philippe Étancelin";
-		driver = this.driverService.findOne(fullname);
-		
-		assertNotNull(driver);
-	}
-	
-	@Test
-	public void negativeTest_display() {
-		Object driver;
-		String fullname;
-		
-		fullname = "Desconocido";
-		driver = this.driverService.findOne(fullname);
-		
-		assertTrue(driver == null);
-	}
-	
+	// Suite test ---------------------------
 	@Test
 	public void test1_findAll() {
 		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		List<Object> circuits, dataPage;
 		int totalPages, totalElements, offset;
 		
-		results = this.driverService.findAll();
+		results = this.circuitService.findAll();
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
+		assertTrue(results.containsKey("circuits"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		drivers = results.get("drivers");
+		circuits = results.get("circuits");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(drivers.size() == UtilityService.DEFAULT_LIMIT);
+		assertTrue(circuits.size() == UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -97,124 +51,138 @@ public class DriverServiceTest extends AbstractTest {
 	@Test
 	public void test2_findAll() {
 		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		List<Object> circuits, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		
 		selectedPage = Optional.of(2);
 		
-		results = this.driverService.findAll(selectedPage);
+		results = this.circuitService.findAll(selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
+		assertTrue(results.containsKey("circuits"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		drivers = results.get("drivers");
+		circuits = results.get("circuits");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(drivers.size() == UtilityService.DEFAULT_LIMIT);
+		assertTrue(circuits.size() == UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
 	}
 	
 	@Test
-	public void test_findByNationality() {
+	public void test_findByLocation() {
 		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		List<Object> circuits, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
-		String nationality;
+		String location;
 		
-		nationality = "Spanish";
-		selectedPage = Optional.of(2);
-		
-		results = this.driverService.findByNationality(nationality, selectedPage);
-		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
-		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
-		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
-		assertTrue(totalPages > 0);
-		assertTrue(totalElements > 0);
-		assertTrue(offset >= 0);
-	}
-	
-	@Test
-	public void test_findByFullname() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
-		int totalPages, totalElements, offset;
-		Optional<Integer> selectedPage;
-		String fullname;
-		
-		fullname = "Lewis";
+		location = "spain";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverService.findByFullname(fullname, selectedPage);
+		results = this.circuitService.findByLocation(location, selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
+		assertTrue(results.containsKey("circuits"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		drivers = results.get("drivers");
+		circuits = results.get("circuits");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(circuits.size() <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
+	}
+	
+	@Test
+	public void test_findByName() {
+		Map<String, List<Object>> results;
+		List<Object> circuits, dataPage;
+		int totalPages, totalElements, offset;
+		Optional<Integer> selectedPage;
+		String name;
+		
+		name = "albert park";
+		selectedPage = Optional.of(1);
+		
+		results = this.circuitService.findByName(name, selectedPage);
+		
+		assertNotNull(results);
+		assertTrue(!results.isEmpty());
+		assertTrue(results.containsKey("circuits"));
+		assertTrue(results.containsKey("dataPage"));
+	
+		circuits = results.get("circuits");
+		dataPage = results.get("dataPage");
+		
+		totalPages = (int) dataPage.get(0);
+		totalElements = (int) dataPage.get(1);
+		offset = (int) dataPage.get(2);
+		
+		assertTrue(circuits.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(totalPages > 0);
+		assertTrue(totalElements > 0);
+		assertTrue(offset >= 0);
+	}
+	
+	@Test
+	public void test_findBySeason() {
+		List<Object> results;
+		String season;
+		
+		season = "2019";
+		
+		results = this.circuitService.findBySeason(season);
+		
+		assertNotNull(results);
+		assertTrue(!results.isEmpty());
 	}
 	
 	@Test
 	public void test_findByParameters() {
 		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		List<Object> circuits, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
-		String nationality, fullname;
+		String location, name;
 		
-		nationality = "spanish";
-		fullname = "fernando";
+		location = "spain";
+		name = "mont";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverService.findByParameters(fullname, nationality, selectedPage);
+		results = this.circuitService.findByAllParameters(location, name, selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
+		assertTrue(results.containsKey("circuits"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		drivers = results.get("drivers");
+		circuits = results.get("circuits");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(circuits.size() <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
 	}
+	
 	
 }

@@ -44,7 +44,7 @@ public class ResultService {
 		return result;
 	}
 	
-	public Integer findResultsByPositionAndConstructor(String constructor, String position) {
+	public Integer findCountByPositionAndConstructor(String constructor, String position) {
 		Integer result;
 		String url;
 		String encodedConstructor;
@@ -58,7 +58,7 @@ public class ResultService {
 		return result;
 	}
 	
-	public Integer findResultsByGridAndConstructor(String constructor, String grid) {
+	public Integer findCountByGridAndConstructor(String constructor, String grid) {
 		Integer result;
 		String url;
 		String encodedConstructor;

@@ -2,7 +2,6 @@ package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
@@ -29,8 +26,8 @@ public class UtilityService {
 	
 	private static final Log log = LogFactory.getLog(UtilityService.class);
 	
-	public static final String API_URI = "https://fone-api.herokuapp.com";
-	//public static final String API_URI = "http://localhost:8080";
+	//public static final String API_URI = "https://fone-api.herokuapp.com";
+	public static final String API_URI = "http://localhost:8080";
 	
 	public static final int DEFAULT_LIMIT = 10;
 	public static final int DEFAULT_OFFSET_TO_USER = 1;
@@ -59,48 +56,6 @@ public class UtilityService {
 		return result;
 	}
 	
-	public Date getStringFromObject(Object object, int posAttribute) {
-		String result, str_object;
-		String str_raceDate;
-		String[] fields;
-		Date d;
-		int posDate;
-		
-		str_object = ObjectUtils.getDisplayString(object);
-		
-		d = null;
-		
-		if (StringUtils.hasText(str_object)) {
-			fields = str_object.split(",");
-			
-			str_raceDate = fields[posAttribute];
-			str_raceDate = str_raceDate.trim();
-			
-			posDate = str_raceDate.indexOf("=");
-			
-			result = str_raceDate.substring(posDate+1);
-			
-			d = this.getDateFromString(result);
-		}
-		
-		return d;
-	}
-	
-	public Date getDateFromString(String str_date) {
-		Date result;
-		SimpleDateFormat format;
-		
-		try {
-			format = new SimpleDateFormat("yyyy-MM-dd");
-			result = format.parse(str_date);
-		} catch (ParseException e) {
-			result = null;
-			log.info("Error al parsear la fecha");
-		}
-		
-		return result;
-	}
-
 	public List<LinkedHashMap<String, String>> listJSON(String url) {
 		List<LinkedHashMap<String, String>> results;
 		URI uri;
@@ -212,12 +167,12 @@ public class UtilityService {
 	public List<Integer> getPages(int totalPages) {
 		List<Integer> results;
 		
+		results = new ArrayList<Integer>();
+		
 		if (totalPages > 0) {
 			results = IntStream.rangeClosed(1, totalPages)
 					.boxed()
 					.collect(Collectors.toList());
-		} else {
-			results = new ArrayList<Integer>();
 		}
 		
 		return results;

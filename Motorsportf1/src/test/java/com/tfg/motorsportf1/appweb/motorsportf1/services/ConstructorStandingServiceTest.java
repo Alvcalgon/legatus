@@ -15,18 +15,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DriverStandingServiceTest {
+public class ConstructorStandingServiceTest {
 
-	// Service under testing ----------------------------
+	// Service under testing -------------------
 	@Autowired
-	private DriverStandingService driverStandingService;
+	private ConstructorStandingService constructorStandingService;
 	
-	
-	// Suite test --------------------------------------
+	// Suite test ------------------------------
 	@Test
 	public void test_findBySeason() {
 		Map<String, List<Object>> results;
-		List<Object> driversStanding, dataPage;
+		List<Object> constructorsStanding, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String season;
@@ -34,21 +33,21 @@ public class DriverStandingServiceTest {
 		season = "2019";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverStandingService.findBySeason(season, selectedPage);
+		results = this.constructorStandingService.findBySeason(season, selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("driversStanding"));
+		assertTrue(results.containsKey("constructorsStanding"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		driversStanding = results.get("driversStanding");
+		constructorsStanding = results.get("constructorsStanding");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(driversStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -57,7 +56,7 @@ public class DriverStandingServiceTest {
 	@Test
 	public void test_findByPosition() {
 		Map<String, List<Object>> results;
-		List<Object> driversStanding, dataPage;
+		List<Object> constructorsStanding, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String position;
@@ -65,91 +64,92 @@ public class DriverStandingServiceTest {
 		position = "1";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverStandingService.findByPosition(position, selectedPage);
+		results = this.constructorStandingService.findByPosition(position, selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("driversStanding"));
+		assertTrue(results.containsKey("constructorsStanding"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		driversStanding = results.get("driversStanding");
+		constructorsStanding = results.get("constructorsStanding");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(driversStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
 	}
 	
 	@Test
-	public void test_findByDriver() {
+	public void test_findByConstructor() {
 		Map<String, List<Object>> results;
-		List<Object> driversStanding, dataPage;
+		List<Object> constructorsStanding, dataPage;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
-		String driver;
+		String constructor;
 		
-		driver = "Lewis Hamilton";
+		constructor = "Mercedes";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverStandingService.findByDriver(driver, selectedPage);
+		results = this.constructorStandingService.findByConstructor(constructor, selectedPage);
 		
 		assertNotNull(results);
 		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("driversStanding"));
+		assertTrue(results.containsKey("constructorsStanding"));
 		assertTrue(results.containsKey("dataPage"));
 	
-		driversStanding = results.get("driversStanding");
+		constructorsStanding = results.get("constructorsStanding");
 		dataPage = results.get("dataPage");
 		
 		totalPages = (int) dataPage.get(0);
 		totalElements = (int) dataPage.get(1);
 		offset = (int) dataPage.get(2);
 		
-		assertTrue(driversStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
 	}
 	
 	@Test
-	public void positiveTest_findCountByDriver() {
-		String driver;
+	public void positiveTest_findCountByConstructor() {
+		String constructor;
 		Integer result;
 		
-		driver = "Fernando Alonso";
-		result = this.driverStandingService.findCountByDriver(driver);
+		constructor = "Mercedes";
+		result = this.constructorStandingService.findCountByConstructor(constructor);
 		
-		assertTrue(result == 17);
+		assertTrue(result == 10);
 	}
 	
 	@Test
-	public void negativeTest_findCountByDriver() {
-		String driver;
+	public void negativeTest_findCountByConstructor() {
+		String constructor;
 		Integer result;
 		
-		driver = "Fernando Alonso Jr";
-		result = this.driverStandingService.findCountByDriver(driver);
+		constructor = "No no";
+		result = this.constructorStandingService.findCountByConstructor(constructor);
 		
 		assertTrue(result == null || result == 0);
 	}
 	
 	@Test
-	public void test_findCountByDriverAndPosition() {
-		String driver, position;
+	public void test_findCountByConstructorAndPosition() {
+		String constructor, position;
 		Integer result;
 		
 		position = "1";
-		driver = "Fernando Alonso";
+		constructor = "Mercedes";
 		
-		result = this.driverStandingService.findCountByDriverAndPosition(driver,
+		result = this.constructorStandingService.findCountByConstructorAndPosition(constructor,
 																		 position);
 		
-		assertTrue(result == 2);
+		assertTrue(result == 6);
 	}
+	
 	
 }

@@ -79,50 +79,6 @@ public class RaceService {
 		return results;
 	}
 	
-	public Map<String, List<Object>> findByDriver(String driver, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url;
-
-		url = UtilityService.API_URI + "/race/list/driver/" + driver;
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
-
-		return results;
-	}
-	
-	public Map<String, List<Object>> findByConstructor(String constructor, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url;
-
-		url = UtilityService.API_URI + "/race/list/constructor/" + constructor;
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
-
-		return results;
-	}
-	
-	public Map<String, List<Object>> findByDriverAndSeason(String driver, String season, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url;
-
-		url = UtilityService.API_URI + "/race/list/driver/" + driver + "/season/" + season;
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
-
-		return results;
-	}
-	
-	public Map<String, List<Object>> findByConstructorAndSeason(String constructor, String season, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url;
-
-		url = UtilityService.API_URI + "/race/list/constructor/" + constructor + "/season/" + season;
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
-
-		return results;
-	}
-	
 	public Map<String, List<Object>> findByEvent(String event, Optional<Integer> selectedPage) {
 		Map<String, List<Object>> results;
 		String url;
