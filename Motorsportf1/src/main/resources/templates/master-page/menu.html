@@ -54,6 +54,23 @@
 							       th:text="#{master.menu.driverStanding}">Clasificacion general de pilotos</a>
 							</div>
 						</li>
+						
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#"
+							   id="navbardrop" data-toggle="dropdown"
+							   th:text="#{master.menu.hallfame}"> Salón de la fama </a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="#"
+								   th:href="@{/hall-of-fame/championship/drivers}"
+							       th:text="#{master.menu.hallfame.driver.titles}">Top 10 pilotos con más títulos</a>
+								<a class="dropdown-item" href="#"
+								   th:href="@{/hall-of-fame/championship/constructors}"
+							       th:text="#{master.menu.hallfame.constructor.titles}">Top 10 escuderías con más títulos</a>
+							    <a class="dropdown-item" href="#"
+								   th:href="@{/hall-of-fame/victories/drivers}"
+							       th:text="#{master.menu.hallfame.driver.victories}">Top 10 pilotos con más victorias</a>
+							</div>
+						</li>
 					</ul>	
 					<ul class="navbar-nav">
 						<li class="navbar-text">

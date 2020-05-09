@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+	<html th:replace="~{master-page/layout :: layout(~{::title}, ~{::div.content})}">
+		<head>
+			<title th:text="#{master.menu.hallfame}"></title>
+		</head>
+		<body>
+			<div class="content">
+				<div class="container">
+					<h1 th:text="#{master.menu.hallfame}"></h1>
+									
+					<div class="results-container">
+						<table th:if="${results.size() > 0}" class="table table-striped hall-fame">
+							<thead class="thead-dark">
+								<tr>
+									<th th:text="#{result.driver}">Piloto</th>
+									<th th:text="${requestURI == 'hall-of-fame/championship/drivers'} ? #{table.info.titles.driver} : #{table.info.victories}">Títulos</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="result : ${results}">
+									<td>
+										<a th:text="${result.name}"
+										   th:href="@{/driver/display(fullname=${result.name})}"
+										   target="_blank"> </a>
+									</td>
+									<td th:text="${result.count}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div th:if="${results.size() == 0}"
+						 class="no-elements bg-info text-white">
+						<span th:text="#{paginacion.empty}"></span>
+					</div>		
+					
+					<p class="volver-atras"> 
+						<a class="btn btn-secondary" th:href="@{/}"
+						   th:text="#{link.return}">Volver atrás</a>
+					</p>
+				</div>		
+			</div>
+		</body>
+	</html>

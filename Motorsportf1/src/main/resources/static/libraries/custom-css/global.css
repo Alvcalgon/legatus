@@ -67,6 +67,11 @@ div.language {
 	margin-left: 3rem;
 }
 
+@media screen and (min-width: 992px) {
+	table.table.hall-fame {
+		width: 75%;
+	}
+}
 
 /* index */
 @media screen and (min-width: 992px) {
