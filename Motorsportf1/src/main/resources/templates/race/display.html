@@ -32,9 +32,7 @@
 						
 						<p>
 							<strong th:text="#{race.circuit} + ':'">Circuito</strong>
-							<a target="_blank" 
-							   th:href="@{/circuit/display(name=${race.circuit.name})}"
-							   th:text="${race.circuit.name}">Enlace a circuito</a>
+							<span th:text="${race.circuit.name}"></span>
 						</p>
 						
 					</div>

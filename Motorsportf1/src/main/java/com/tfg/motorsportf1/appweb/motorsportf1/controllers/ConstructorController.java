@@ -49,7 +49,7 @@ public class ConstructorController {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 			@RequestParam("name") Optional<String> name,
-			@RequestParam("country") Optional<String> nationality) {
+			@RequestParam("nationality") Optional<String> nationality) {
 		String val_nationality, val_name;
 		int valid_offset;
 		Map<String, List<Object>> mapa;

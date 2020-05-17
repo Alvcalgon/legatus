@@ -54,10 +54,10 @@
 								<tr>
 									<th>
 									</th>
-									<th th:text="#{race.season}">Nombre completo</th>
+									<th th:text="#{race.season}">Temporada</th>
 									<th th:text="#{race.raceDate}">Fecha de la carrera</th>
 									<th th:text="#{race.event}">Evento</th>
-									<th th:text="#{race.circuit}">Date of birth</th>
+									<th th:text="#{race.circuit}">Circuito</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -68,9 +68,7 @@
 									<td th:text="${race.season}"></td>
 									<td th:text="${race.raceDate}"></td>
 									<td th:text="${race.event}"></td>
-									<td>
-										<a target="_blank" th:text="${race.circuit.name}" th:href="@{circuit/display(name=${race.circuit.name})}"> </a>
-									</td>
+									<td th:text="${race.circuit.name}"></td>
 								</tr>
 							</tbody>
 						</table>
