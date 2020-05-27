@@ -1,10 +1,5 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.logging.Log;
@@ -12,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.DriverJson;
 import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
 
 @Service
@@ -42,154 +38,82 @@ public class DriverService {
 		return result;
 	}
 
-	public Object findOne(String fullname) {
-		Object result;
-		String encodedFullname, url;
+	public Driver findOne(String fullname) {
+		Driver result = null;
 		
 		try {			
-			encodedFullname = this.utilityService.getEncodedText(fullname);
+			String encodedFullname = this.utilityService.getEncodedText(fullname);
 			
-			url = UtilityService.API_URI + "/driver/display/" + encodedFullname;
+			String url = UtilityService.API_URI + "/driver/display/" + encodedFullname;
 			
-			result = this.utilityService.stringMapJSON(url);
-
+			result = this.utilityService.getObjectFromJSON(url, Driver.class);
 		} catch (Throwable oops) {
-			result = null;
-			
-			log.info("DriverService::findOne - Error al recuperar el piloto cuyo nombre completo es: " + fullname);
+			log.info("Error al recuperar el piloto cuyo nombre completo es: " + fullname);
 		}
 
 		return result;
 	}
 
-	public Map<String, List<Object>> findAll() {
+	public DriverJson findAll() {
 		return this.findAll(Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
 	}
 	
-	// source:
-	// https://www.journaldev.com/2552/spring-rest-example-tutorial-spring-restful-web-services
-	public Map<String, List<Object>> findAll(Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url;
+	public DriverJson findAll(Optional<Integer> selectedPage) {
+		String uri = UtilityService.API_URI + "/driver/list";
 
-		url = UtilityService.API_URI + "/driver/list";
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
+		uri = this.getURI(uri, selectedPage);
+		
+		DriverJson results = this.utilityService.getObjectFromJSON(uri, DriverJson.class);
 
 		return results;
 	}
 
-	// source:
-	// https://www.journaldev.com/2552/spring-rest-example-tutorial-spring-restful-web-services
-	public Map<String, List<Object>> findByNationality(String nationality, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url, encodedNationality;
-
-		encodedNationality = this.utilityService.getEncodedText(nationality);
+	public DriverJson findByNationality(String nationality, Optional<Integer> selectedPage) {
+		String encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality;
+		String url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality;
 		
-		results = this.getDataPaginationAndObjects(url, selectedPage);
+		url = this.getURI(url, selectedPage);
 		
-		return results;
+		DriverJson result = this.utilityService.getObjectFromJSON(url, DriverJson.class);
+		
+		return result;
 	}
 
-	public Map<String, List<Object>> findByFullname(String fullname, Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url, encodedFullname;
-
-		encodedFullname = this.utilityService.getEncodedText(fullname);
+	public DriverJson findByFullname(String fullname, Optional<Integer> selectedPage) {
+		String encodedFullname = this.utilityService.getEncodedText(fullname);
 		
-		url = UtilityService.API_URI + "/driver/list/fullname/" + encodedFullname;
+		String uri = UtilityService.API_URI + "/driver/list/fullname/" + encodedFullname;
+		
+		uri = this.getURI(uri, selectedPage);
+		
+		DriverJson result = this.utilityService.getObjectFromJSON(uri, DriverJson.class);
 
-		results = this.getDataPaginationAndObjects(url, selectedPage);
+		return result;
+	}
+	
+	public DriverJson findByParameters(String fullname, String nationality,
+			Optional<Integer> selectedPage) {
+		String encodedFullname = this.utilityService.getEncodedText(fullname);
+		String encodedNationality = this.utilityService.getEncodedText(nationality);
+		
+		String uri = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
+		
+		uri = this.getURI(uri, selectedPage);
+		
+		DriverJson results = this.utilityService.getObjectFromJSON(uri, DriverJson.class);
 
 		return results;
 	}
 	
-	public Map<String, List<Object>> findByParameters(String fullname, String nationality,
-			Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		String url, encodedFullname, encodedNationality;
-
-		encodedFullname = this.utilityService.getEncodedText(fullname);
-		encodedNationality = this.utilityService.getEncodedText(nationality);
+	private String getURI(String uri, Optional<Integer> selectedPage) {
+		DriverJson result = this.utilityService.getObjectFromJSON(uri, DriverJson.class);
 		
-		url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
-
-		results = this.getDataPaginationAndObjects(url, selectedPage);
-
-		return results;
+		int totalElements = result.getTotalElements();
+			
+		uri = this.utilityService.getURI(uri, selectedPage, totalElements);
+		
+		return uri;
 	}
-
-	private Map<String, List<Object>> getDataPaginationAndObjects(String url,
-				Optional<Integer> selectedPage) {
-		Map<String, List<Object>> results;
-		List<LinkedHashMap<String, String>> ls_map_drivers;
-		String fullname, nationality, info, dateOfBirth;
-		int totalPages, totalElements, valid_selectedPage, targetPage;
-		Map<String, Object> map_json, temp;
-		List<Object> drivers;
-		List<Object> dataPage;
-		Driver driver;
-		
-		try {
-			temp = this.utilityService.mapJSON(url, 0);
-			totalElements = (int) temp.get("totalElements");
-			
-			// Validamos offset de la paginacion
-			valid_selectedPage = this.utilityService.getValidOffset(selectedPage, totalElements);
-
-			targetPage = valid_selectedPage - 1;
-			map_json = this.utilityService.mapJSON(url, targetPage);
-			
-			results = new HashMap<String, List<Object>>();
-			
-			dataPage = new ArrayList<Object>();
-			drivers = new ArrayList<Object>();
-			
-			if (!map_json.isEmpty()) {
-				ls_map_drivers = (List<LinkedHashMap<String, String>>) map_json.get("content");
-
-				if (!ls_map_drivers.isEmpty()) {
-					for (LinkedHashMap<String, String> mapDriver : ls_map_drivers) {
-						fullname = this.utilityService.getStringFromKey(mapDriver, "fullname");
-						nationality = this.utilityService.getStringFromKey(mapDriver, "nacionality");
-						dateOfBirth = this.utilityService.getStringFromKey(mapDriver, "dateOfBirth");
-						info = this.utilityService.getStringFromKey(mapDriver, "information");
-						
-						driver = new Driver(fullname, nationality, dateOfBirth, info);
-
-						drivers.add(driver);
-					}
-				}
-				
-				totalPages = (int) map_json.get("totalPages");
-				totalElements = (int) map_json.get("totalElements");
-				
-				dataPage = this.utilityService.fillDataPage(totalPages,
-															totalElements,
-															valid_selectedPage);
-			}
-			
-			results.put("drivers", drivers);
-			results.put("dataPage", dataPage);
-			
-		} catch (Throwable oops) {
-			log.info("DriverService::getDataPaginationAndObjects ->"
-					+ " Algo fue mal al recuperar los objetos y datos de la paginacion: "
-						+ oops.getMessage());
-
-			results = new HashMap<String, List<Object>>();
-			
-			drivers = new ArrayList<Object>();
-			dataPage = this.utilityService.fillDataPage(-1, -1, UtilityService.DEFAULT_OFFSET_TO_USER);
-			
-			results.put("drivers", drivers);
-			results.put("dataPage", dataPage);
-		}
-		
-		return results;
-	}
-		
+	
 }

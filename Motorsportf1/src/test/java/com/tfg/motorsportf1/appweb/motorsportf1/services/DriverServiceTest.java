@@ -3,8 +3,6 @@ package com.tfg.motorsportf1.appweb.motorsportf1.services;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.DriverJson;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.utilities.AbstractTest;
 
 @RunWith(SpringRunner.class)
@@ -70,25 +69,18 @@ public class DriverServiceTest extends AbstractTest {
 	
 	@Test
 	public void test1_findAll() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		DriverJson json;
 		int totalPages, totalElements, offset;
 		
-		results = this.driverService.findAll();
+		json = this.driverService.findAll();
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
+			
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
-		
-		assertTrue(drivers.size() == UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -96,28 +88,21 @@ public class DriverServiceTest extends AbstractTest {
 	
 	@Test
 	public void test2_findAll() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		DriverJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		
 		selectedPage = Optional.of(2);
 		
-		results = this.driverService.findAll(selectedPage);
+		json = this.driverService.findAll(selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		assertTrue(drivers.size() == UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -125,8 +110,7 @@ public class DriverServiceTest extends AbstractTest {
 	
 	@Test
 	public void test_findByNationality() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		DriverJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String nationality;
@@ -134,21 +118,15 @@ public class DriverServiceTest extends AbstractTest {
 		nationality = "Spanish";
 		selectedPage = Optional.of(2);
 		
-		results = this.driverService.findByNationality(nationality, selectedPage);
+		json = this.driverService.findByNationality(nationality, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
+				
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
-		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -156,8 +134,7 @@ public class DriverServiceTest extends AbstractTest {
 	
 	@Test
 	public void test_findByFullname() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		DriverJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String fullname;
@@ -165,21 +142,15 @@ public class DriverServiceTest extends AbstractTest {
 		fullname = "Lewis";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverService.findByFullname(fullname, selectedPage);
+		json = this.driverService.findByFullname(fullname, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
+		assertNotNull(json);
 	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
-		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -187,8 +158,7 @@ public class DriverServiceTest extends AbstractTest {
 	
 	@Test
 	public void test_findByParameters() {
-		Map<String, List<Object>> results;
-		List<Object> drivers, dataPage;
+		DriverJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String nationality, fullname;
@@ -197,21 +167,15 @@ public class DriverServiceTest extends AbstractTest {
 		fullname = "fernando";
 		selectedPage = Optional.of(1);
 		
-		results = this.driverService.findByParameters(fullname, nationality, selectedPage);
+		json = this.driverService.findByParameters(fullname, nationality, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("drivers"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		drivers = results.get("drivers");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		assertTrue(drivers.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);

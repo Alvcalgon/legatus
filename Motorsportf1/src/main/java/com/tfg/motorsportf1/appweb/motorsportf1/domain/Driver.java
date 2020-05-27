@@ -8,7 +8,7 @@ public class Driver {
 	// Atributos --------------------------
 	private String fullname;
 		
-	private String nationality;
+	private String nacionality;
 		
 	private String dateOfBirth;	
 	
@@ -20,13 +20,13 @@ public class Driver {
 	}
 		
 	public Driver(String fullname,
-				  String nationality,
+				  String nacionality,
 				  String dateOfBirth,
 			      String information) {
 		super();
 		
 		this.fullname = fullname;
-		this.nationality = nationality;
+		this.nacionality = nacionality;
 		this.dateOfBirth = dateOfBirth;
 		this.information = information;
 	}
@@ -41,12 +41,12 @@ public class Driver {
 		this.fullname = fullname;
 	}
 	
-	public String getNationality() {
-		return nationality;
+	public String getNacionality() {
+		return nacionality;
 	}
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
+	public void setNacionality(String nacionality) {
+		this.nacionality = nacionality;
 	}
 
 	public String getInformation() {
@@ -73,7 +73,7 @@ public class Driver {
 		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
 		result = prime * result + ((fullname == null) ? 0 : fullname.hashCode());
 		result = prime * result + ((information == null) ? 0 : information.hashCode());
-		result = prime * result + ((nationality == null) ? 0 : nationality.hashCode());
+		result = prime * result + ((nacionality == null) ? 0 : nacionality.hashCode());
 		return result;
 	}
 
@@ -101,17 +101,17 @@ public class Driver {
 				return false;
 		} else if (!information.equals(other.information))
 			return false;
-		if (nationality == null) {
-			if (other.nationality != null)
+		if (nacionality == null) {
+			if (other.nacionality != null)
 				return false;
-		} else if (!nationality.equals(other.nationality))
+		} else if (!nacionality.equals(other.nacionality))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Driver [fullname=" + this.fullname + ", nationality=" + this.nationality + "]";
+		return "Driver [fullname=" + this.fullname + ", nacionality=" + this.nacionality + "]";
 	}
 
 }

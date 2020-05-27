@@ -1,7 +1,7 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.ConstructorStandingJson;
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.ConstructorStanding;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.ConstructorStandingForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.ConstructorStandingService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
@@ -43,41 +45,34 @@ public class ConstructorStandingController {
 							 @RequestParam("season") Optional<String> season,
 							 @RequestParam("position") Optional<String> position,
 							 @RequestParam("constructor") Optional<String> constructor) {
-		String val_season, val_position, val_constructor;
-		ConstructorStandingForm constructorStandingForm;
-		int valid_offset;
-		Map<String, List<Object>> mapa;
-		ModelAndView result;
-		List<Object> dataPage;
-
-		val_season = season.orElse("");
-		val_position = position.orElse("");
-		val_constructor = constructor.orElse("");
+		ConstructorStandingJson json;
+	
+		String val_season = season.orElse(UtilityService.CADENA_VACIA);
+		String val_position = position.orElse(UtilityService.CADENA_VACIA);
+		String val_constructor = constructor.orElse(UtilityService.CADENA_VACIA);
 
 		if (!StringUtil.isBlank(val_season)) {
-			mapa = this.constructorStandingService.findBySeason(val_season,
+			json = this.constructorStandingService.findBySeason(val_season,
 																selectedPage);
 		} else if (!StringUtil.isBlank(val_position)) {
-			mapa = this.constructorStandingService.findByPosition(val_position, 
+			json = this.constructorStandingService.findByPosition(val_position, 
 																  selectedPage);
 		} else if (!StringUtil.isBlank(val_constructor)) {
-			mapa = this.constructorStandingService.findByConstructor(val_constructor, 
+			json = this.constructorStandingService.findByConstructor(val_constructor, 
 																	 selectedPage);
 		} else {
-			mapa = this.constructorStandingService.findBySeason(UtilityService.LAST_SEASON, 
+			json = this.constructorStandingService.findBySeason(UtilityService.LAST_SEASON, 
 																selectedPage);
 		}
 
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
+		int valid_offset = json.getNumber();
 
-		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
-
-		constructorStandingForm = new ConstructorStandingForm(valid_offset,
+		ConstructorStandingForm constructorStandingForm = new ConstructorStandingForm(valid_offset,
 															  val_season,
 															  val_position,
 															  val_constructor);
 
-		result = this.getModelAndView(mapa, constructorStandingForm);
+		ModelAndView result = this.getModelAndView(json, constructorStandingForm);
 
 		return result;
 	}
@@ -93,9 +88,7 @@ public class ConstructorStandingController {
 			// Si hay errores de validacion, se envia la clasificación general de 2018
 			result = this.getModelAndView(
 					        this.constructorStandingService.findBySeason(
-							UtilityService.LAST_SEASON),
-					        constructorStandingForm
-		   );
+							UtilityService.LAST_SEASON), constructorStandingForm);
 			
 		} else {
 			// Si no hay errores de validacion, se filtran los constructor
@@ -115,43 +108,35 @@ public class ConstructorStandingController {
 	}
 	
 	@PostMapping(value = "/list", params = "reset")
-	public ModelAndView reset(@ModelAttribute ConstructorStandingForm constructorStandingForm) {
-		Map<String, List<Object>> mapa;
-		ModelAndView result;
-		int offset;
+	public ModelAndView reset(@ModelAttribute ConstructorStandingForm constructorStandingForm) {	
+		int offset = constructorStandingForm.getOffset();
 		
-		offset = constructorStandingForm.getOffset();
-		
-		mapa = this.constructorStandingService.findBySeason(
+		ConstructorStandingJson json = this.constructorStandingService.findBySeason(
 				  UtilityService.LAST_SEASON,
 				  Optional.ofNullable(offset));
 	
-		result = this.getModelAndView(mapa);
+		ModelAndView result = this.getModelAndView(json);
 		
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, ConstructorStandingForm constructorStandingForm) {
-		int totalPages, totalElements, valid_selectedPage;
-		ModelAndView result;
+	protected ModelAndView getModelAndView(ConstructorStandingJson json,
+										   ConstructorStandingForm constructorStandingForm) {
 		List<Integer> pages;
-		List<Object> dataPage;
-		List<Object> constructorsStanding;
-
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
+		List<ConstructorStanding> constructorsStanding;
 		
-		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		int totalPages = json.getTotalPages();
 		pages = this.utilityService.getPages(totalPages);
 		
-		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		int totalElements = json.getTotalElements();
 						
-		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		int valid_selectedPage = constructorStandingForm.getOffset() + 1;
 		
 		constructorStandingForm.setOffset(valid_selectedPage);
 			
-		constructorsStanding = this.utilityService.getFromMap2(mapa, "constructorsStanding");
+		constructorsStanding = Arrays.asList(json.getContent());
 		
-		result = new ModelAndView("constructorStanding/list");
+		ModelAndView result = new ModelAndView("constructorStanding/list");
 		
 		result.addObject("totalElements", totalElements);
 		result.addObject("selectedPage", valid_selectedPage);
@@ -163,12 +148,10 @@ public class ConstructorStandingController {
 		return result;
 	}
 
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
-		ModelAndView result;
-		ConstructorStandingForm constructorStandingForm;
-
-		constructorStandingForm = new ConstructorStandingForm();
-		result = this.getModelAndView(mapa, constructorStandingForm);
+	protected ModelAndView getModelAndView(ConstructorStandingJson json) {
+		ConstructorStandingForm constructorStandingForm = new ConstructorStandingForm();
+		
+		ModelAndView result = this.getModelAndView(json, constructorStandingForm);
 
 		return result;
 	}

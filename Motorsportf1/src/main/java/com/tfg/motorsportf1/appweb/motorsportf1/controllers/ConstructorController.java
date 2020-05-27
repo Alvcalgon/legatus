@@ -1,11 +1,13 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.ConstructorJson;
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.Constructor;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.ConstructorForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.ConstructorService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.ConstructorStandingService;
@@ -27,8 +31,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/constructor")
 public class ConstructorController {
 
-	// private static final Log log =
-	// LogFactory.getLog(ConstructorController.class);
+	private static final Log log = LogFactory.getLog(ConstructorController.class);
 
 	@Autowired
 	private ConstructorService constructorService;
@@ -52,27 +55,32 @@ public class ConstructorController {
 			@RequestParam("nationality") Optional<String> nationality) {
 		String val_nationality, val_name;
 		int valid_offset;
-		Map<String, List<Object>> mapa;
+		ConstructorJson mapa;
 		ModelAndView result;
-		List<Object> dataPage;
 		ConstructorForm constructorForm;
 
-		val_name = name.orElse("");
-		val_nationality = nationality.orElse("");
+		val_name = name.orElse(UtilityService.CADENA_VACIA);
+		val_nationality = nationality.orElse(UtilityService.CADENA_VACIA);
 
 		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_nationality)) {
+			
 			mapa = this.constructorService.findByParameters(val_name, val_nationality, selectedPage);
+		
 		} else if (!StringUtil.isBlank(val_name)) {
+			
 			mapa = this.constructorService.findByName(val_name, selectedPage);
+		
 		} else if (!StringUtil.isBlank(val_nationality)) {
+			
 			mapa = this.constructorService.findByNationality(val_nationality, selectedPage);
+		
 		} else {
+		
 			mapa = this.constructorService.findAll(selectedPage);
+		
 		}
 
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-
-		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
+		valid_offset = (int) mapa.getNumber();
 
 		constructorForm = new ConstructorForm(valid_offset, val_name, val_nationality);
 
@@ -84,13 +92,12 @@ public class ConstructorController {
 	@GetMapping("/display")
 	public ModelAndView display(@RequestParam("name") String name) {			
 		ModelAndView result;
-		Object constructor;
+		Constructor constructor;
 		String nameTrim;
 		Integer driversTitles;
 		Integer constructorTitles;
 		Integer poles;
 		Integer victories;
-		Integer podiums;
 		Integer races;
 		
 		nameTrim = name.trim();
@@ -151,7 +158,7 @@ public class ConstructorController {
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute ConstructorForm constructorForm) {
-		Map<String, List<Object>> mapa;
+		ConstructorJson mapa;
 		ModelAndView result;
 		
 		mapa = this.constructorService.findAll();
@@ -161,25 +168,23 @@ public class ConstructorController {
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, ConstructorForm constructorForm) {
+	protected ModelAndView getModelAndView(ConstructorJson json, ConstructorForm constructorForm) {
 		int totalPages, totalElements, valid_selectedPage;
-		List<Object> constructors;
+		List<Constructor> constructors;
 		ModelAndView result;
 		List<Integer> pages;
-		List<Object> dataPage;
 
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-
-		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		totalPages = json.getTotalPages();
 		pages = this.utilityService.getPages(totalPages);
 
-		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		totalElements = json.getTotalElements();
 
-		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		valid_selectedPage = json.getNumber() + 1;
+		log.info("Valid offset: " + valid_selectedPage);
 
 		constructorForm.setOffset(valid_selectedPage);
 
-		constructors = this.utilityService.getFromMap2(mapa, "constructors");
+		constructors = Arrays.asList(json.getContent());
 
 		result = new ModelAndView("constructor/list");
 
@@ -193,12 +198,12 @@ public class ConstructorController {
 		return result;
 	}
 
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
+	protected ModelAndView getModelAndView(ConstructorJson json) {
 		ModelAndView result;
 		ConstructorForm constructorForm;
 
 		constructorForm = new ConstructorForm();
-		result = this.getModelAndView(mapa, constructorForm);
+		result = this.getModelAndView(json, constructorForm);
 
 		return result;
 	}

@@ -16,10 +16,11 @@ public class Result {
 	
 	private Integer points;
 	
+	private String status;
+	
 	private Driver driver;
 	
 	private Constructor constructor;
-	
 	
 	// Constructores --------------------------------
 	public Result() {
@@ -97,6 +98,15 @@ public class Result {
 	}
 	
 	
+	public String getStatus() {
+		return status;
+	}
+
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "Result [driver=" + this.driver.getFullname() + ", constructor=" + this.getConstructor().getName() + ", position=" + this.position + "]";

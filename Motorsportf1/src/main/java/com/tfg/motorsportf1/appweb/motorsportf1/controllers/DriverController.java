@@ -1,7 +1,7 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.DriverJson;
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.Driver;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.DriverForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.DriverStandingService;
@@ -50,33 +52,33 @@ public class DriverController {
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 							 @RequestParam("fullname") Optional<String> fullname,
 							 @RequestParam("nationality") Optional<String> nationality) {
-		Map<String, List<Object>> mapa;
+		DriverJson mapa;
 		ModelAndView result;
-		List<Object> dataPage;
-		DriverForm driverForm;
 		
-		String val_fullname = fullname.orElse("");
-		String val_nationality = nationality.orElse("");
+		String val_fullname = fullname.orElse(UtilityService.CADENA_VACIA);
+		String val_nationality = nationality.orElse(UtilityService.CADENA_VACIA);
 		
 		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_nationality)) {
+			
 			mapa = this.driverService.findByParameters(val_fullname,
 													   val_nationality,
 													   selectedPage);
 		} else if (!StringUtil.isBlank(val_fullname)) {
+			
 			mapa = this.driverService.findByFullname(val_fullname,
 													selectedPage);
 		} else if (!StringUtil.isBlank(val_nationality)) {			
+			
 			mapa = this.driverService.findByNationality(val_nationality,
 													selectedPage);
 		} else {
+			
 			mapa = this.driverService.findAll(selectedPage);
 		}
 		
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
+		int valid_offset = mapa.getNumber();
 		
-		int valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
-		
-		driverForm = new DriverForm(valid_offset,
+		DriverForm driverForm = new DriverForm(valid_offset,
 									val_fullname,
 									val_nationality);
 		
@@ -88,27 +90,20 @@ public class DriverController {
 	@GetMapping("/display")
 	public ModelAndView display(@RequestParam("fullname") String fullname) {			
 		ModelAndView result;
-		String fullnameTrim;
-		Object driver;
-		Integer races;
-		Integer victories;
-		Integer podiums;
-		Integer poles;
-		Integer titles;
 		
-		fullnameTrim = fullname.trim();
+		String fullnameTrim = fullname.trim();
 		
-		driver = this.driverService.findOne(fullnameTrim);
+		Driver driver = this.driverService.findOne(fullnameTrim);
 		
 		try {
 			if (driver != null) {
 				result = new ModelAndView("driver/display");
 								
-				races = this.resultService.findCountByDriver(fullnameTrim);
-				victories = this.resultService.findCountByPositionAndDriver(fullnameTrim, "1");
-				podiums = this.driverService.getPodiums(fullnameTrim);
-				poles = this.resultService.findCountByGridAndDriver(fullnameTrim, "1");
-				titles = this.driverStandingService.findCountByDriverAndPosition(fullnameTrim,
+				Integer races = this.resultService.findCountByDriver(fullnameTrim);
+				Integer victories = this.resultService.findCountByPositionAndDriver(fullnameTrim, "1");
+				Integer podiums = this.driverService.getPodiums(fullnameTrim);
+				Integer poles = this.resultService.findCountByGridAndDriver(fullnameTrim, "1");
+				Integer titles = this.driverStandingService.findCountByDriverAndPosition(fullnameTrim,
 																				 "1");
 				result.addObject("driver", driver);
 				result.addObject("races", races);
@@ -153,39 +148,31 @@ public class DriverController {
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute DriverForm driverForm) {
-		Map<String, List<Object>> mapa;
-		ModelAndView result;
+		DriverJson json = this.driverService.findAll();
 		
-		mapa = this.driverService.findAll();
-		
-		result = this.getModelAndView(mapa);
+		ModelAndView result = this.getModelAndView(json);
 		
 		return result;
 	}
 	
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, 
+	protected ModelAndView getModelAndView(DriverJson json, 
 										DriverForm driverForm) {
-		int totalPages, totalElements, valid_selectedPage;
-		List<Object> drivers;
-		ModelAndView result;
+		List<Driver> drivers;
 		List<Integer> pages;
-		List<Object> dataPage;
 		
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-		
-		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		int totalPages = json.getTotalPages();
 		pages = this.utilityService.getPages(totalPages);
 	
-		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		int totalElements = json.getTotalElements();
 				
-		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		int valid_selectedPage = driverForm.getOffset() + 1;
 	
 		driverForm.setOffset(valid_selectedPage);
 		
-		drivers = this.utilityService.getFromMap2(mapa, "drivers");
+		drivers = Arrays.asList(json.getContent());
 		
-		result = new ModelAndView("driver/list");
+		ModelAndView result = new ModelAndView("driver/list");
 	
 		result.addObject("totalElements", totalElements);
 		result.addObject("selectedPage", valid_selectedPage);
@@ -197,12 +184,10 @@ public class DriverController {
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
-		ModelAndView result;
-		DriverForm driverForm;
+	protected ModelAndView getModelAndView(DriverJson json) {
+		DriverForm driverForm = new DriverForm();
 		
-		driverForm = new DriverForm();
-		result = this.getModelAndView(mapa, driverForm);
+		ModelAndView result = this.getModelAndView(json, driverForm);
 		
 		return result;
 	}

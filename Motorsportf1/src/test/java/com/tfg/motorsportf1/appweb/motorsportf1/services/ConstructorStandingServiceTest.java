@@ -3,8 +3,6 @@ package com.tfg.motorsportf1.appweb.motorsportf1.services;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -12,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.ConstructorStandingJson;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,8 +24,7 @@ public class ConstructorStandingServiceTest {
 	// Suite test ------------------------------
 	@Test
 	public void test_findBySeason() {
-		Map<String, List<Object>> results;
-		List<Object> constructorsStanding, dataPage;
+		ConstructorStandingJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String season;
@@ -33,21 +32,15 @@ public class ConstructorStandingServiceTest {
 		season = "2019";
 		selectedPage = Optional.of(1);
 		
-		results = this.constructorStandingService.findBySeason(season, selectedPage);
+		json = this.constructorStandingService.findBySeason(season, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("constructorsStanding"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		constructorsStanding = results.get("constructorsStanding");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -55,8 +48,7 @@ public class ConstructorStandingServiceTest {
 	
 	@Test
 	public void test_findByPosition() {
-		Map<String, List<Object>> results;
-		List<Object> constructorsStanding, dataPage;
+		ConstructorStandingJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String position;
@@ -64,21 +56,15 @@ public class ConstructorStandingServiceTest {
 		position = "1";
 		selectedPage = Optional.of(1);
 		
-		results = this.constructorStandingService.findByPosition(position, selectedPage);
+		json = this.constructorStandingService.findByPosition(position, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("constructorsStanding"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		constructorsStanding = results.get("constructorsStanding");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -86,8 +72,7 @@ public class ConstructorStandingServiceTest {
 	
 	@Test
 	public void test_findByConstructor() {
-		Map<String, List<Object>> results;
-		List<Object> constructorsStanding, dataPage;
+		ConstructorStandingJson json;
 		int totalPages, totalElements, offset;
 		Optional<Integer> selectedPage;
 		String constructor;
@@ -95,21 +80,15 @@ public class ConstructorStandingServiceTest {
 		constructor = "Mercedes";
 		selectedPage = Optional.of(1);
 		
-		results = this.constructorStandingService.findByConstructor(constructor, selectedPage);
+		json = this.constructorStandingService.findByConstructor(constructor, selectedPage);
 		
-		assertNotNull(results);
-		assertTrue(!results.isEmpty());
-		assertTrue(results.containsKey("constructorsStanding"));
-		assertTrue(results.containsKey("dataPage"));
-	
-		constructorsStanding = results.get("constructorsStanding");
-		dataPage = results.get("dataPage");
+		assertNotNull(json);
 		
-		totalPages = (int) dataPage.get(0);
-		totalElements = (int) dataPage.get(1);
-		offset = (int) dataPage.get(2);
+		totalPages = json.getTotalPages();
+		totalElements = json.getTotalElements();
+		offset = json.getNumber();
 		
-		assertTrue(constructorsStanding.size() <= UtilityService.DEFAULT_LIMIT);
+		assertTrue(json.getContent().length <= UtilityService.DEFAULT_LIMIT);
 		assertTrue(totalPages > 0);
 		assertTrue(totalElements > 0);
 		assertTrue(offset >= 0);
@@ -150,6 +129,5 @@ public class ConstructorStandingServiceTest {
 		
 		assertTrue(result == 6);
 	}
-	
 	
 }

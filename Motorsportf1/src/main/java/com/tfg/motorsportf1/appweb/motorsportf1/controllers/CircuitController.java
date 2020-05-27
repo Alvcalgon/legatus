@@ -1,13 +1,15 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.CircuitJson;
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.Circuit;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.CircuitForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.CircuitService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
@@ -28,7 +32,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/circuit")
 public class CircuitController {
 
-	//private static final Log log = LogFactory.getLog(CircuitController.class);
+	private static final Log log = LogFactory.getLog(CircuitController.class);
 
 	@Autowired
 	private CircuitService circuitService;
@@ -44,7 +48,7 @@ public class CircuitController {
 	@GetMapping(value = "/list-by-season")
 	public ModelAndView listBySeason(Optional<String> season) {
 		ModelAndView result;
-		List<Object> circuits;
+		List<Circuit> circuits;
 		String val_season;
 		
 		result = new ModelAndView("circuit/listSeason");
@@ -57,7 +61,7 @@ public class CircuitController {
 		} else {
 			circuits = new ArrayList<>();
 			
-			result.addObject("season", "");
+			result.addObject("season", UtilityService.CADENA_VACIA);
 		}
 		
 		result.addObject("circuits", circuits);
@@ -84,13 +88,12 @@ public class CircuitController {
 							 @RequestParam("name") Optional<String> name) {
 		String val_location, val_name;
 		int valid_offset;
-		Map<String, List<Object>> mapa;
+		CircuitJson mapa;
 		ModelAndView result;
-		List<Object> dataPage;
 		CircuitForm circuitForm;
 		
-		val_name = name.orElse("");
-		val_location = location.orElse("");
+		val_name = name.orElse(UtilityService.CADENA_VACIA);
+		val_location = location.orElse(UtilityService.CADENA_VACIA);
 				
 		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_location)) {
 			
@@ -110,9 +113,7 @@ public class CircuitController {
 		
 		}
 		
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-		
-		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
+		valid_offset = (int) mapa.getNumber();
 		
 		circuitForm = new CircuitForm(valid_offset, val_location, val_name);
 		
@@ -150,7 +151,7 @@ public class CircuitController {
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute CircuitForm circuitForm) {
-		Map<String, List<Object>> mapa;
+		CircuitJson mapa;
 		ModelAndView result;
 		
 		mapa = this.circuitService.findAll();
@@ -160,26 +161,24 @@ public class CircuitController {
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa,
+	protected ModelAndView getModelAndView(CircuitJson json,
 										   CircuitForm circuitForm) {
 		int totalPages, totalElements, valid_selectedPage;
-		List<Object> circuits;
+		List<Circuit> circuits;
 		ModelAndView result;
 		List<Integer> pages;
-		List<Object> dataPage;
 
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-
-		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		totalPages = json.getTotalPages();
 		pages = this.utilityService.getPages(totalPages);
 
-		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		totalElements = json.getTotalElements();
 
-		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		valid_selectedPage = circuitForm.getOffset()+1;
+		log.info("Offset: " + valid_selectedPage);
 
 		circuitForm.setOffset(valid_selectedPage);
 
-		circuits = this.utilityService.getFromMap2(mapa, "circuits");
+		circuits = Arrays.asList(json.getContent());
 
 		result = new ModelAndView("circuit/list");
 
@@ -193,12 +192,12 @@ public class CircuitController {
 		return result;
 	}
 
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
+	protected ModelAndView getModelAndView(CircuitJson json) {
 		ModelAndView result;
 		CircuitForm circuitForm;
 
 		circuitForm = new CircuitForm();
-		result = this.getModelAndView(mapa, circuitForm);
+		result = this.getModelAndView(json, circuitForm);
 
 		return result;
 	}

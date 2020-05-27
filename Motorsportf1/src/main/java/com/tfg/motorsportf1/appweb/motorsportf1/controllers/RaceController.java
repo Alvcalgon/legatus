@@ -1,8 +1,7 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tfg.motorsportf1.appweb.motorsportf1.bean.RaceJson;
+import com.tfg.motorsportf1.appweb.motorsportf1.domain.Race;
 import com.tfg.motorsportf1.appweb.motorsportf1.forms.RaceForm;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.RaceService;
 import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
@@ -43,8 +44,7 @@ public class RaceController {
 	public ModelAndView display(@RequestParam("season") String season,
 								@RequestParam("event") String event) {			
 		ModelAndView result;
-		Object race;
-		Date dateRace;
+		Race race;
 		
 		race = this.raceService.findOne(season, event);
 		
@@ -65,15 +65,10 @@ public class RaceController {
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 							 @RequestParam("season") Optional<String> season,
 							 @RequestParam("event") Optional<String> event) {
-		String val_season, val_event;
-		int valid_offset;
-		Map<String, List<Object>> mapa;
-		ModelAndView result;
-		List<Object> dataPage;
-		RaceForm raceForm;
+		RaceJson mapa;
 		
-		val_season = season.orElse("");
-		val_event = event.orElse("");
+		String val_season = season.orElse("");
+		String val_event = event.orElse("");
 				
 		if (!StringUtil.isBlank(val_event) && !StringUtil.isBlank(val_season)) {
 	
@@ -91,16 +86,13 @@ public class RaceController {
 			
 			mapa = this.raceService.findBySeason(UtilityService.LAST_SEASON,
 					                             selectedPage);
-			
 		}
+			
+		int valid_offset = mapa.getNumber();
 		
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
+		RaceForm raceForm = new RaceForm(valid_offset, val_season, val_event);
 		
-		valid_offset = (int) dataPage.get(UtilityService.POS_OFFSET);
-		
-		raceForm = new RaceForm(valid_offset, val_season, val_event);
-		
-		result = this.getModelAndView(mapa, raceForm);
+		ModelAndView result = this.getModelAndView(mapa, raceForm);
 		
 		return result;
 	}
@@ -133,38 +125,33 @@ public class RaceController {
 		
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute RaceForm raceForm) {
-		Map<String, List<Object>> mapa;
+		RaceJson json;
 		ModelAndView result;
 		
-		mapa = this.raceService.findBySeason(UtilityService.LAST_SEASON, 
+		json = this.raceService.findBySeason(UtilityService.LAST_SEASON, 
 						   Optional.of(UtilityService.DEFAULT_OFFSET_TO_USER));
 		
-		result = this.getModelAndView(mapa);
+		result = this.getModelAndView(json);
 		
 		return result;
 	}
 	
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa, RaceForm raceForm) {
-		int totalPages, totalElements, valid_selectedPage;
-		List<Object> races;
-		ModelAndView result;
+	protected ModelAndView getModelAndView(RaceJson mapa, RaceForm raceForm) {
+		List<Race> races;
 		List<Integer> pages;
-		List<Object> dataPage;
 
-		dataPage = this.utilityService.getFromMap2(mapa, "dataPage");
-
-		totalPages = (int) dataPage.get(UtilityService.POS_TOTAL_PAGES);
+		int totalPages = mapa.getTotalPages();
 		pages = this.utilityService.getPages(totalPages);
 
-		totalElements = (int) dataPage.get(UtilityService.POS_TOTAL_ELEMENTS);
+		int totalElements = mapa.getTotalElements();
 
-		valid_selectedPage = (int) dataPage.get(UtilityService.POS_OFFSET);
+		int valid_selectedPage = raceForm.getOffset() + 1;
 
 		raceForm.setOffset(valid_selectedPage);
 
-		races = this.utilityService.getFromMap2(mapa, "races");
+		races = Arrays.asList(mapa.getContent());
 
-		result = new ModelAndView("race/list");
+		ModelAndView result = new ModelAndView("race/list");
 
 		result.addObject("totalElements", totalElements);
 		result.addObject("selectedPage", valid_selectedPage);
@@ -176,12 +163,10 @@ public class RaceController {
 		return result;
 	}
 
-	protected ModelAndView getModelAndView(Map<String, List<Object>> mapa) {
-		ModelAndView result;
-		RaceForm raceForm;
-
-		raceForm = new RaceForm();
-		result = this.getModelAndView(mapa, raceForm);
+	protected ModelAndView getModelAndView(RaceJson json) {	
+		RaceForm raceForm = new RaceForm();
+		
+		ModelAndView result = this.getModelAndView(json, raceForm);
 
 		return result;
 	}

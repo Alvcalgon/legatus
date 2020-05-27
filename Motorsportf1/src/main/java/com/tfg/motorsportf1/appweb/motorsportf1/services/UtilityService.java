@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 @Service
 public class UtilityService {
 	
@@ -36,12 +39,36 @@ public class UtilityService {
 	public static final int POS_TOTAL_PAGES = 0;
 	public static final int POS_TOTAL_ELEMENTS = 1;
 	public static final int POS_OFFSET = 2;
+	public static final String CADENA_VACIA = "";
 	
 	public static final String LAST_SEASON = "2019";
 	
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	
+	public <T> T getObjectFromJSON(String url, Class<T> classOutput) {
+		T result;
+		
+		String strJSON = getStringOfJSON(url);
+		
+		GsonBuilder builder = new GsonBuilder();
+		Gson gson = builder.create();
+		
+		result = gson.fromJson(strJSON, classOutput);
+		
+		return result;
+	}
+	
+	public String getURI(String url, Optional<Integer> selectedPage, int totalElements) {
+		// Validamos offset
+		int valid_selectedPage = this.getValidOffset(selectedPage, totalElements);
+		int targetPage = valid_selectedPage - 1;
+		
+		String result = url + "?offset=" + targetPage; 
+		
+		return result;
+	}
 	
 	public String getCurrentMomentString() {
 		SimpleDateFormat formatter;
@@ -115,6 +142,31 @@ public class UtilityService {
 			
 			result = null;
 		}
+		
+		return result;
+	}
+	
+	public String getStringOfJSON(String url) {
+		String result;
+		URI uri;
+		
+		try {
+			uri = new URI(url);
+			
+			result = this.restTemplate.getForObject(uri, String.class);
+		} catch (URISyntaxException use) {
+			log.debug("Error al recuperar el json");
+			
+			result = "";
+		}
+		
+		return result;
+	}
+	
+	public String getStringOfJSON(String url, int offset) {		
+		String uri = url + "?offset=" + offset + "&limit=" + DEFAULT_LIMIT;
+		
+		String result = this.getStringOfJSON(uri);
 		
 		return result;
 	}
