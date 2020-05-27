@@ -64,13 +64,13 @@ public class HallOfFameService {
 		Item item;
 		
 		try {
-			list_json = this.utilityService.listJSON2(url);
+			list_json = this.utilityService.listJSON(url);
 			
 			results = new ArrayList<Object>();
 			
 			if (!list_json.isEmpty()) {
 				for (LinkedHashMap<String, Object> mapObject : list_json) {
-					name = String.valueOf(this.utilityService.getStringFromKey2(mapObject,
+					name = String.valueOf(this.utilityService.getStringFromKey(mapObject,
 																			   attributeName));
 					
 					s = String.valueOf(mapObject.get(attributeCount));

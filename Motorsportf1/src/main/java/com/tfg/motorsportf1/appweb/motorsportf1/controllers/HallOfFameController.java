@@ -25,10 +25,9 @@ public class HallOfFameController {
 	
 	@GetMapping(value = "/championship/drivers")
 	public ModelAndView findDriversTitle() {
-		ModelAndView result;
 		List<Object> objects;
 		
-		result = new ModelAndView("hallOfFame/list");
+		ModelAndView result = new ModelAndView("hallOfFame/list");
 		
 		objects = this.hallOfFameService.findDriversTitle();
 		result.addObject("results", objects);
@@ -39,10 +38,9 @@ public class HallOfFameController {
 	
 	@GetMapping(value = "/championship/constructors")
 	public ModelAndView findConstructorsTitle() {
-		ModelAndView result;
 		List<Object> objects;
 		
-		result = new ModelAndView("hallOfFame/list2");
+		ModelAndView result = new ModelAndView("hallOfFame/list2");
 		
 		objects = this.hallOfFameService.findConstructorsTitle();
 		result.addObject("results", objects);
@@ -53,10 +51,9 @@ public class HallOfFameController {
 	
 	@GetMapping(value = "/victories/drivers")
 	public ModelAndView findDriversVictories() {
-		ModelAndView result;
 		List<Object> objects;
 		
-		result = new ModelAndView("hallOfFame/list");
+		ModelAndView result = new ModelAndView("hallOfFame/list");
 		
 		objects = this.hallOfFameService.findDriversVictories();
 		result.addObject("results", objects);

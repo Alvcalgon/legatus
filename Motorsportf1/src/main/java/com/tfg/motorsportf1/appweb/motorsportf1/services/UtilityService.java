@@ -5,10 +5,8 @@ import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -83,28 +81,7 @@ public class UtilityService {
 		return result;
 	}
 	
-	public List<LinkedHashMap<String, String>> listJSON(String url) {
-		List<LinkedHashMap<String, String>> results;
-		URI uri;
-		
-		try {
-			uri = new URI(url);
-			
-			results = this.restTemplate.getForObject(uri, List.class);
-		} catch (URISyntaxException use) {
-			log.info("Error en la url de la API: " + use.getMessage());
-		
-			results = new ArrayList<LinkedHashMap<String,String>>();
-		} catch (Throwable oops) {
-			log.info("Error al parsear los objetos del json: " + oops.getMessage());
-			
-			results = new ArrayList<LinkedHashMap<String,String>>();
-		}
-		
-		return results;
-	}
-	
-	public List<LinkedHashMap<String, Object>> listJSON2(String url) {
+	public List<LinkedHashMap<String, Object>> listJSON(String url) {
 		List<LinkedHashMap<String, Object>> results;
 		URI uri;
 		
@@ -171,51 +148,6 @@ public class UtilityService {
 		return result;
 	}
 	
-	public Map<String, Object> mapJSON(String url, int offset) {
-		Map<String, Object> results;
-		URI uri;
-		
-		try {
-			uri = new URI(url + "?offset=" + offset + "&limit=" + DEFAULT_LIMIT);
-			
-			results = this.restTemplate.getForObject(uri, Map.class);
-		} catch (URISyntaxException use) {
-			log.info("Error en la url de la API: " + use.getMessage());
-		
-			results = new HashMap<String, Object>();
-		} catch (Throwable oops) {
-			log.info("Error al parsear los objetos del json: " + oops.getMessage());
-			
-			results = new HashMap<String, Object>();
-			results.put("content", new ArrayList<>());
-			results.put("totalPages", 0);
-			results.put("totalElements", 0);
-		}
-		
-		return results;
-	}
-	
-	public Object stringMapJSON(String url) {
-		Object result;
-		URI uri;
-		
-		try {
-			uri = new URI(url);
-			
-			result = this.restTemplate.getForObject(uri, Object.class);
-		} catch (URISyntaxException use) {
-			log.info("Error en la url de la API: " + use.getMessage());
-			
-			result = null;
-		} catch (Throwable oops) {
-			log.info("Algo falló: " + oops.getMessage());
-			
-			result = null;
-		}
-		
-		return result;
-	}
-	
 	public List<Integer> getPages(int totalPages) {
 		List<Integer> results;
 		
@@ -257,48 +189,13 @@ public class UtilityService {
 		return result;
 	}
 	
-	public Object getFromMap(Map<String, Object> w_map, String key) {
-		Object result;
-		
-		result = (w_map.containsKey(key)) ? w_map.get(key) : null;
-		
-		return result;
-	}
 	
-	public List<Object> getFromMap2(Map<String, List<Object>> w_map, String key) {
-		List<Object> result;
-		
-		result = (w_map.containsKey(key)) ? w_map.get(key) : new ArrayList<Object>();
-		
-		return result;
-	}
-	
-	public String getStringFromKey(LinkedHashMap<String, String> map, String key) {
+	public String getStringFromKey(LinkedHashMap<String, Object> map, String key) {
 		String result;
 		
-		result = (map.containsKey(key)) ? (String) map.get(key) : "";
+		result = (map.containsKey(key)) ? (String) map.get(key) : UtilityService.CADENA_VACIA;
 		
 		return result;
 	}
-	
-	public String getStringFromKey2(LinkedHashMap<String, Object> map, String key) {
-		String result;
 		
-		result = (map.containsKey(key)) ? (String) map.get(key) : "";
-		
-		return result;
-	}
-	
-	protected List<Object> fillDataPage(int totalPages, int totalElements, int offset) {
-		List<Object> results;
-		
-		results = new ArrayList<Object>();
-		
-		results.add(UtilityService.POS_TOTAL_PAGES, totalPages);
-		results.add(UtilityService.POS_TOTAL_ELEMENTS, totalElements);
-		results.add(UtilityService.POS_OFFSET, offset);
-		
-		return results;
-	}
-	
 }
