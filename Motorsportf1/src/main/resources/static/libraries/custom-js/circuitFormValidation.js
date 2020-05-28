@@ -64,12 +64,9 @@ function validateNameCircuit() {
 	var input = document.getElementById("name");
 	var name = input.value.trim();
 	var language = document.documentElement.lang;
-	var regExp = /^[^0-9]{0,}$/;
 	var error = "";
 	
-	var valid = regExp.test(name);
-	
-	if (!valid || name.includes("<script>") || name.includes("</script>")) {
+	if (name.includes("<script>") || name.includes("</script>")) {
 		error = (language == "es")
 				? "Introduzca un nombre válido."
 				: "You must enter a valid name.";

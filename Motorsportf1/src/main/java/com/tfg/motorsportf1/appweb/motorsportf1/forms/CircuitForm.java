@@ -13,8 +13,6 @@ public class CircuitForm extends PaginationForm {
 	private String location;
 		
 	@NotNull
-	@Pattern(regexp = "^[^0-9]*$")
-	
 	@SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
 	private String name;
 
