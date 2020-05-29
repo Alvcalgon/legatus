@@ -53,38 +53,37 @@ public class ConstructorController {
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 			@RequestParam("name") Optional<String> name,
 			@RequestParam("nationality") Optional<String> nationality) {
-		String val_nationality, val_name;
-		int valid_offset;
 		ConstructorJson mapa;
-		ModelAndView result;
-		ConstructorForm constructorForm;
 
-		val_name = name.orElse(UtilityService.CADENA_VACIA);
-		val_nationality = nationality.orElse(UtilityService.CADENA_VACIA);
+		String valName = name.orElse(UtilityService.CADENA_VACIA);
+		String valNationality = nationality.orElse(UtilityService.CADENA_VACIA);
 
-		if (!StringUtil.isBlank(val_name) && !StringUtil.isBlank(val_nationality)) {
-			
-			mapa = this.constructorService.findByParameters(val_name, val_nationality, selectedPage);
+		int validOffset = this.utilityService.getValidOffset(selectedPage);
 		
-		} else if (!StringUtil.isBlank(val_name)) {
+		if (!StringUtil.isBlank(valName) && !StringUtil.isBlank(valNationality)) {
 			
-			mapa = this.constructorService.findByName(val_name, selectedPage);
-		
-		} else if (!StringUtil.isBlank(val_nationality)) {
+			mapa = this.constructorService.findByParameters(valName,
+															valNationality,
+															Optional.of(validOffset));
+		} else if (!StringUtil.isBlank(valName)) {
 			
-			mapa = this.constructorService.findByNationality(val_nationality, selectedPage);
-		
+			mapa = this.constructorService.findByName(valName, Optional.of(validOffset));
+		} else if (!StringUtil.isBlank(valNationality)) {
+			
+			mapa = this.constructorService.findByNationality(valNationality, Optional.of(validOffset));
 		} else {
 		
-			mapa = this.constructorService.findAll(selectedPage);
-		
+			mapa = this.constructorService.findAll(Optional.of(validOffset));
 		}
+		
+		validOffset = this.utilityService.getValidOffset(selectedPage, mapa.getTotalElements());
+		log.info("Pagina seleccionada: " + validOffset);
+		
+		ConstructorForm constructorForm = new ConstructorForm(validOffset,
+															  valName,
+															  valNationality);
 
-		valid_offset = (int) mapa.getNumber();
-
-		constructorForm = new ConstructorForm(valid_offset, val_name, val_nationality);
-
-		result = this.getModelAndView(mapa, constructorForm);
+		ModelAndView result = this.getModelAndView(mapa, constructorForm);
 
 		return result;
 	}
@@ -108,10 +107,17 @@ public class ConstructorController {
 			if (constructor != null) {
 				result = new ModelAndView("constructor/display");
 				
-				driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(nameTrim);
-				constructorTitles = this.constructorStandingService.findCountByConstructorAndPosition(nameTrim, "1");
+				driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(
+						nameTrim
+				);
+				
+				constructorTitles = this.constructorStandingService.
+						findCountByConstructorAndPosition(nameTrim, "1");
+				
 				poles = this.resultService.findCountByGridAndConstructor(nameTrim, "1");
+				
 				victories = this.resultService.findCountByPositionAndConstructor(nameTrim, "1");
+				
 				races = this.resultService.findCountByConstructor(nameTrim);
 				
 				result.addObject("driversTitles", driversTitles);
@@ -125,6 +131,7 @@ public class ConstructorController {
 			}
 		} catch (Throwable oops) {
 			result = this.getModelAndView(this.constructorService.findAll());
+			log.error("Error al mostrar escudería", oops);
 		}
 		
 		return result;
@@ -132,7 +139,8 @@ public class ConstructorController {
 	
 	
 	@PostMapping(value = "/list", params = "search")
-	public ModelAndView search(@Valid @ModelAttribute ConstructorForm constructorForm, BindingResult binding) {
+	public ModelAndView search(@Valid @ModelAttribute ConstructorForm constructorForm,
+							   BindingResult binding) {
 		ModelAndView result;
 		String nationality, name;
 		Integer offset;
@@ -179,7 +187,7 @@ public class ConstructorController {
 
 		totalElements = json.getTotalElements();
 
-		valid_selectedPage = json.getNumber() + 1;
+		valid_selectedPage = constructorForm.getOffset();
 		log.info("Valid offset: " + valid_selectedPage);
 
 		constructorForm.setOffset(valid_selectedPage);

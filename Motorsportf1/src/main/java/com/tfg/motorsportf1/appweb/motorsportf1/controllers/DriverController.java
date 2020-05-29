@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/driver")
 public class DriverController {
 
-	//private static final Log log = LogFactory.getLog(DriverController.class);
+	private static final Log log = LogFactory.getLog(DriverController.class);
 	
 	@Autowired
 	private DriverService driverService;
@@ -55,32 +57,35 @@ public class DriverController {
 		DriverJson mapa;
 		ModelAndView result;
 		
-		String val_fullname = fullname.orElse(UtilityService.CADENA_VACIA);
-		String val_nationality = nationality.orElse(UtilityService.CADENA_VACIA);
+		String valFullname = fullname.orElse(UtilityService.CADENA_VACIA);
+		String valNationality = nationality.orElse(UtilityService.CADENA_VACIA);
 		
-		if (!StringUtil.isBlank(val_fullname) && !StringUtil.isBlank(val_nationality)) {
+		int validOffset = this.utilityService.getValidOffset(selectedPage);
 			
-			mapa = this.driverService.findByParameters(val_fullname,
-													   val_nationality,
-													   selectedPage);
-		} else if (!StringUtil.isBlank(val_fullname)) {
+		if (!StringUtil.isBlank(valFullname) && !StringUtil.isBlank(valNationality)) {
 			
-			mapa = this.driverService.findByFullname(val_fullname,
-													selectedPage);
-		} else if (!StringUtil.isBlank(val_nationality)) {			
+			mapa = this.driverService.findByParameters(valFullname,
+													   valNationality,
+													   Optional.of(validOffset));
+		} else if (!StringUtil.isBlank(valFullname)) {
 			
-			mapa = this.driverService.findByNationality(val_nationality,
-													selectedPage);
+			mapa = this.driverService.findByFullname(valFullname,
+													 Optional.of(validOffset));
+		} else if (!StringUtil.isBlank(valNationality)) {			
+			
+			mapa = this.driverService.findByNationality(valNationality,
+														Optional.of(validOffset));
 		} else {
 			
-			mapa = this.driverService.findAll(selectedPage);
+			mapa = this.driverService.findAll(Optional.of(validOffset));
 		}
 		
-		int valid_offset = mapa.getNumber();
+		validOffset = this.utilityService.getValidOffset(selectedPage, mapa.getTotalElements());
+		log.info("Selected page by user: " + validOffset);
 		
-		DriverForm driverForm = new DriverForm(valid_offset,
-									val_fullname,
-									val_nationality);
+		DriverForm driverForm = new DriverForm(validOffset,
+									valFullname,
+									valNationality);
 		
 		result = this.getModelAndView(mapa, driverForm);
 		
@@ -100,11 +105,14 @@ public class DriverController {
 				result = new ModelAndView("driver/display");
 								
 				Integer races = this.resultService.findCountByDriver(fullnameTrim);
-				Integer victories = this.resultService.findCountByPositionAndDriver(fullnameTrim, "1");
+				Integer victories = this.resultService.findCountByPositionAndDriver(
+						fullnameTrim, "1"
+				);
 				Integer podiums = this.driverService.getPodiums(fullnameTrim);
 				Integer poles = this.resultService.findCountByGridAndDriver(fullnameTrim, "1");
-				Integer titles = this.driverStandingService.findCountByDriverAndPosition(fullnameTrim,
-																				 "1");
+				Integer titles = this.driverStandingService.findCountByDriverAndPosition(
+						fullnameTrim, "1"
+				);
 				result.addObject("driver", driver);
 				result.addObject("races", races);
 				result.addObject("victories", victories);
@@ -116,13 +124,15 @@ public class DriverController {
 			}
 		} catch (Throwable oops) {
 			result = this.getModelAndView(this.driverService.findAll());
+			log.error("Error al recuperar piloto", oops);
 		}
 		
 		return result;
 	}
 			
 	@PostMapping(value = "/list", params = "search")
-	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm, BindingResult binding) {
+	public ModelAndView search(@Valid @ModelAttribute DriverForm driverForm,
+							   BindingResult binding) {
 		ModelAndView result;
 		String nationality, fullname;
 		Integer offset;
@@ -166,16 +176,16 @@ public class DriverController {
 	
 		int totalElements = json.getTotalElements();
 				
-		int valid_selectedPage = driverForm.getOffset() + 1;
+		int validSelectedPage = driverForm.getOffset();
 	
-		driverForm.setOffset(valid_selectedPage);
+		driverForm.setOffset(validSelectedPage);
 		
 		drivers = Arrays.asList(json.getContent());
 		
 		ModelAndView result = new ModelAndView("driver/list");
 	
 		result.addObject("totalElements", totalElements);
-		result.addObject("selectedPage", valid_selectedPage);
+		result.addObject("selectedPage", validSelectedPage);
 		result.addObject("totalPages", totalPages);
 		result.addObject("pages", pages);
 		result.addObject("drivers", drivers);

@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/race")
 public class RaceController {
 
-	//private static final Log log = LogFactory.getLog(RaceController.class);
+	private static final Log log = LogFactory.getLog(RaceController.class);
 	
 	@Autowired
 	private RaceService raceService;
@@ -67,20 +69,22 @@ public class RaceController {
 							 @RequestParam("event") Optional<String> event) {
 		RaceJson mapa;
 		
-		String val_season = season.orElse("");
-		String val_event = event.orElse("");
-				
-		if (!StringUtil.isBlank(val_event) && !StringUtil.isBlank(val_season)) {
+		String valSeason = season.orElse(UtilityService.CADENA_VACIA);
+		String valEvent = event.orElse(UtilityService.CADENA_VACIA);
+		
+		int validOffset = this.utilityService.getValidOffset(selectedPage);
+		
+		if (!StringUtil.isBlank(valEvent) && !StringUtil.isBlank(valSeason)) {
 	
-			mapa = this.raceService.findBySeasonAndEvent(val_season, val_event, selectedPage);
+			mapa = this.raceService.findBySeasonAndEvent(valSeason, valEvent, selectedPage);
 			
-		} else if (!StringUtil.isBlank(val_season)) {
+		} else if (!StringUtil.isBlank(valSeason)) {
 			
-			mapa = this.raceService.findBySeason(val_season, selectedPage);
+			mapa = this.raceService.findBySeason(valSeason, selectedPage);
 			
-		} else if (!StringUtil.isBlank(val_event)) {			
+		} else if (!StringUtil.isBlank(valEvent)) {			
 			
-			mapa = this.raceService.findByEvent(val_event, selectedPage);
+			mapa = this.raceService.findByEvent(valEvent, selectedPage);
 							
 		} else {
 			
@@ -88,9 +92,10 @@ public class RaceController {
 					                             selectedPage);
 		}
 			
-		int valid_offset = mapa.getNumber();
+		validOffset = this.utilityService.getValidOffset(selectedPage, mapa.getTotalElements());
+		log.info("Pagina seleccionada: " + validOffset);
 		
-		RaceForm raceForm = new RaceForm(valid_offset, val_season, val_event);
+		RaceForm raceForm = new RaceForm(validOffset, valSeason, valEvent);
 		
 		ModelAndView result = this.getModelAndView(mapa, raceForm);
 		
@@ -137,19 +142,16 @@ public class RaceController {
 	}
 	
 	protected ModelAndView getModelAndView(RaceJson mapa, RaceForm raceForm) {
-		List<Race> races;
-		List<Integer> pages;
-
 		int totalPages = mapa.getTotalPages();
-		pages = this.utilityService.getPages(totalPages);
+		List<Integer> pages = this.utilityService.getPages(totalPages);
 
 		int totalElements = mapa.getTotalElements();
 
-		int valid_selectedPage = raceForm.getOffset() + 1;
+		int valid_selectedPage = raceForm.getOffset();
 
 		raceForm.setOffset(valid_selectedPage);
 
-		races = Arrays.asList(mapa.getContent());
+		List<Race> races = Arrays.asList(mapa.getContent());
 
 		ModelAndView result = new ModelAndView("race/list");
 

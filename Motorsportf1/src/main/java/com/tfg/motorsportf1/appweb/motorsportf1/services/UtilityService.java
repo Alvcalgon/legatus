@@ -62,6 +62,7 @@ public class UtilityService {
 		// Validamos offset
 		int valid_selectedPage = this.getValidOffset(selectedPage, totalElements);
 		int targetPage = valid_selectedPage - 1;
+		log.info("Offset de la consulta: " + targetPage);
 		
 		String result = url + "?offset=" + targetPage; 
 		
@@ -176,6 +177,21 @@ public class UtilityService {
 			if (result > totalPages) { result = totalPages; }
 		} else {
 			result = 1;
+		}
+		
+		return result;
+	}
+	
+	public int getValidOffset(Optional<Integer> selectedPage) {
+		int result;
+		
+		result = 1;
+		if (selectedPage != null) {
+			result = selectedPage.orElse(1);
+			
+			if (result < 1) {
+				result = 1;
+			}
 		}
 		
 		return result;

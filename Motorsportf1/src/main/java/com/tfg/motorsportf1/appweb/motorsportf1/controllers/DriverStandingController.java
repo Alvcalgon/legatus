@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/driver-standing")
 public class DriverStandingController {
 
-	//private static final Log log = LogFactory.getLog(DriverStandingController.class);
+	private static final Log log = LogFactory.getLog(DriverStandingController.class);
 	
 	@Autowired
 	private DriverStandingService driverStandingService;
@@ -49,21 +51,23 @@ public class DriverStandingController {
 			 				 @RequestParam("driver") Optional<String> driver) {
 		DriverStandingJson json;
 	
-		String val_season = season.orElse(UtilityService.CADENA_VACIA);
-		String val_position = position.orElse(UtilityService.CADENA_VACIA);
-		String val_driver = driver.orElse(UtilityService.CADENA_VACIA);
+		String valSeason = season.orElse(UtilityService.CADENA_VACIA);
+		String valPosition = position.orElse(UtilityService.CADENA_VACIA);
+		String valDriver = driver.orElse(UtilityService.CADENA_VACIA);
 
-		if (!StringUtil.isBlank(val_season)) {
+		int validOffset = this.utilityService.getValidOffset(selectedPage);
+		
+		if (!StringUtil.isBlank(valSeason)) {
 			
-			json = this.driverStandingService.findBySeason(val_season,
-																selectedPage);
-		} else if (!StringUtil.isBlank(val_position)) {
+			json = this.driverStandingService.findBySeason(valSeason,
+														   selectedPage);
+		} else if (!StringUtil.isBlank(valPosition)) {
 			
-			json = this.driverStandingService.findByPosition(val_position, 
-																  selectedPage);
-		} else if (!StringUtil.isBlank(val_driver)) {
+			json = this.driverStandingService.findByPosition(valPosition, 
+														     selectedPage);
+		} else if (!StringUtil.isBlank(valDriver)) {
 			
-			json = this.driverStandingService.findByDriver(val_driver, 
+			json = this.driverStandingService.findByDriver(valDriver, 
 														   selectedPage);
 		} else {
 			
@@ -71,10 +75,11 @@ public class DriverStandingController {
 														   selectedPage);
 		}
 
-		int valid_offset = json.getNumber();
-
-		DriverStandingForm driverStandingForm = new DriverStandingForm(valid_offset, val_season,
-													val_position, val_driver);
+		validOffset = this.utilityService.getValidOffset(selectedPage, json.getTotalElements());
+		log.info("Pagina seleccionada: " + validOffset);
+		
+		DriverStandingForm driverStandingForm = new DriverStandingForm(validOffset, valSeason,
+																	   valPosition, valDriver);
 
 		ModelAndView result = this.getModelAndView(json, driverStandingForm);
 
@@ -123,19 +128,18 @@ public class DriverStandingController {
 	
 	protected ModelAndView getModelAndView(DriverStandingJson json,
 			                               DriverStandingForm driverStandingForm) {
-		List<Integer> pages;
-		List<DriverStanding> driversStanding;
-		
 		int totalPages = json.getTotalPages();
-		pages = this.utilityService.getPages(totalPages);
+		List<Integer> pages = this.utilityService.getPages(totalPages);
 		
 		int totalElements = json.getTotalElements();
 		
-		int valid_selectedPage = driverStandingForm.getOffset() + 1;
+		int valid_selectedPage = driverStandingForm.getOffset();
 		
 		driverStandingForm.setOffset(valid_selectedPage);
 		
-		driversStanding = new ArrayList<DriverStanding>(Arrays.asList(json.getContent()));
+		List<DriverStanding> driversStanding = new ArrayList<DriverStanding>(
+					Arrays.asList(json.getContent())
+		);
 		
 		ModelAndView result = new ModelAndView("driverStanding/list");
 			
@@ -150,11 +154,9 @@ public class DriverStandingController {
 	}
 
 	protected ModelAndView getModelAndView(DriverStandingJson json) {
-		ModelAndView result;
-		DriverStandingForm driverStandingForm;
-
-		driverStandingForm = new DriverStandingForm();
-		result = this.getModelAndView(json, driverStandingForm);
+		DriverStandingForm driverStandingForm = new DriverStandingForm();
+		
+		ModelAndView result = this.getModelAndView(json, driverStandingForm);
 
 		return result;
 	}

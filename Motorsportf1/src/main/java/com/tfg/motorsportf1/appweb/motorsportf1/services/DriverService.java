@@ -97,7 +97,8 @@ public class DriverService {
 		String encodedFullname = this.utilityService.getEncodedText(fullname);
 		String encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		String uri = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality + "/fullname/" + encodedFullname;
+		String uri = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality
+											+ "/fullname/" + encodedFullname;
 		
 		uri = this.getURI(uri, selectedPage);
 		

@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,7 @@ import com.tfg.motorsportf1.appweb.motorsportf1.services.UtilityService;
 @RequestMapping("/constructor-standing")
 public class ConstructorStandingController {
 
-	//private static final Log log = LogFactory.getLog(ConstructorStandingController.class);
+	private static final Log log = LogFactory.getLog(ConstructorStandingController.class);
 
 	@Autowired
 	private ConstructorStandingService constructorStandingService;
@@ -47,30 +49,33 @@ public class ConstructorStandingController {
 							 @RequestParam("constructor") Optional<String> constructor) {
 		ConstructorStandingJson json;
 	
-		String val_season = season.orElse(UtilityService.CADENA_VACIA);
-		String val_position = position.orElse(UtilityService.CADENA_VACIA);
-		String val_constructor = constructor.orElse(UtilityService.CADENA_VACIA);
+		String valSeason = season.orElse(UtilityService.CADENA_VACIA);
+		String valPosition = position.orElse(UtilityService.CADENA_VACIA);
+		String valConstructor = constructor.orElse(UtilityService.CADENA_VACIA);
 
-		if (!StringUtil.isBlank(val_season)) {
-			json = this.constructorStandingService.findBySeason(val_season,
+		int validOffset = this.utilityService.getValidOffset(selectedPage);
+		
+		if (!StringUtil.isBlank(valSeason)) {
+			json = this.constructorStandingService.findBySeason(valSeason,
 																selectedPage);
-		} else if (!StringUtil.isBlank(val_position)) {
-			json = this.constructorStandingService.findByPosition(val_position, 
+		} else if (!StringUtil.isBlank(valPosition)) {
+			json = this.constructorStandingService.findByPosition(valPosition, 
 																  selectedPage);
-		} else if (!StringUtil.isBlank(val_constructor)) {
-			json = this.constructorStandingService.findByConstructor(val_constructor, 
+		} else if (!StringUtil.isBlank(valConstructor)) {
+			json = this.constructorStandingService.findByConstructor(valConstructor, 
 																	 selectedPage);
 		} else {
 			json = this.constructorStandingService.findBySeason(UtilityService.LAST_SEASON, 
 																selectedPage);
 		}
 
-		int valid_offset = json.getNumber();
-
-		ConstructorStandingForm constructorStandingForm = new ConstructorStandingForm(valid_offset,
-															  val_season,
-															  val_position,
-															  val_constructor);
+		validOffset = this.utilityService.getValidOffset(selectedPage, json.getTotalElements());
+		log.info("Pagina seleccionada: " + validOffset);
+		
+		ConstructorStandingForm constructorStandingForm = new ConstructorStandingForm(validOffset,
+															  						 valSeason,
+															  						 valPosition,
+															  						 valConstructor);
 
 		ModelAndView result = this.getModelAndView(json, constructorStandingForm);
 
@@ -122,19 +127,16 @@ public class ConstructorStandingController {
 	
 	protected ModelAndView getModelAndView(ConstructorStandingJson json,
 										   ConstructorStandingForm constructorStandingForm) {
-		List<Integer> pages;
-		List<ConstructorStanding> constructorsStanding;
-		
 		int totalPages = json.getTotalPages();
-		pages = this.utilityService.getPages(totalPages);
+		List<Integer> pages = this.utilityService.getPages(totalPages);
 		
 		int totalElements = json.getTotalElements();
 						
-		int valid_selectedPage = constructorStandingForm.getOffset() + 1;
+		int valid_selectedPage = constructorStandingForm.getOffset();
 		
 		constructorStandingForm.setOffset(valid_selectedPage);
 			
-		constructorsStanding = Arrays.asList(json.getContent());
+		List<ConstructorStanding> constructorsStanding = Arrays.asList(json.getContent());
 		
 		ModelAndView result = new ModelAndView("constructorStanding/list");
 		
