@@ -90,35 +90,28 @@ public class ConstructorController {
 
 	@GetMapping("/display")
 	public ModelAndView display(@RequestParam("name") String name) {			
-		ModelAndView result;
-		Constructor constructor;
-		String nameTrim;
-		Integer driversTitles;
-		Integer constructorTitles;
-		Integer poles;
-		Integer victories;
-		Integer races;
+		ModelAndView result = null;
 		
-		nameTrim = name.trim();
+		String nameTrim = name.trim();
 		
-		constructor = this.constructorService.findOne(nameTrim);
+		Constructor constructor = this.constructorService.findOne(nameTrim);
 		
 		try {
 			if (constructor != null) {
 				result = new ModelAndView("constructor/display");
 				
-				driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(
+				Integer driversTitles = this.constructorStandingService.findDriversTitlesByConstructorAPI(
 						nameTrim
 				);
 				
-				constructorTitles = this.constructorStandingService.
+				Integer constructorTitles = this.constructorStandingService.
 						findCountByConstructorAndPosition(nameTrim, "1");
 				
-				poles = this.resultService.findCountByGridAndConstructor(nameTrim, "1");
+				Integer poles = this.resultService.findCountByGridAndConstructor(nameTrim, "1");
 				
-				victories = this.resultService.findCountByPositionAndConstructor(nameTrim, "1");
+				Integer victories = this.resultService.findCountByPositionAndConstructor(nameTrim, "1");
 				
-				races = this.resultService.findCountByConstructor(nameTrim);
+				Integer races = this.resultService.findCountByConstructor(nameTrim);
 				
 				result.addObject("driversTitles", driversTitles);
 				result.addObject("constructorTitles", constructorTitles);
@@ -166,35 +159,25 @@ public class ConstructorController {
 	
 	@PostMapping(value = "/list", params = "reset")
 	public ModelAndView reset(@ModelAttribute ConstructorForm constructorForm) {
-		ConstructorJson mapa;
-		ModelAndView result;
+		ConstructorJson mapa = this.constructorService.findAll();
 		
-		mapa = this.constructorService.findAll();
-		
-		result = this.getModelAndView(mapa);
+		ModelAndView result = this.getModelAndView(mapa);
 		
 		return result;
 	}
 	
 	protected ModelAndView getModelAndView(ConstructorJson json, ConstructorForm constructorForm) {
-		int totalPages, totalElements, valid_selectedPage;
-		List<Constructor> constructors;
-		ModelAndView result;
-		List<Integer> pages;
+		int totalPages = json.getTotalPages();
+		List<Integer> pages = this.utilityService.getPages(totalPages);
 
-		totalPages = json.getTotalPages();
-		pages = this.utilityService.getPages(totalPages);
+		int totalElements = json.getTotalElements();
 
-		totalElements = json.getTotalElements();
-
-		valid_selectedPage = constructorForm.getOffset();
+		int valid_selectedPage = constructorForm.getOffset();
 		log.info("Valid offset: " + valid_selectedPage);
 
-		constructorForm.setOffset(valid_selectedPage);
+		List<Constructor> constructors = Arrays.asList(json.getContent());
 
-		constructors = Arrays.asList(json.getContent());
-
-		result = new ModelAndView("constructor/list");
+		ModelAndView result = new ModelAndView("constructor/list");
 
 		result.addObject("totalElements", totalElements);
 		result.addObject("selectedPage", valid_selectedPage);
@@ -206,12 +189,10 @@ public class ConstructorController {
 		return result;
 	}
 
-	protected ModelAndView getModelAndView(ConstructorJson json) {
-		ModelAndView result;
-		ConstructorForm constructorForm;
-
-		constructorForm = new ConstructorForm();
-		result = this.getModelAndView(json, constructorForm);
+	protected ModelAndView getModelAndView(ConstructorJson json) {	
+		ConstructorForm constructorForm = new ConstructorForm();
+		
+		ModelAndView result = this.getModelAndView(json, constructorForm);
 
 		return result;
 	}

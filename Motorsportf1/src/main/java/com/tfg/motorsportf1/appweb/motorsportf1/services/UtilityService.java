@@ -45,15 +45,13 @@ public class UtilityService {
 	private RestTemplate restTemplate;
 	
 	
-	public <T> T getObjectFromJSON(String url, Class<T> classOutput) {
-		T result;
-		
-		String strJSON = getStringOfJSON(url);
+	public <T> T getObjectFromJSON(String uri, Class<T> classOutput) {	
+		String strJSON = getStringOfJSON(uri);
 		
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 		
-		result = gson.fromJson(strJSON, classOutput);
+		T result = gson.fromJson(strJSON, classOutput);
 		
 		return result;
 	}
@@ -124,18 +122,15 @@ public class UtilityService {
 		return result;
 	}
 	
-	public String getStringOfJSON(String url) {
-		String result;
-		URI uri;
+	public String getStringOfJSON(String strUri) {	
+		String result = CADENA_VACIA;
 		
 		try {
-			uri = new URI(url);
+			URI uri = new URI(strUri);
 			
 			result = this.restTemplate.getForObject(uri, String.class);
 		} catch (URISyntaxException use) {
-			log.debug("Error al recuperar el json");
-			
-			result = "";
+			log.error("Error al recuperar el json", use);
 		}
 		
 		return result;

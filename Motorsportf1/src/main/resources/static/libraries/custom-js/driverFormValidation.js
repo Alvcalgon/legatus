@@ -2,6 +2,9 @@ function validateDriverForm() {
 	var errorFullname = validateFullnameDriver();
 	var errorNationality = validateNationalityDriver();
 	
+	console.log("Error full name: " + errorFullname);
+	console.log("Error nationality: " + errorNationality);
+	
 	return errorFullname.length == 0 && errorNationality.length == 0;
 }
 
@@ -17,7 +20,7 @@ function validateFullnameDriver() {
 	
 	if (!valid || fullname.includes("<script>") || fullname.includes("</script>")) {
 		error = (language == "es") ? "Nombre completo inválido"
-				: "Invalid full name";
+								   : "Invalid full name";
 		
 		input.style.border = "1px solid red";
 	} else {
@@ -38,7 +41,7 @@ function validateNationalityDriver() {
 	
 	var valid = regExp.test(nationality);
 	
-	if (!valid || country.includes("<script>") || country.includes("</script>")) {
+	if (!valid || nationality.includes("<script>") || nationality.includes("</script>")) {
 		error = (language == "es") ? "Nacionalidad inválido" : "Invalid nationality"; 
 	
 		input.style.border = "1px solid red";

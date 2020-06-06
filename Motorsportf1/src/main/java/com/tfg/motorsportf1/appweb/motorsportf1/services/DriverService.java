@@ -71,11 +71,11 @@ public class DriverService {
 	public DriverJson findByNationality(String nationality, Optional<Integer> selectedPage) {
 		String encodedNationality = this.utilityService.getEncodedText(nationality);
 		
-		String url = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality;
+		String uri = UtilityService.API_URI + "/driver/list/nationality/" + encodedNationality;
 		
-		url = this.getURI(url, selectedPage);
+		uri = this.getURI(uri, selectedPage);
 		
-		DriverJson result = this.utilityService.getObjectFromJSON(url, DriverJson.class);
+		DriverJson result = this.utilityService.getObjectFromJSON(uri, DriverJson.class);
 		
 		return result;
 	}

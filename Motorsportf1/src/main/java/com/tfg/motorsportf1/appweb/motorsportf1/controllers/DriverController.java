@@ -54,8 +54,7 @@ public class DriverController {
 	public ModelAndView list(@RequestParam("offset") Optional<Integer> selectedPage,
 							 @RequestParam("fullname") Optional<String> fullname,
 							 @RequestParam("nationality") Optional<String> nationality) {
-		DriverJson mapa;
-		ModelAndView result;
+		DriverJson json;
 		
 		String valFullname = fullname.orElse(UtilityService.CADENA_VACIA);
 		String valNationality = nationality.orElse(UtilityService.CADENA_VACIA);
@@ -63,31 +62,25 @@ public class DriverController {
 		int validOffset = this.utilityService.getValidOffset(selectedPage);
 			
 		if (!StringUtil.isBlank(valFullname) && !StringUtil.isBlank(valNationality)) {
-			
-			mapa = this.driverService.findByParameters(valFullname,
+			json = this.driverService.findByParameters(valFullname,
 													   valNationality,
 													   Optional.of(validOffset));
 		} else if (!StringUtil.isBlank(valFullname)) {
-			
-			mapa = this.driverService.findByFullname(valFullname,
+			json = this.driverService.findByFullname(valFullname,
 													 Optional.of(validOffset));
 		} else if (!StringUtil.isBlank(valNationality)) {			
-			
-			mapa = this.driverService.findByNationality(valNationality,
+			json = this.driverService.findByNationality(valNationality,
 														Optional.of(validOffset));
 		} else {
-			
-			mapa = this.driverService.findAll(Optional.of(validOffset));
+			json = this.driverService.findAll(Optional.of(validOffset));
 		}
 		
-		validOffset = this.utilityService.getValidOffset(selectedPage, mapa.getTotalElements());
+		validOffset = this.utilityService.getValidOffset(selectedPage, json.getTotalElements());
 		log.info("Selected page by user: " + validOffset);
 		
-		DriverForm driverForm = new DriverForm(validOffset,
-									valFullname,
-									valNationality);
+		DriverForm driverForm = new DriverForm(validOffset, valFullname, valNationality);
 		
-		result = this.getModelAndView(mapa, driverForm);
+		ModelAndView result = this.getModelAndView(json, driverForm);
 		
 		return result;
 	}
@@ -168,19 +161,14 @@ public class DriverController {
 	
 	protected ModelAndView getModelAndView(DriverJson json, 
 										DriverForm driverForm) {
-		List<Driver> drivers;
-		List<Integer> pages;
-		
 		int totalPages = json.getTotalPages();
-		pages = this.utilityService.getPages(totalPages);
+		List<Integer> pages = this.utilityService.getPages(totalPages);
 	
 		int totalElements = json.getTotalElements();
 				
 		int validSelectedPage = driverForm.getOffset();
-	
-		driverForm.setOffset(validSelectedPage);
 		
-		drivers = Arrays.asList(json.getContent());
+		List<Driver> drivers = Arrays.asList(json.getContent());
 		
 		ModelAndView result = new ModelAndView("driver/list");
 	

@@ -1,6 +1,5 @@
 package com.tfg.motorsportf1.appweb.motorsportf1.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -134,12 +133,8 @@ public class DriverStandingController {
 		int totalElements = json.getTotalElements();
 		
 		int valid_selectedPage = driverStandingForm.getOffset();
-		
-		driverStandingForm.setOffset(valid_selectedPage);
-		
-		List<DriverStanding> driversStanding = new ArrayList<DriverStanding>(
-					Arrays.asList(json.getContent())
-		);
+			
+		List<DriverStanding> driversStanding = Arrays.asList(json.getContent());
 		
 		ModelAndView result = new ModelAndView("driverStanding/list");
 			
