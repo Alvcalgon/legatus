@@ -41,11 +41,9 @@ public class CircuitService {
 	}
 
 	public CircuitJson findByLocation(String location, Optional<Integer> selectedPage) {
-		String uri, encodedLocation;
-
-		encodedLocation = this.utilityService.getEncodedText(location);
+		String encodedLocation = this.utilityService.getEncodedText(location);
 		
-		uri = UtilityService.API_URI + "/circuit/list/location/" + encodedLocation;
+		String uri = UtilityService.API_URI + "/circuit/list/location/" + encodedLocation;
 		
 		uri = this.getURI(uri, selectedPage);
 		
@@ -70,13 +68,13 @@ public class CircuitService {
 		return circuits;
 	}
 		
-	public CircuitJson findByAllParameters(String location, String name, Optional<Integer> selectedPage) {
-		String uri, encodedName, encodedLocation;
+	public CircuitJson findByAllParameters(String location, String name,
+										   Optional<Integer> selectedPage) {		
+		String encodedLocation = this.utilityService.getEncodedText(location);
+		String encodedName = this.utilityService.getEncodedText(name);
 		
-		encodedLocation = this.utilityService.getEncodedText(location);
-		encodedName = this.utilityService.getEncodedText(name);
-		
-		uri = UtilityService.API_URI + "/circuit/list/location/" + encodedLocation + "/name/" + encodedName;
+		String uri = UtilityService.API_URI + "/circuit/list/location/" 
+											+ encodedLocation + "/name/" + encodedName;
 		uri = this.getURI(uri, selectedPage);
 		
 		CircuitJson result = this.utilityService.getObjectFromJSON(uri, CircuitJson.class);
@@ -85,11 +83,9 @@ public class CircuitService {
 	}
 		
 	public CircuitJson findByName(String name, Optional<Integer> selectedPage) {
-		String uri, encodedName;
-
-		encodedName = this.utilityService.getEncodedText(name);
+		String encodedName = this.utilityService.getEncodedText(name);
 		
-		uri = UtilityService.API_URI + "/circuit/list/name/" + encodedName;
+		String uri = UtilityService.API_URI + "/circuit/list/name/" + encodedName;
 		
 		uri = this.getURI(uri, selectedPage);
 		

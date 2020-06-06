@@ -58,42 +58,40 @@ public class ConstructorService {
 	}
 	
 	public ConstructorJson findByNationality(String nationality, Optional<Integer> selectedPage) {
-		ConstructorJson result;
-		String url, encodedNationality;
+		String encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		encodedNationality = this.utilityService.getEncodedText(nationality);
-
-		url = UtilityService.API_URI + "/constructor/list/nationality/" + encodedNationality;
+		String url = UtilityService.API_URI + "/constructor/list/nationality/" + encodedNationality;
+		
 		url = this.getURI(url, selectedPage);
 		
-		result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
+		ConstructorJson result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
 
 		return result;
 	}
 
 	public ConstructorJson findByName(String name, Optional<Integer> selectedPage) {
-		ConstructorJson result;
-
 		String encodedName = this.utilityService.getEncodedText(name);
+		
 		String url = UtilityService.API_URI + "/constructor/list/name/" + encodedName;
 		
 		url = this.getURI(url, selectedPage);
 		
-		result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
+		ConstructorJson result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
 
 		return result;
 	}
 
-	public ConstructorJson findByParameters(String name, String nationality, Optional<Integer> selectedPage) {
-		ConstructorJson result;
-		String url;
-
+	public ConstructorJson findByParameters(String name, String nationality,
+											Optional<Integer> selectedPage) {
 		String encodedName = this.utilityService.getEncodedText(name);
 		String encodedNationality = this.utilityService.getEncodedText(nationality);
 
-		url = UtilityService.API_URI + "/constructor/list/nationality/" + encodedNationality + "/name/" + encodedName;
-
-		result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
+		String url = UtilityService.API_URI + "/constructor/list/nationality/"
+											+ encodedNationality + "/name/" + encodedName;
+		
+		url = this.getURI(url, selectedPage);
+		
+		ConstructorJson result = this.utilityService.getObjectFromJSON(url, ConstructorJson.class);
 
 		return result;
 	}

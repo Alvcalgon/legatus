@@ -46,38 +46,32 @@ public class DriverStandingService {
 												  Optional<Integer> selectedPage) {	
 		String encoded_driver = this.utilityService.getEncodedText(driver);
 
-		String url = UtilityService.API_URI + "/driver-standing/list/driver/" + encoded_driver;
+		String uri = UtilityService.API_URI + "/driver-standing/list/driver/" + encoded_driver;
+		
+		uri = this.getURI(uri, selectedPage);
 
-		DriverStandingJson result = this.utilityService.getObjectFromJSON(url, DriverStandingJson.class);
+		DriverStandingJson result = this.utilityService.getObjectFromJSON(uri, DriverStandingJson.class);
 
 		return result;
 	}
 	
-	public Integer findCountByDriver(String driver) {
-		Integer result;
-		String url;
-		String encoded_driver;
+	public Integer findCountByDriver(String driver) {	
+		String encoded_driver = this.utilityService.getEncodedText(driver);
 		
-		encoded_driver = this.utilityService.getEncodedText(driver);
+		String url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver;
 		
-		url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver;
-		
-		result = this.utilityService.countJSON(url);
+		Integer result = this.utilityService.countJSON(url);
 		
 		return result;
 	}
 	
-	public Integer findCountByDriverAndPosition(String driver, String position) {
-		Integer result;
-		String url;
-		String encoded_driver;
+	public Integer findCountByDriverAndPosition(String driver, String position) {	
+		String encoded_driver = this.utilityService.getEncodedText(driver);
 		
-		encoded_driver = this.utilityService.getEncodedText(driver);
-		
-		url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver +
+		String url = UtilityService.API_URI + "/driver-standing/count/driver/" + encoded_driver +
 				"/position/" + position;
 		
-		result = this.utilityService.countJSON(url);
+		Integer result = this.utilityService.countJSON(url);
 		
 		return result;
 	}
